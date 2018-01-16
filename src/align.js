@@ -15,7 +15,7 @@ const align = (pairToBeAligned, corpus, savedAlignments) => {
     .sort((b, a) =>
       internalPhraseTable[primary][a] - internalPhraseTable[primary][b]
     )[0];
-    alignments.push({primary, secondary});
+    alignments.push({primary: [primary], secondary: [secondary]});
   });
   return alignments;
 };
