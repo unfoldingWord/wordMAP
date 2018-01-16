@@ -1,0 +1,35 @@
+{
+  "name": "word-map",
+  "version": "0.0.1-alpha.1",
+  "description": "Multilingual Alignment Prediction",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/translationCoreApps/word-map.git"
+  },
+  "keywords": [
+    "word",
+    "alignment",
+    "map",
+    "tc",
+    "multilingual",
+    "linguistics",
+    "prediction",
+    "bible",
+    "translation",
+    "translation",
+    "alignment",
+    "aligner",
+    "word",
+    "language"
+  ],
+  "author": "@unfoldingword",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/translationCoreApps/word-map/issues"
+  },
+  "homepage": "https://github.com/translationCoreApps/word-map#readme"
+}
