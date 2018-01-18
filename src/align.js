@@ -10,12 +10,14 @@ const align = (pairToBeAligned, corpus, savedAlignments) => {
     internalPhraseTable[primary][secondary] ++;
   });
   pairToBeAligned.primary.forEach(primary => {
-    const secondary = Object.keys(internalPhraseTable[primary])
-    .filter(word => pairToBeAligned.secondary.indexOf(word) > -1)
-    .sort((b, a) =>
-      internalPhraseTable[primary][a] - internalPhraseTable[primary][b]
-    )[0];
-    alignments.push({primary: [primary], secondary: [secondary]});
+    if (internalPhraseTable[primary]) {
+      const secondary = Object.keys(internalPhraseTable[primary])
+      .filter(word => pairToBeAligned.secondary.indexOf(word) > -1)
+      .sort((b, a) =>
+        internalPhraseTable[primary][a] - internalPhraseTable[primary][b]
+      )[0];
+      alignments.push({primary: [primary], secondary: [secondary]});
+    }
   });
   return alignments;
 };
