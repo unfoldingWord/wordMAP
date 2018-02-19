@@ -205,6 +205,10 @@ This allows us to dynamically add new corpus to the index quickly without runnin
 When a sentence is decoded we only use the relevant data from the index.
 Since we are only using a subset of the data our statistical algorithms can run exponentially faster.
 
+# Scratch Pad
+
+we thinking out loud here.
+
 ### Corpus Preprocessing (done)
 Corpus must be prepared as a list of unaligned tokenized sentence pairs and optionally normalized.
 
@@ -216,18 +220,24 @@ Corpus must be prepared as a list of unaligned tokenized sentence pairs and opti
 - Receive saved alignments (as a list of known permutations)
   - Index and tally occurrences
 
-### Prediction/Decoding
+### Prediction/Decoding (in progress)
 - Receive unaligned sentence pair
   - Generate n-grams for unaligned sentence pair
   - Generate permutations for the n-grams between languages
 - Selecting subset of data that is relevant
   - relevant to words in provided unaligned sentence pair
   - from both corpus and saved alignments indices
+(done up to here)
 - Statistical algorithms
-  - Scoring/weighting
+  - Scoring
+  - Weighted average of all scores
 - Alignment Prediction
   - Selection of best alignments via Process of elimination
-  - Ordering selected alignments to target
+    - Pick the best
+    - Eliminate non-usable conflicts
+    - Penalize usable conflicts
+    - Repeat until all words are covered
+  - Order selected alignments to one of the unaligned sentence word order
 
 loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
 
