@@ -2,49 +2,43 @@
 
 # Introduction
 
-Word alignment is the process of mapping/associating words from some primary text with corresponding words in a secondary text.
+Word alignment prediction is the process of mapping/associating words from some primary text with corresponding words in a secondary text. This tool uses advanced statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
 
-This tool uses algorithms to predict word alignments with a computed level of confidence.
+Alignments provide many valuable benefits to translators including:
+
+* Ensures that all terms and phrases in the primary text have a proper translation in the secondary text.
+* Provides in-context vocabulary suggestions to the translator.
+* Helps prevent inconsistencies in the translation.
 
 ## Terms
 
-* `Primary Text`: The original biblical texts (historically referred to as "source text").
-* `Primary Languages`: The languages used in a `primary text`.
-* `Secondary Text`: The translation of a `primary text`.
-* `Secondary Languages`: The languages used in a `secondary text`.
-* `Gateway (Secondary) Languages`: Those languages that compose the minimum set of trade languages in the world.
-* `Ternary Text`: The translation of a `secondary text`.
-* `Minor (Ternary) Language`: A non-trade language spoken by a small group of people. i.e. a language that is not a `gateway language`. The language used in a `ternary text`.
-* `n-gram (word or phrase)`: Is a contiguous sequence of n items from a given sample of text. An n-gram of size 1 is referred to as a "unigram"; size 2 is a "bigram", etc. For example: "hello" is a unigram, while "hello world" is a bigram.
-* `Unaligned Sentence Pair`: A sentence in the primary text and matching sentence in the secondary text that needs to be aligned. This is input provided by the user. The response is a list of suggested alignments for the sentence pair.
-* `Alignment`: An individual n-gram in the primary text that has been aligned to an n-gram in the secondary text.
-* `Saved Alignment`: An alignment that has been approved/corrected by the user.
-* `Engine`: Contains a index of every permutation of possible n-gram alignments. And a index of `saved alignments`.
-* `Corpus`: The input dataset which is the primary and secondary text aligned by sentences. This is used in training the engine. Note: This is a list of `unaligned sentence pairs` though not input provided by the user.
-* `Tokenization`: Separating a sentence into individual words and punctuation.
-* `Normalization`: A text might use several different utf8 characters to represent the same visual character. The process of normalization reduces visual character representation to a single utf8 character. A text using a single utf8 standard is considered normalized.
+* **Primary Text**: The original biblical texts (historically referred to as "source text").
+* **Primary Language**: The language used in a `primary text`.
+* **Secondary Text**: The translation of a `primary text`.
+* **Secondary Language**: The language used in a `secondary text`. See also `gateway language`.
+* **Gateway (Secondary) Languages**: Those languages that compose the minimum set of trade languages in the world. See also `secondary language`.
+* **Ternary Text**: The translation of a `secondary text`.
+* **Ternary (Minor) Language**: A non-trade language spoken by a small group of people. i.e. a language that is not a `gateway language`. Also, the language used in a `ternary text`.
+* **n-gram (word or phrase)**: A contiguous sequence of n items from a given sample of text. An n-gram of size 1 is referred to as a "unigram"; size 2 is a "bigram", etc. For example: "hello" is a unigram, while "hello world" is a bigram.
+* **Unaligned Sentence Pair**: A sentence in two languages that need to be aligned. e.g. a sentence from a primary text and secondary text.
+* **Alignment**: Two individual `n-grams` that have been aligned from two texts. e.g. from a primary text and secondary text.
+* **Saved Alignment**: An alignment that has been approved/corrected by the user.
+* **Engine**: Contains a index of every permutation of possible `n-gram` `alignments`. And an index of `saved alignments`.
+* **Corpus**: The input dataset which is the primary and secondary text grouped by `unaligned sentence pairs`. This is used in training the engine. Note: This is a list of `unaligned sentence pairs` though not input directly provided by the user.
+* **Tokenization**: Separating a sentence into individual words and punctuation.
+* **Normalization**: A text might use several different utf8 characters to represent the same visual character. The process of normalization reduces visual character representation to a single utf8 character. A text using a single utf8 standard is considered normalized.
 
-> Note: it is important to understand that n-grams are "contiguous". It is possible
+> **Note:** it is important to understand that n-grams are "contiguous". It is possible
 > and even beneficial to support non-contiguous n-grams, however this greatly
 > increases the resources required by the system.
 
-## Primary Use Case
+## Use Cases
 
-Taking a primary text and mapping it a secondary text e.g. when generating mapping for gateway languages.
+The following use cases provide the basis for accomplishing the vision set forth below.
 
-And, look for inconsistencies in the alignment.
-
-This ensures that all terms and phrases in the primary text have a proper translation in the secondary text.
-
-## Secondary Use Case
-
-Taking a secondary text and mapping it to a ternary text.
-
-## Vision
-
-These tools would provide a basis for taking a primary text and mapping i* Easy to add manually saved alignments.t to a ternary text.
-
-We must use the primary and secondary use cases to fulfill this vision.
+* Aligning a primary text with a secondary text e.g. when generating word maps for gateway languages.
+* Aligning a secondary text with a ternary text.
+* Aligning a primary text to a ternary text (using the secondary as a proxy)
 
 ## The Need
 
@@ -54,8 +48,10 @@ We need a tool that:
 
 * runs on the client with minimal configuration.
 * works with existing web browser technology.
+* integrates with translationCore and related tools.
 * works without an Internet connection.
 * does not have a minimal corpus size.
+* requires minimal system resources.
 
 # Requirements
 
@@ -209,5 +205,7 @@ When a sentence is decoded we only use the relevant data from the index.
 Since we are only using a subset of the data our statistical algorithms can run exponentially faster.
 
 # Alignment Prediction
+
+
 
 # Algorithms
