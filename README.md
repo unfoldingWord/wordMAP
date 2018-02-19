@@ -65,6 +65,7 @@ We need a tool that:
 * Differentiate multiple occurrences of the same word.
 
 > TODO: Support for metadata like strong's numbers and parts of speech.
+> Also support contextually saved alignments. e.g. alignments are grouped by verse.
 
 ## Input Prerequisites
 
@@ -87,7 +88,7 @@ The following is a non-technical description of how this tool would be used.
 
 # Engine Training
 
-An engine is composed of two indices. The corpus index and saved alignments index.
+An engine is composed of two indices; The corpus index and saved alignments index.
 
 
 ## Corpus Index
@@ -139,8 +140,8 @@ permutations = [
   ...
 ];
 
-// keyed by n-grams in the primary text
-primaryTallyIndex = {
+// keyed by n-grams by the primary text
+primaryAlignmentFrequencyIndex = {
   "a": {
     "d": 1,
     "e": 3,
@@ -165,7 +166,7 @@ primaryTallyIndex = {
 }
 
 // keyed by n-grams in the secondary text
-secondaryTallyIndex = {
+secondaryAlignmentFrequencyIndex = {
   "d": {
     "a": 1,
     "b": 2,
@@ -204,8 +205,89 @@ This allows us to dynamically add new corpus to the index quickly without runnin
 When a sentence is decoded we only use the relevant data from the index.
 Since we are only using a subset of the data our statistical algorithms can run exponentially faster.
 
+### Corpus Preprocessing (done)
+Corpus must be prepared as a list of unaligned tokenized sentence pairs and optionally normalized.
+
+### Training/Encoding (done)
+- Receive corpus
+  - Generate n-grams for corpus
+  - Generate permutations
+  - Index and tally occurrences
+- Receive saved alignments (as a list of known permutations)
+  - Index and tally occurrences
+
+### Prediction/Decoding
+- Receive unaligned sentence pair
+  - Generate n-grams for unaligned sentence pair
+  - Generate permutations for the n-grams between languages
+- Selecting subset of data that is relevant
+  - relevant to words in provided unaligned sentence pair
+  - from both corpus and saved alignments indices
+- Statistical algorithms
+  - Scoring/weighting
+- Alignment Prediction
+  - Selection of best alignments via Process of elimination
+  - Ordering selected alignments to target
+
+loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
+
+
 # Alignment Prediction
+The alignment prediction begins when the user provides an unaligned sentence pair.
 
+## Alignment Document Frequency
 
+> **Note:** This algorithm appears to be a hybrid of tf-idf.
 
-# Algorithms
+The alignment document frequency algorithm is the foundation for most of the other algorithms.
+This algorithm should be ran over the corpus indices (filtered and unfiltered),
+and saved alignment indices (filtered and unfiltered).
+
+> **Note:** It is important to compare the filtered and unfiltered frequency ratios.
+This is done in other algorithms.
+
+The algorithm proceeds as follows:
+
+1. Generate n-grams for each sentence in the unaligned sentence pair.
+1. Generate permutations of all `possible alignments` of n-grams between the sentences in the pair.
+1. Filter the corpus/saved alignment indices to just those possible alignments within the unaligned sentence pair.
+
+Perform the following calculations on the filtered and unfiltered corpus/saved alignment indices:
+
+1. Calculate the frequency of each filtered *primary* n-gram over the corpus/saved alignment index.
+1. Calculate the frequency of each filtered *secondary* n-gram over the corpus/saved alignment index.
+1. Calculate the ratio of alignment frequency vs *primary* n-gram frequency.
+1. Calculate the ratio of alignment frequency vs *secondary* n-gram frequency.
+
+Pseudo Code Samples:
+
+```js
+// corpus frequency sums and ratios
+primaryNgrams = ngram(unalignedSentencePair[0], 2);
+secondaryNgrams = ngram(unalignedSentencePair[1], 3);
+primaryIndex = {};
+secondaryIndex = {};
+primaryNgrams.forEach(primaryNgram => {
+  secondaryNgrams.forEach(secondaryNgram => {
+    primaryIndex[primaryNgram][secondaryNgram] = {
+      frequency: primaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
+      corpusFrequency: objectSum(primaryAlignmentFrequencyIndex[primaryNgram]),
+      corpusFrequencyRatio: this.frequency / this.corpusFrequency
+    };
+    secondaryIndex[secondaryNgram][primaryNgram] = {
+      frequency: secondaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
+      corpusFrequency: objectSum(secondaryAlignmentFrequencyIndex[secondaryNgram]),
+      corpusFrequencyRatio: this.frequency / this.corpusFrequency
+    };
+  });
+});
+// filtered frequency sums and ratios
+Object.keys(primaryIndex).forEach(primaryNgram => {
+  primaryIndex[primaryNgram][secondaryNgram].filteredFrequency = objectSumByAttribute(primaryIndex[primaryNgram], 'frequency');
+  primaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
+});
+Object.keys(secondaryIndex).forEach(secondaryNgram => {
+  secondaryIndex[secondaryNgram][primaryNgram].filteredFrequency = objectSumByAttribute(secondaryIndex[secondaryNgram], 'frequency');
+  secondaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
+});
+```
