@@ -251,10 +251,10 @@ loop through each index and filter by keys that match the n-grams in the provide
 
 ---
 
-# Alignment Prediction
+# Prediction Algorithms
 The alignment prediction begins when the user provides an unaligned sentence pair.
 
-## Alignment Document Frequency
+## n-gram Document Frequency
 
 > **Note:** This algorithm uses similar concepts as found in tf-idf.
 
@@ -287,12 +287,16 @@ secondaryIndex = {};
 primaryNgrams.forEach(primaryNgram => {
   secondaryNgrams.forEach(secondaryNgram => {
     primaryIndex[primaryNgram][secondaryNgram] = {
+      // frequency of this n-gram combination (this is the same value as the frequency below)
       frequency: primaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
+      // frequency of primary n-gram in the corpus
       corpusFrequency: objectSum(primaryAlignmentFrequencyIndex[primaryNgram]),
       corpusFrequencyRatio: this.frequency / this.corpusFrequency
     };
     secondaryIndex[secondaryNgram][primaryNgram] = {
+      // frequency of this n-gram combination (this is the same value as the frequency above)
       frequency: secondaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
+      // frequency of secondary n-gram in the corpus
       corpusFrequency: objectSum(secondaryAlignmentFrequencyIndex[secondaryNgram]),
       corpusFrequencyRatio: this.frequency / this.corpusFrequency
     };
@@ -308,3 +312,22 @@ Object.keys(secondaryIndex).forEach(secondaryNgram => {
   secondaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
 });
 ```
+
+## Phrase Plausibility
+N-grams are essentially dumb phrases as it combines any contiguous tokens. A major problem is identifying if an n-gram is actually a phrase. Checking to see how common an n-gram is used over the corpus helps determine how likely it is a phrase.
+
+Plausibility is determined by first assuming unigrams are a phrase.
+Larger n-grams use the calculated commonality.
+
+> NOTE: we need a way to allow 0-length n-grams in alignments,
+> because one word may not exist in another language.
+
+### Commonality
+
+Commonality demonstrates the likely-hood that both n-grams are phrases.
+And a high scores indicates it is plausible that as phrases, they could be equivalent.
+
+where x = primary n-gram corpusFrequency.
+and y = secondary n-gram corpusFrequency.
+
+commonality = min( (1-(1/x)), (1-(1/y)) )
