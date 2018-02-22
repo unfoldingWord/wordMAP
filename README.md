@@ -103,6 +103,8 @@ For each unaligned sentence pair in the corpus:
 1. Generate permutations of all possible combinations of n-grams between primary and secondary sentences so that we can:
 1. Tally the occurrences of each permutation across the entire corpus.
 
+> NOTE: while generating permutation include a match against 0-length n-grams.
+> This accounts for the case where an n-gram may not have a valid match in the apposing language.
 
 Code samples:
 ```js
@@ -287,14 +289,14 @@ secondaryIndex = {};
 primaryNgrams.forEach(primaryNgram => {
   secondaryNgrams.forEach(secondaryNgram => {
     primaryIndex[primaryNgram][secondaryNgram] = {
-      // frequency of this n-gram combination (this is the same value as the frequency below)
+      // frequency of this n-gram combination in the corpus (this is the same value as the frequency below)
       frequency: primaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
       // frequency of primary n-gram in the corpus
       corpusFrequency: objectSum(primaryAlignmentFrequencyIndex[primaryNgram]),
       corpusFrequencyRatio: this.frequency / this.corpusFrequency
     };
     secondaryIndex[secondaryNgram][primaryNgram] = {
-      // frequency of this n-gram combination (this is the same value as the frequency above)
+      // frequency of this n-gram combination in the corpus (this is the same value as the frequency above)
       frequency: secondaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
       // frequency of secondary n-gram in the corpus
       corpusFrequency: objectSum(secondaryAlignmentFrequencyIndex[secondaryNgram]),
@@ -302,19 +304,26 @@ primaryNgrams.forEach(primaryNgram => {
     };
   });
 });
+
 // add filtered frequency sums and ratios
 Object.keys(primaryIndex).forEach(primaryNgram => {
+  // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency below)
   primaryIndex[primaryNgram][secondaryNgram].filteredFrequency = objectSumByAttribute(primaryIndex[primaryNgram], 'frequency');
   primaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
 });
 Object.keys(secondaryIndex).forEach(secondaryNgram => {
+  // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency above)
   secondaryIndex[secondaryNgram][primaryNgram].filteredFrequency = objectSumByAttribute(secondaryIndex[secondaryNgram], 'frequency');
   secondaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
 });
 ```
 
 ## Phrase Plausibility
-N-grams are essentially dumb phrases as it combines any contiguous tokens. A major problem is identifying if an n-gram is actually a phrase. Checking to see how common an n-gram is used over the corpus helps determine how likely it is a phrase.
+
+N-grams are essentially dumb phrases as it combines any contiguous tokens.
+A major problem is identifying if an n-gram is actually a phrase.
+Checking to see how common an n-gram is used over the corpus helps determine
+how likely it is a phrase.
 
 Plausibility is determined by first assuming unigrams are a phrase.
 Larger n-grams use the calculated commonality.
@@ -327,7 +336,45 @@ Larger n-grams use the calculated commonality.
 Commonality demonstrates the likely-hood that both n-grams are phrases.
 And a high scores indicates it is plausible that as phrases, they could be equivalent.
 
+```
 where x = primary n-gram corpusFrequency.
 and y = secondary n-gram corpusFrequency.
 
 commonality = min( (1-(1/x)), (1-(1/y)) )
+```
+
+## Uniqueness
+
+Because some words are uniquely used in the current unaligned sentence pair,
+this results in low or unreliable confidence scores in most algorithms.
+
+Uniqueness is the inverse of commonality.
+If an n-gram is used only once or very rarely in the primary text it is likely the
+equivalent n-gram in the secondary text is also used very rarely.
+
+Primary n-gram uniqueness
+```
+where x = primary n-gram filteredFrequency
+and y = primary n-gram corpusFrequency
+
+primary uniqueness = x / y
+```
+
+Secondary n-gram uniqueness
+```
+where x = secondary n-gram filteredFrequency
+and y = secondary n-gram corpusFrequency
+
+secondary uniqueness = x / y
+```
+
+Once we have the uniqueness of primary and secondary n-grams we can calculate
+the uniqueness of the alignment.
+
+```
+delta = abs(primary uniqueness - secondary uniqueness)
+uniqueness = 1 - delta
+```
+
+
+## N-gram Score
