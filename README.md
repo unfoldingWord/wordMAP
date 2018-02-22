@@ -368,6 +368,8 @@ and y = secondary n-gram corpusFrequency
 secondary uniqueness = x / y
 ```
 
+### Uniqueness Affinity
+
 Once we have the uniqueness of primary and secondary n-grams we can calculate
 the uniqueness of the alignment.
 
@@ -377,4 +379,44 @@ uniqueness = 1 - delta
 ```
 
 
-## N-gram Score
+## N-gram Length
+
+In other algorithms n-grams are scored equally regardless of length.
+However, shorter n-grams are more prevalent than longer n-grams.
+This typically results in shorter n-grams overwhelming the output.
+
+The weight of an alignment increases proportionally to it's length, and relative
+sentence coverage in primary and secondary text.
+
+### Length Ratio
+
+Get the ratio of n-gram length to the sentence token length for each language.
+
+Primary n-gram length ratio
+```
+where x = primary n-gram length
+and y = primary sentence token length
+
+primary length ratio = x / y
+```
+
+Secondary n-gram length ratio
+```
+where x = secondary n-gram length
+and y = secondary sentence token length
+
+secondary length ratio = x / y
+```
+
+### Length Affinity
+
+Once we have the length ratios of the two n-grams we can calculate
+the n-gram weight for the alignment.
+
+```
+delta = abs(primary length ratio - secondary length ratio)
+weight = pow(1 - delta, 5)
+```
+
+> NOTE: the numbers in the initial delta calculation were too flat
+> so we added a power of 5 to improve the curve.
