@@ -2,7 +2,7 @@
 
 # Introduction
 
-Word alignment prediction is the process of mapping/associating words from some primary text with corresponding words in a secondary text. This tool uses advanced statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
+Word alignment prediction is the process of mapping/associating words from some primary text with corresponding words in a secondary text. This tool uses statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
 
 Alignments provide many valuable benefits to translators including:
 
@@ -12,7 +12,7 @@ Alignments provide many valuable benefits to translators including:
 
 ## Terms
 
-* **Primary Text**: The original biblical texts (historically referred to as "source text").
+* **Primary Text**: The original biblical texts (traditionally referred to as "source text").
 * **Primary Language**: The language used in a `primary text`.
 * **Secondary Text**: The translation of a `primary text`.
 * **Secondary Language**: The language used in a `secondary text`. See also `gateway language`.
@@ -21,20 +21,18 @@ Alignments provide many valuable benefits to translators including:
 * **Ternary (Minor) Language**: A non-trade language spoken by a small group of people. i.e. a language that is not a `gateway language`. Also, the language used in a `ternary text`.
 * **n-gram (word or phrase)**: A contiguous sequence of n items from a given sample of text. An n-gram of size 1 is referred to as a "unigram"; size 2 is a "bigram", etc. For example: "hello" is a unigram, while "hello world" is a bigram.
 * **Unaligned Sentence Pair**: A sentence in two languages that need to be aligned. e.g. a sentence from a primary text and secondary text.
-* **Alignment**: Two individual `n-grams` that have been aligned from two texts. e.g. from a primary text and secondary text.
+* **Alignment**: Two individual `n-grams` that have been matched from two texts. e.g. from a primary text and secondary text.
 * **Saved Alignment**: An alignment that has been approved/corrected by the user.
 * **Engine**: Contains a index of every permutation of possible `n-gram` `alignments`. And an index of `saved alignments`.
-* **Corpus**: The input dataset which is the primary and secondary text grouped by `unaligned sentence pairs`. This is used in training the engine. Note: This is a list of `unaligned sentence pairs` though not input directly provided by the user.
+* **Corpus**: The input dataset which is the primary and secondary text given as a list of `unaligned sentence pairs`. This is used in training the engine. Note: This is not not input directly provided by the user.
 * **Tokenization**: Separating a sentence into individual words and punctuation.
 * **Normalization**: A text might use several different utf8 characters to represent the same visual character. The process of normalization reduces visual character representation to a single utf8 character. A text using a single utf8 standard is considered normalized.
 
-> **Note:** it is important to understand that n-grams are "contiguous". It is possible
+> **Note:** it is important to understand that *our* definition of n-grams is "contiguous". It is possible
 > and even beneficial to support non-contiguous n-grams, however this greatly
 > increases the resources required by the system.
 
 ## Use Cases
-
-The following use cases provide the basis for accomplishing the vision set forth below.
 
 * Aligning a primary text with a secondary text e.g. when generating word maps for gateway languages.
 * Aligning a secondary text with a ternary text.
@@ -50,7 +48,7 @@ We need a tool that:
 * works with existing web browser technology.
 * integrates with translationCore and related tools.
 * works without an Internet connection.
-* does not have a minimal corpus size.
+* does not have a minimum corpus size.
 * requires minimal system resources.
 
 # Requirements
@@ -60,12 +58,16 @@ We need a tool that:
 * Learn and adapt to regularly changing input without relying on previously stored engines.
 * Must not store trained engines.
 * Easy to add new lines of corpus.
-* Easy to add manually saved alignments.
-* Be fast enough to be usable in real time.
-* Differentiate multiple occurrences of the same word.
+* Easy to manually add saved alignments.
+* Be fast enough to align a single sentence in real time.
+* Differentiate multiple occurrences of the same word within a sentence.
 
-> TODO: Support for metadata like strong's numbers and parts of speech.
+> TODO: Support for metadata like lemma, stems, strong's numbers and parts of speech in all languages.
 > Also support contextually saved alignments. e.g. alignments are grouped by verse.
+> In order to support metadata the input will have to be an object.
+> String input should also be accepted, but will result in a "dumb" object.
+> We need to define the object structure and what features of the tool will be
+> enabled for each key(s) in the object.
 
 ## Input Prerequisites
 
@@ -74,17 +76,18 @@ We need a tool that:
 * The corpus and unaligned sentence pairs must be in the same primary and secondary languages.
 * Input must be in utf8.
 * Input characters should be normalized for optimum results.
+* Input tokens should be objects when including metadata.
 
 ## Overview of Operation
 
-The following is a non-technical description of how this tool would be used.
+The following is a non-technical description of how this tool could be used.
 
 1. The tool is initialized with some corpus and previously saved alignments.
 1. The tool trains a new engine using the provided corpus.
 1. The user gives the tool an unaligned sentence pair.
 1. The tool generates and returns a list of possible alignments for the sentence pair provided by the user.
-1. The user chooses the correct alignment to use in their work.
-1. The alignment chosen by the user is given back to the tool to increase accuracy of future predictions.
+1. The user chooses the correct alignments to use in their work.
+1. The alignments chosen by the user is given back to the tool as `saved alignments` to increase accuracy of future predictions.
 
 # Engine Training
 
@@ -93,7 +96,8 @@ An engine is composed of two indices; The corpus index and saved alignments inde
 
 ## Corpus Index
 This index is generated by iterating over the corpus.
-For each unaligned sentence pair in the corpus
+For each unaligned sentence pair in the corpus:
+
 1. Filter out punctuation from the corpus.
 1. Generate n-grams for each sentence (n-grams are often limited to lengths of 1 to 3).
 1. Generate permutations of all possible combinations of n-grams between primary and secondary sentences so that we can:
@@ -102,6 +106,8 @@ For each unaligned sentence pair in the corpus
 
 Code samples:
 ```js
+// Note: the token strings would be objects by the time it gets here
+// Strings are used for simplicity in conveying concepts
 corpus = [
  [["a", "b", "c", "."], ["d", "e", "f", "|"]],
  // e.g. [["primary", "language", "sentence", "."], [...]]
@@ -187,7 +193,7 @@ secondaryAlignmentFrequencyIndex = {
 ## Save Alignments Index
 This index is generated by iterating over all saved alignments.
 For each saved alignment, it tallies occurrences.
-Since the alignments are verified there is no need for generating n-grams or permutations.
+Since these alignments have already been verified by the user there is no need to generate n-grams or permutations.
 
 See the code examples for the Corpus Index above.
 
@@ -196,7 +202,7 @@ See the code examples for the Corpus Index above.
 Most other engines require millions of lines of corpus on which they are trained.
 This amount of data takes enormous amounts of time to process.
 Also, these engines include in their training, heavy statistical algorithms that are computed on every permutation.
-Only a small percentage of the data is used in the decoding of the alignment for a single sentence.
+Only a small percentage of the data is used in the decoding of the alignments for a single sentence.
 The result is a lot of wasted time and resources.
 
 In our engine implementation the corpus is first indexed and stored without running statistical algorithms.
@@ -204,6 +210,8 @@ This allows us to dynamically add new corpus to the index quickly without runnin
 
 When a sentence is decoded we only use the relevant data from the index.
 Since we are only using a subset of the data our statistical algorithms can run exponentially faster.
+
+---
 
 # Scratch Pad
 
@@ -241,20 +249,16 @@ Corpus must be prepared as a list of unaligned tokenized sentence pairs and opti
 
 loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
 
+---
 
 # Alignment Prediction
 The alignment prediction begins when the user provides an unaligned sentence pair.
 
 ## Alignment Document Frequency
 
-> **Note:** This algorithm appears to be a hybrid of tf-idf.
+> **Note:** This algorithm uses similar concepts as found in tf-idf.
 
-The alignment document frequency algorithm is the foundation for most of the other algorithms.
-This algorithm should be ran over the corpus indices (filtered and unfiltered),
-and saved alignment indices (filtered and unfiltered).
-
-> **Note:** It is important to compare the filtered and unfiltered frequency ratios.
-This is done in other algorithms.
+The alignment document frequency algorithm is the foundation for most of the other algorithms in this tool.
 
 The algorithm proceeds as follows:
 
@@ -269,10 +273,13 @@ Perform the following calculations on the filtered and unfiltered corpus/saved a
 1. Calculate the ratio of alignment frequency vs *primary* n-gram frequency.
 1. Calculate the ratio of alignment frequency vs *secondary* n-gram frequency.
 
+> **Note:** It is important to compare the filtered and unfiltered frequency ratios.
+This is done in other algorithms.
+
 Pseudo Code Samples:
 
 ```js
-// corpus frequency sums and ratios
+// filter the corpus and add corpus frequency sums and ratios
 primaryNgrams = ngram(unalignedSentencePair[0], 2);
 secondaryNgrams = ngram(unalignedSentencePair[1], 3);
 primaryIndex = {};
@@ -291,7 +298,7 @@ primaryNgrams.forEach(primaryNgram => {
     };
   });
 });
-// filtered frequency sums and ratios
+// add filtered frequency sums and ratios
 Object.keys(primaryIndex).forEach(primaryNgram => {
   primaryIndex[primaryNgram][secondaryNgram].filteredFrequency = objectSumByAttribute(primaryIndex[primaryNgram], 'frequency');
   primaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
