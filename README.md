@@ -420,3 +420,13 @@ weight = pow(1 - delta, 5)
 
 > NOTE: the numbers in the initial delta calculation were too flat
 > so we added a power of 5 to improve the curve.
+
+---
+
+> Work on these next!
+
+- Phrase Count
+- Word Order
+- Character Length
+- Frequency Ratios
+- Static Scores
