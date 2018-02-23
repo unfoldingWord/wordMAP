@@ -1,4 +1,4 @@
-# Multi-Lingual Word Alignment Prediction (Word MAP)
+atom# Multi-Lingual Word Alignment Prediction (Word MAP)
 
 # Introduction
 
@@ -421,12 +421,81 @@ weight = pow(1 - delta, 5)
 > NOTE: the numbers in the initial delta calculation were too flat
 > so we added a power of 5 to improve the curve.
 
+## Character Length
+
+> **Note** This algorithm is very similar to the n-gram length algorithm.
+> However, we ended up using a completely different algorithm.
+
+Phrases commonly have similar length across multiple languages.
+Other algorithms do not account for this similarity.
+Therefore, these highly probable alignments are overlooked.
+
+Character length weight is proportional to the character length of the primary n-gram and the secondary n-gram.
+
+> **NOTE**: it's important to see the ratio of the length vs the sentence length.
+> Additionally, we may want a new algorithm that compares this ratio.
+
+> **TODO**: give this algorithm some TLC. Is there a better formula for calculating this?
+
+```
+where x = primary n-gram character length
+and y = secondary n-gram character length
+
+delta = abs(x - y)
+largest = max(x, y)
+weight = (largest - delta) / largest
+```
+
+
+## Alignment Occurrences
+
+A commonly seen pattern in translation is that word repetition in the primary text
+is often seen in the secondary text. Other algorithms are unable to account for this pattern in the text. Therefore, these highly probable alignments are overlooked.
+
+
+The alignment occurrences weight is inversely proportional to the difference of n-gram frequency in the primary sentence vs the n-gram frequency in the secondary sentence.
+
+> Example: a 1 to 1 n-gram alignment would get the highest score.
+> As this deviates the score will decrease.
+
+```
+where x = primary n-gram occurrences count
+and y = secondary n-gram occurrences count
+
+delta = abs(x - y)
+weight = 1 / ( delta + 1)
+```
+
+## Alignment Position
+
+> **Note:** this feature is currently for literal translations only.
+> It could be enhanced to support dynamic translations in the future.
+
+Other algorithms will not identify the relative position of n-grams in the sentence.
+However, in literal translations this positioning is usually proportional.
+Therefore, these highly probable alignments are overlooked.
+
+We want to give extra preference to those aliments for which n-grams are in relatively proportional positions within their sentences.
+The alignment position weight is proportional to the difference in n-gram position in the primary sentence vs the n-gram position in the secondary sentence.
+
+```
+where x = primary n-gram position
+and y = secondary n-gram position
+
+delta = abs(x - y)
+weight = 1 - delta
+```
+
+> **NOTE:** This algorithm accounts for single occurrences within a sentence.
+> A new algorithm would need to be created to account for multiple occurrences.
+> We cannot combine the two algorithms, because it would skew the weight toward
+> either single occurrences or multiple occurrences.
+
+## Frequency Ratios
+
 ---
 
 > Work on these next!
 
-- Phrase Count
-- Word Order
-- Character Length
 - Frequency Ratios
 - Static Scores
