@@ -148,7 +148,27 @@ permutations = [
   ...
 ];
 
-// keyed by n-grams by the primary text
+// keyed by n-grams in the primary text.
+// These are the number of occurrences an n-gram occurs in the text
+primaryNgramFrequencyIndex = {
+  "a": 5,
+  "b": 2,
+  ...
+  "a b": 1,
+  ...
+}
+
+// keyed by n-grams in the secondary text.
+// These are the number of occurrences an n-gram occurs in the text
+secondaryNgramFrequencyIndex = {
+  "d": 5,
+  "e": 2,
+  ...
+  "d e": 1,
+  ...
+}
+
+// keyed by n-grams in the primary text. These the frequency of permutations.
 primaryAlignmentFrequencyIndex = {
   "a": {
     "d": 1,
@@ -173,7 +193,7 @@ primaryAlignmentFrequencyIndex = {
   ...
 }
 
-// keyed by n-grams in the secondary text
+// keyed by n-grams in the secondary text. These are the frequency of permutations.
 secondaryAlignmentFrequencyIndex = {
   "d": {
     "a": 1,
@@ -213,46 +233,6 @@ This allows us to dynamically add new corpus to the index quickly without runnin
 When a sentence is decoded we only use the relevant data from the index.
 Since we are only using a subset of the data our statistical algorithms can run exponentially faster.
 
----
-
-# Scratch Pad
-
-we thinking out loud here.
-
-### Corpus Preprocessing (done)
-Corpus must be prepared as a list of unaligned tokenized sentence pairs and optionally normalized.
-
-### Training/Encoding (done)
-- Receive corpus
-  - Generate n-grams for corpus
-  - Generate permutations
-  - Index and tally occurrences
-- Receive saved alignments (as a list of known permutations)
-  - Index and tally occurrences
-
-### Prediction/Decoding (in progress)
-- Receive unaligned sentence pair
-  - Generate n-grams for unaligned sentence pair
-  - Generate permutations for the n-grams between languages
-- Selecting subset of data that is relevant
-  - relevant to words in provided unaligned sentence pair
-  - from both corpus and saved alignments indices
-(done up to here)
-- Statistical algorithms
-  - Scoring
-  - Weighted average of all scores
-- Alignment Prediction
-  - Selection of best alignments via Process of elimination
-    - Pick the best
-    - Eliminate non-usable conflicts
-    - Penalize usable conflicts
-    - Repeat until all words are covered
-  - Order selected alignments to one of the unaligned sentence word order
-
-loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
-
----
-
 # Prediction Algorithms
 The alignment prediction begins when the user provides an unaligned sentence pair.
 
@@ -289,18 +269,18 @@ secondaryIndex = {};
 primaryNgrams.forEach(primaryNgram => {
   secondaryNgrams.forEach(secondaryNgram => {
     primaryIndex[primaryNgram][secondaryNgram] = {
-      // frequency of this n-gram combination in the corpus (this is the same value as the frequency below)
-      frequency: primaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
+      // frequency of this alignment in the corpus (this is the same value as the frequency below)
+      alignmentFrequency: primaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
       // frequency of primary n-gram in the corpus
-      corpusFrequency: objectSum(primaryAlignmentFrequencyIndex[primaryNgram]),
-      corpusFrequencyRatio: this.frequency / this.corpusFrequency
+      primaryCorpusFrequency: objectSum(primaryAlignmentFrequencyIndex[primaryNgram]),
+      primaryCorpusFrequencyRatio: this.alignmentFrequency / this.primaryCorpusFrequency
     };
     secondaryIndex[secondaryNgram][primaryNgram] = {
-      // frequency of this n-gram combination in the corpus (this is the same value as the frequency above)
-      frequency: secondaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
+      // frequency of this alignment in the corpus (this is the same value as the frequency above)
+      alignmentFrequency: secondaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
       // frequency of secondary n-gram in the corpus
-      corpusFrequency: objectSum(secondaryAlignmentFrequencyIndex[secondaryNgram]),
-      corpusFrequencyRatio: this.frequency / this.corpusFrequency
+      secondaryCorpusFrequency: objectSum(secondaryAlignmentFrequencyIndex[secondaryNgram]),
+      secondaryCorpusFrequencyRatio: this.alignmentFrequency / this.secondaryCorpusFrequency
     };
   });
 });
@@ -308,13 +288,13 @@ primaryNgrams.forEach(primaryNgram => {
 // add filtered frequency sums and ratios
 Object.keys(primaryIndex).forEach(primaryNgram => {
   // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency below)
-  primaryIndex[primaryNgram][secondaryNgram].filteredFrequency = objectSumByAttribute(primaryIndex[primaryNgram], 'frequency');
-  primaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
+  primaryIndex[primaryNgram][secondaryNgram].filteredFrequency = objectSumByAttribute(primaryIndex[primaryNgram], 'alignmentFrequency');
+  primaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.alignmentFrequency / this.filteredFrequency;
 });
 Object.keys(secondaryIndex).forEach(secondaryNgram => {
   // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency above)
-  secondaryIndex[secondaryNgram][primaryNgram].filteredFrequency = objectSumByAttribute(secondaryIndex[secondaryNgram], 'frequency');
-  secondaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.frequency / this.filteredFrequency;
+  secondaryIndex[secondaryNgram][primaryNgram].filteredFrequency = objectSumByAttribute(secondaryIndex[secondaryNgram], 'alignmentFrequency');
+  secondaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.alignmentFrequency / this.filteredFrequency;
 });
 ```
 
@@ -493,9 +473,75 @@ weight = 1 - delta
 
 ## Frequency Ratios
 
+> **TODO**: we need to document this!!!
+
+> **TODO** we can move these calculations into `n-gram document frequency`.
+> we also need to document these better
+
+```
+where x = primary filteredFrequencyRatio
+and y = secondary filteredFrequencyRatio
+affr = average filtered frequency ratio = (x + y) / 2
+
+where a = primary corpusFrequencyRatio
+and b = secondary corpusFrequencyRatio
+acfr = average corpus frequency ratio = (a + b) / 2
+
+where c = alignmentFrequency / primaryNgramFrequency
+and d = alignmentFrequency / secondaryNgramFrequency
+anfr = average ngram frequency ratio = (c + d) / 2
+```
+
+```
+weight = (affr + acfr + anfr) / 3
+```
+
+> **NOTE**: this is a simplified average. A weighted average would be ideal.
+>
+> e.g. `(affr * weight1 + acfr * weight2 + anfr * weight3) / (weight1 + weight2 + weight3)`
+
+## Static Scores
+
+> **NOTE**: score based on factors that don't change once new corpus is added, used during training.
+>
+> See: https://github.com/unfoldingWord-dev/tact/blob/master/tact/src/alignment.js#L214
+
+
 ---
 
-> Work on these next!
+# Scratch Pad
 
-- Frequency Ratios
-- Static Scores
+we are thinking out loud here.
+
+### Corpus Preprocessing (done)
+- [x] Corpus must be prepared as a list of unaligned tokenized sentence pairs and optionally normalized.
+
+### Training/Encoding (done)
+- [x] Receive corpus
+  - [x] Generate n-grams for corpus
+  - [x] Generate permutations
+  - [x] Index and tally occurrences
+- [x] Receive saved alignments (as a list of known permutations)
+  - [x] Index and tally occurrences
+
+### Prediction/Decoding (in progress)
+- [x] Receive unaligned sentence pair
+  - [x] Generate n-grams for unaligned sentence pair
+  - [x] Generate permutations for the n-grams between languages
+- [x] Selecting subset of data that is relevant
+  - [x] relevant to words in provided unaligned sentence pair
+  - [x] from both corpus and saved alignments indices
+- Statistical algorithms
+  - [ ] Scoring
+  - [ ] Weighted average of all scores
+- [ ] Alignment Prediction
+  - [ ] Selection of best alignments via Process of elimination
+    - [ ] Pick the best
+    - [ ] Eliminate non-usable conflicts
+    - [ ] Penalize usable conflicts
+    - [ ] Repeat until all words are covered
+  - [ ] Order selected alignments to one of the unaligned sentence word order
+
+loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
+
+---
