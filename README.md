@@ -540,22 +540,26 @@ For example the phrase plausibility should multiply the final scoring.
 Weighted scores can be calculated based on user defined weights to support
 custom tailored results.
 
-```
-where "weights" is user provided input
-and "scores" contains all the algorithm scores.
+```js
+// where "weights" is user provided input
+// and "scores" contains all the algorithm scores.
 
-weightSum = sum(weights)
+let weightSum = sum(Object.values(weights))
 
-confidence = (
-   weights.frequency * frequency score +
-   weights.uniqueness * uniqueness score +
-   weights.ngramAffinity * ngram affinity score +
-   weights.alignmentOccurrences * alignment occurrences score +
-   weights.alignmentPosition * alignment position score +
-   weights.characterLength * character length score
- ) / weightSum
+let confidence = (
+   weights.frequency * scores.frequency +
+   weights.uniqueness * scores.uniqueness +
+   weights.ngramAffinity * scores.ngramAffinity +
+   weights.alignmentOccurrences * scores.alignmentOccurrences +
+   weights.alignmentPosition * scores.alignmentPosition +
+   weights.characterLength * scores.characterLengthScore
+ ) / weightSum;
 
-confidence = phrase plausibility * confidence
+confidence = scores.phrasePlausibility * confidence;
+
+if (isSavedAlignment) {
+  confidence ++;
+}
 ```
 
 
@@ -583,10 +587,10 @@ we are thinking out loud here.
 - [x] Selecting subset of data that is relevant
   - [x] relevant to words in provided unaligned sentence pair
   - [x] from both corpus and saved alignments indices
-- [ ] Statistical algorithms
+- [x] Statistical algorithms
   - [x] Static scoring
   - [x] Scoring
-  - [ ] Weighted average of all scores
+  - [x] Weighted average of all scores
 - [ ] Alignment Prediction
   - [ ] Selection of best alignments via Process of elimination
     - [ ] Pick the best
