@@ -1,4 +1,4 @@
-atom# Multi-Lingual Word Alignment Prediction (Word MAP)
+# Multi-Lingual Word Alignment Prediction (Word MAP)
 
 # Introduction
 
@@ -500,11 +500,63 @@ weight = (affr + acfr + anfr) / 3
 >
 > e.g. `(affr * weight1 + acfr * weight2 + anfr * weight3) / (weight1 + weight2 + weight3)`
 
-## Static Scores
+## Static Scoring - Outlier Protection - Enhancement - Thingy
+
+> **NOTE**: this isn't a formal algorithm, but an enhancement of existing algorithms
+> to prevent misrepresenting outliers.
 
 > **NOTE**: score based on factors that don't change once new corpus is added, used during training.
 >
 > See: https://github.com/unfoldingWord-dev/tact/blob/master/tact/src/alignment.js#L214
+
+> **NOTE**: This could be ran after each of the affected algorithms or once when we are scoring.
+> If we ran this in the affected algorithms we could just do the averaging there.
+> We should add a note in the other algorithms to reference this.
+
+Algorithms that run just on the unaligned sentence pair may not be representative
+of the corpus. Therefore these algorithms will suggest outliers with the same
+confidence as what is more common.
+
+We want to give preference to alignments that follow the norm found within the corpus
+instead of relying on the single unaligned sentence pair.
+
+Affected algorithms include:
+
+* N-gram length
+* Character length
+* Alignment occurrences
+* Alignment position
+
+Retrieve unaligned sentence pairs from the corpus that contain the alignment and run each of them through the affected algorithms.
+Then calculate a average of each affected algorithm score.
+
+## Scoring
+
+Calculate the average of all algorithm weights with a few exceptions.
+
+Some algorithms should influence the final score more than others.
+For example the phrase plausibility should multiply the final scoring.
+
+Weighted scores can be calculated based on user defined weights to support
+custom tailored results.
+
+```
+where "weights" is user provided input
+and "scores" contains all the algorithm scores.
+
+weightSum = sum(weights)
+
+confidence = (
+   weights.frequency * frequency score +
+   weights.uniqueness * uniqueness score +
+   weights.ngramAffinity * ngram affinity score +
+   weights.alignmentOccurrences * alignment occurrences score +
+   weights.alignmentPosition * alignment position score +
+   weights.characterLength * character length score
+ ) / weightSum
+
+confidence = phrase plausibility * confidence
+```
 
 
 ---
@@ -531,8 +583,9 @@ we are thinking out loud here.
 - [x] Selecting subset of data that is relevant
   - [x] relevant to words in provided unaligned sentence pair
   - [x] from both corpus and saved alignments indices
-- Statistical algorithms
-  - [ ] Scoring
+- [ ] Statistical algorithms
+  - [x] Static scoring
+  - [x] Scoring
   - [ ] Weighted average of all scores
 - [ ] Alignment Prediction
   - [ ] Selection of best alignments via Process of elimination
