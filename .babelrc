@@ -1,4 +1,8 @@
 {
-  "plugins": ["transform-runtime"],
-  "presets": ["es2015"]
+  "plugins": [
+    "transform-runtime",
+    "transform-object-rest-spread",
+    "jest-hoist"
+  ],
+  "presets": ["env", "es2015"]
 }
