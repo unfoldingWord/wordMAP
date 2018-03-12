@@ -3,7 +3,7 @@
  */
 export default class NotImplemented extends Error {
   constructor() {
-    super(`Not implemented`);
+    super(`This code block has not yet been implemented. Maybe you should finish it!`);
     this.name = 'NotImplemented';
   }
 }

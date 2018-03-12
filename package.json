@@ -13,6 +13,18 @@
     "type": "git",
     "url": "git+https://github.com/translationCoreApps/word-map.git"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/__tests__/*.+(ts|js)"
+    ]
+  },
   "keywords": [
     "word",
     "alignment",
@@ -36,6 +48,7 @@
   },
   "homepage": "https://github.com/translationCoreApps/word-map#readme",
   "devDependencies": {
+    "@types/jest": "^22.2.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.2",
     "babel-jest": "^22.4.0",
@@ -50,6 +63,7 @@
     "eslint-config-google": "^0.6.0",
     "eslint-plugin-jest": "^21.14.0",
     "jest": "^21.2.1",
+    "ts-jest": "^22.4.1",
     "typescript": "^2.7.2"
   },
   "dependencies": {

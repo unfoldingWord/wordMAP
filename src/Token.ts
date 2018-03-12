@@ -3,12 +3,20 @@
  */
 export default class Token {
 
-  private text:String;
+    private text: String;
 
-  /**
-   * The text of the token
-   */
-  constructor(text:String) {
-    this.text = text;
-  }
+    /**
+     * The text of the token
+     */
+    constructor(text: String) {
+        this.text = text;
+    }
+
+    /**
+     * Returns a human readable form of the token
+     * @return {String}
+     */
+    public toString() {
+        return this.text;
+    }
 }
