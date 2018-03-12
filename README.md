@@ -51,6 +51,38 @@ We need a tool that:
 * does not have a minimum corpus size.
 * requires minimal system resources.
 
+# Outline
+
+### Corpus Preprocessing
+- Corpus must be prepared as a list of unaligned tokenized sentence pairs and optionally normalized.
+
+### Training/Encoding
+- Receive corpus
+  - Generate n-grams for corpus
+  - Generate permutations
+  - Index and tally occurrences
+- Receive saved alignments (as a list of known permutations)
+  - Index and tally occurrences
+
+### Prediction/Decoding
+- Receive unaligned sentence pair
+  - Generate n-grams for unaligned sentence pair
+  - Generate permutations for the n-grams between languages
+- Selecting subset of data that is relevant
+  - relevant to words in provided unaligned sentence pair
+  - from both corpus and saved alignments indices
+- Statistical algorithms
+  - Static scoring
+  - Scoring
+  - Weighted average of all scores
+- Alignment Prediction
+  - Selection of best alignments via Process of elimination
+    - Pick the best
+    - Eliminate non-usable conflicts
+    - Penalize usable conflicts
+    - Repeat until all words are covered
+  - Order selected alignments to the primary unaligned sentence word order
+
 # Requirements
 
 ## Tool Requirements
@@ -601,46 +633,12 @@ the book of the genealogy of Jesus Christ
 # Saved Alignments Minimum Viable Product
 
 Below are the components required to build a saved alignment tool for use in translationCore.
-The initial goal is not to implement all of the algorithms described in this Document
-but to take the first step in bringing word alignment prediction to translationCore.
+The initial goal is not to implement all of the algorithms described in this document but to take the first step in bringing word alignment prediction to translationCore.
 
+Algorithms/steps needed to implement saved alignments:
 
----
-
-# Scratch Pad
-
-we are thinking out loud here.
-
-### Corpus Preprocessing (done)
-- [x] Corpus must be prepared as a list of unaligned tokenized sentence pairs and optionally normalized.
-
-### Training/Encoding (done)
-- [x] Receive corpus
-  - [x] Generate n-grams for corpus
-  - [x] Generate permutations
-  - [x] Index and tally occurrences
-- [x] Receive saved alignments (as a list of known permutations)
-  - [x] Index and tally occurrences
-
-### Prediction/Decoding (in progress)
-- [x] Receive unaligned sentence pair
-  - [x] Generate n-grams for unaligned sentence pair
-  - [x] Generate permutations for the n-grams between languages
-- [x] Selecting subset of data that is relevant
-  - [x] relevant to words in provided unaligned sentence pair
-  - [x] from both corpus and saved alignments indices
-- [x] Statistical algorithms
-  - [x] Static scoring
-  - [x] Scoring
-  - [x] Weighted average of all scores
-- [x] Alignment Prediction
-  - [x] Selection of best alignments via Process of elimination
-    - [x] Pick the best
-    - [x] Eliminate non-usable conflicts
-    - [x] Penalize usable conflicts
-    - [x] Repeat until all words are covered
-  - [x] Order selected alignments to the primary unaligned sentence word order
-
-loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
-
----
+* Engine Training - for saved alignments
+* Frequency Ratios
+* Alignment Position
+* Scoring
+* Alignment Prediction

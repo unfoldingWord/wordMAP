@@ -1,7 +1,7 @@
 {
   "name": "word-map",
   "version": "0.0.1-alpha.1",
-  "description": "Multilingual Alignment Prediction",
+  "description": "Multi-Lingual Word Alignment Prediction",
   "main": "index.js",
   "scripts": {
     "test": "eslint ./src ./index.js && jest",
