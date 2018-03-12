@@ -562,6 +562,48 @@ if (isSavedAlignment) {
 }
 ```
 
+# Alignment Prediction
+
+Current implementation:
+
+We pick the alignment with the highest confidence score.
+
+Then we take the tokens in the primary n-gram in that alignment and use them to filter out the remaining alignments that include those primary tokens.
+
+Then we take the tokens in the secondary n-gram in that alignment and use them to penalize the remaining alignments that include those secondary tokens.
+
+We will repeat this until all primary words are covered.
+
+> **NOTE** we have full coverage of the primary words but not of the secondary words.
+> This is compensated by learning from the saved alignments.
+> In the future, improvements to the prediction could boost secondary word coverage.
+> This would be particularly helpful in the readability of machine translation output.
+
+Once we have the best alignments for each primary n-gram we sort the alignments according to the word occurrence in the primary sentence.
+
+> **NOTE:** This produces a single proposed sentence.
+> If we wanted to suggest multiple sentences or evaluate the best overall sentence confidence we could generate permutations of all sentences based on the alignments.
+> For increased performance the above permutations might only include the most confident alignments.
+
+
+Example of sort input/output:
+```
+// primary text
+the book of the genealogy of Jesus Christ
+
+// filtered alignments
+[Christ][Jesus][the genealogy of][the book of]
+
+// output
+[the book of][the genealogy of][Jesus][Christ]
+```
+
+# Saved Alignments Minimum Viable Product
+
+Below are the components required to build a saved alignment tool for use in translationCore.
+The initial goal is not to implement all of the algorithms described in this Document
+but to take the first step in bringing word alignment prediction to translationCore.
+
 
 ---
 
@@ -591,13 +633,13 @@ we are thinking out loud here.
   - [x] Static scoring
   - [x] Scoring
   - [x] Weighted average of all scores
-- [ ] Alignment Prediction
-  - [ ] Selection of best alignments via Process of elimination
-    - [ ] Pick the best
-    - [ ] Eliminate non-usable conflicts
-    - [ ] Penalize usable conflicts
-    - [ ] Repeat until all words are covered
-  - [ ] Order selected alignments to one of the unaligned sentence word order
+- [x] Alignment Prediction
+  - [x] Selection of best alignments via Process of elimination
+    - [x] Pick the best
+    - [x] Eliminate non-usable conflicts
+    - [x] Penalize usable conflicts
+    - [x] Repeat until all words are covered
+  - [x] Order selected alignments to the primary unaligned sentence word order
 
 loop through each index and filter by keys that match the n-grams in the provided unaligned sentence pair.
 
