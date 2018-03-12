@@ -2,6 +2,8 @@
   "plugins": [
     "transform-runtime",
     "transform-object-rest-spread",
+    "transform-class-properties",
+    "autobind-class-methods",
     "jest-hoist"
   ],
   "presets": ["env", "es2015"]
