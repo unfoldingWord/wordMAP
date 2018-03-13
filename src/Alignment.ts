@@ -6,31 +6,31 @@ import Ngram from './Ngram';
  */
 export default class Alignment {
 
-    private sourceNgram: Ngram;
-    private targetNgram: Ngram;
+    private _sourceNgram: Ngram;
+    private _targetNgram: Ngram;
 
     /**
      * @param {Ngram} sourceNgram - an n-gram from the source text
      * @param {Ngram} targetNgram - an n-gram from the secondary text
      */
     constructor(sourceNgram: Ngram, targetNgram: Ngram) {
-        this.sourceNgram = sourceNgram;
-        this.targetNgram = targetNgram;
+        this._sourceNgram = sourceNgram;
+        this._targetNgram = targetNgram;
     }
 
     /**
      * Returns the source n-gram
      * @return {Ngram}
      */
-    public get source() {
-        return this.sourceNgram;
+    public get sourceNgram() {
+        return this._sourceNgram;
     }
 
     /**
      * Returns the target n-gram
      * @return {Ngram}
      */
-    public get target() {
-        return this.targetNgram;
+    public get targetNgram() {
+        return this._targetNgram;
     }
 }

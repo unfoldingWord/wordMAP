@@ -8,7 +8,7 @@ describe('create alignment', () => {
         const target = new Ngram([new Token('hi')]);
         const alignment = new Alignment(source, target);
 
-        expect(alignment.source.toString()).toEqual('hello:world');
-        expect(alignment.target.toString()).toEqual('hi');
+        expect(alignment.sourceNgram.toString()).toEqual('hello:world');
+        expect(alignment.targetNgram.toString()).toEqual('hi');
     });
 });

@@ -23,6 +23,9 @@
     },
     "testMatch": [
       "**/__tests__/*.+(ts|js)"
+    ],
+    "testPathIgnorePatterns": [
+      "testUtils.ts"
     ]
   },
   "keywords": [
@@ -68,6 +71,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "string-punctuation-tokenizer": "^0.8.0"
   }
 }
