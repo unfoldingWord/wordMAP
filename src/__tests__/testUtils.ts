@@ -43,7 +43,7 @@ function alignTokens(tokens: Array<Token>): Alignment {
  * @param {String} sentence
  * @return {Array<Token>}
  */
-function tokenizeSentence(sentence: String): Array<Token> {
+export function tokenizeSentence(sentence: String): Array<Token> {
     const words = stringTokenizer.tokenize(sentence);
     const tokens: Array<Token> = [];
     for (const word of words) {
