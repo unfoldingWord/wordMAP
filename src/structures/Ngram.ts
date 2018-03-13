@@ -16,7 +16,7 @@ export default class Ngram {
 
     /**
      * Returns a human readable form of the n-gram.
-     * @return {String}
+     * @return {string}
      */
     public toString(): string {
         const tokenValues = [];

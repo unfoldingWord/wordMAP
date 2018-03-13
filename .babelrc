@@ -6,5 +6,5 @@
     "autobind-class-methods",
     "jest-hoist"
   ],
-  "presets": ["env", "es2015"]
+  "presets": ["env"]
 }

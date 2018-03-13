@@ -29,6 +29,6 @@ describe('append saved alignments', () => {
 describe('append corpus', () => {
     it('is not implemented', () => {
         const engine = new Engine();
-        expect(engine.appendCorpus).toThrow(new NotImplemented());
+        expect(engine.appendCorpus).toThrow(NotImplemented);
     });
 });
