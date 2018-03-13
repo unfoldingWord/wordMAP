@@ -1,7 +1,7 @@
 import NotImplemented from './errors/NotImplemented';
-import Alignment from './Alignment';
-import Ngram from './Ngram';
-import Index from './Index';
+import Alignment from './structures/Alignment';
+import Ngram from './structures/Ngram';
+import Index from './interfaces/Index';
 
 /**
  * Represents a multi-lingual word alignment prediction engine.

@@ -1,8 +1,8 @@
 //@ts-ignore
 import stringTokenizer from 'string-punctuation-tokenizer';
-import Token from '../Token';
-import Ngram from '../Ngram';
-import Alignment from "../Alignment";
+import Token from '../structures/Token';
+import Ngram from '../structures/Ngram';
+import Alignment from "../structures/Alignment";
 
 /**
  * Generates a sample alignment from a sentence

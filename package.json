@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "eslint ./src && jest",
+    "prebuild": "rm -rf dist",
     "build": "tsc",
     "buildold": "babel src --out-dir dist --ignore '**/__tests__,**/__mocks__'",
     "prepublishOnly": "npm test && npm run build"
