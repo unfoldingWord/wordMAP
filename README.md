@@ -642,3 +642,62 @@ Algorithms/steps needed to implement saved alignments:
 * Alignment Position
 * Scoring
 * Alignment Prediction
+
+# Language Configuration Settings API
+
+Word-MAP will be extended to support the storing and retrieving of language specific configuration values via an API. This may also include saved alignment data.
+
+## Potential API Implementation in DCS
+
+Using [DCS](https://git.door43.org/) we could define a repository naming convention and and repository structure that would allow the optimal storage of Word-MAP configuration variables and alignment data.  For an example:
+
+Repository: `jag3773/word-map_en-hbo`
+
+The above would specify that the configuration information is for the English (`en`) and Biblical Hebrew (`hbo`) language pairs.
+
+Repository Contents:
+```
+- config.json
+- saved_alignments.json
+```
+
+The `config.json` file would be a small JSON array that could hold the configurable values for the [Prediction Algorithms](https://github.com/translationCoreApps/word-map/blob/master/README.md#prediction-algorithms).  A provisonal example:
+
+```
+{
+  "source_language": {
+    "direction": "rtl",
+    "identifier": "hbo",
+    "title": "Ancient Hebrew"
+  },
+  "target_language": {
+    "direction": "ltr",
+    "identifier": "en",
+    "title": "English"
+  },
+  "config": [
+    {
+      "feature": "char_length",
+      "option1": 20,
+      "option2": 25
+    },
+    ...
+    {
+      "feature": "length_affinity",
+      "option1": 3,
+      "option2": 5
+    }
+  ],
+  "word-map_version": "1"
+}
+```
+
+The `saved_alignments.json` would be a JSON array of saved alignment pairs.
+
+### Benefits
+
+A benefit of this approach is that it allows users to backup their configuration and reload it on another system, using the existing account. A second advantage is that user's would be able to share configuration and saved alignments with one another, in the same manner in which they share projects. A third benefit is that it allows Word-MAP to define a cascading list of defaults, possibly looking at the [Door43-Catalog](https://git.door43.org/Door43-Catalog) organization first, then checking a user's repo for overrides.
+
+### Limitations
+
+This approach requires a DCS account. This is not a problem for tC but other software using Word-MAP may not have support for DCS accounts. Such software would still be able to read configuration data but could not write it unless they add support for DCS user authentication.
