@@ -2,6 +2,12 @@ import Ngram from '../Ngram';
 import Token from '../Token';
 
 describe('creates an n-gram', () => {
+
+    it('has no tokens', () => {
+        const ngram = new Ngram();
+        expect(ngram.toString()).toEqual('');
+    });
+
     it('has a single token', () => {
         const ngram = new Ngram([new Token('hello')]);
         expect(ngram.toString()).toEqual('hello');

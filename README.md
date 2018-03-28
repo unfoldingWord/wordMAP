@@ -2,7 +2,7 @@
 
 # Introduction
 
-Word alignment prediction is the process of mapping/associating words from some primary text with corresponding words in a secondary text. This tool uses statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
+Word alignment prediction is the process of associating (mapping) words from some primary text with corresponding words in a secondary text. This tool uses statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
 
 Alignments provide many valuable benefits to translators including:
 
@@ -19,14 +19,15 @@ Alignments provide many valuable benefits to translators including:
 * **Gateway (Secondary) Languages**: Those languages that compose the minimum set of trade languages in the world. See also `secondary language`.
 * **Ternary Text**: The translation of a `secondary text`.
 * **Ternary (Minor) Language**: A non-trade language spoken by a small group of people. i.e. a language that is not a `gateway language`. Also, the language used in a `ternary text`.
-* **n-gram (word or phrase)**: A contiguous sequence of n items from a given sample of text. An n-gram of size 1 is referred to as a "unigram"; size 2 is a "bigram", etc. For example: "hello" is a unigram, while "hello world" is a bigram.
+* **Token:** A unit of text within a sentence such as a word or punctuation.
+* **n-gram (word or phrase)**: A contiguous sequence of n tokens from a given sample of text. An n-gram containing a single token is referred to as a "unigram"; two tokens is a "bigram", etc. For example: "hello" is a unigram, while "hello world" is a bigram.
 * **Unaligned Sentence Pair**: A sentence in two languages that need to be aligned. e.g. a sentence from a primary text and secondary text.
 * **Alignment**: Two individual `n-grams` that have been matched from two texts. e.g. from a primary text and secondary text.
 * **Saved Alignment**: An alignment that has been approved/corrected by the user.
 * **Engine**: Contains a index of every permutation of possible `n-gram` `alignments`. And an index of `saved alignments`.
-* **Corpus**: The input dataset which is the primary and secondary text given as a list of `unaligned sentence pairs`. This is used in training the engine. Note: This is not not input directly provided by the user.
+* **Corpus**: The input dataset which is the primary and secondary text given as a list of `unaligned sentence pairs`. This is used in training the engine. Note: This is not input directly provided by the user.
 * **Tokenization**: Separating a sentence into individual words and punctuation.
-* **Normalization**: A text might use several different utf8 characters to represent the same visual character. The process of normalization reduces visual character representation to a single utf8 character. A text using a single utf8 standard is considered normalized.
+* **Normalization**: A text might use characters from multiple utf8 standards to represent the same visual character. The process of normalization reduces visual character representation to a single utf8 character. A text using a single utf8 standard is considered normalized.
 
 > **Note:** it is important to understand that *our* definition of n-grams is "contiguous". It is possible
 > and even beneficial to support non-contiguous n-grams, however this greatly

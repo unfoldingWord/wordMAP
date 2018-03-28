@@ -8,9 +8,9 @@ export default class Ngram {
     private tokens: Array<Token>;
 
     /**
-     * @param {Array<Token>} tokens - a list of tokens of which this n-gram is componsed
+     * @param {Array<Token>} [tokens=[]] - a list of tokens of which this n-gram is composed
      */
-    constructor(tokens: Array<Token>) {
+    constructor(tokens: Array<Token> = []) {
         this.tokens = tokens;
     }
 

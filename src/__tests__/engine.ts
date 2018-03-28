@@ -7,23 +7,23 @@ import Ngram from "../structures/Ngram";
 describe('append saved alignments', () => {
     it('begins empty', () => {
         const engine = new Engine();
-        expect(engine.primarySavedAlignmentFrequencyIndex).toEqual({});
-        expect(engine.secondarySavedAlignmentFrequencyIndex).toEqual({});
+        expect(engine.primaryAlignmentIndex).toEqual({});
+        expect(engine.secondaryAlignmentIndex).toEqual({});
     });
 
     it('counts occurrences', () => {
         const engine = new Engine();
         const firstSentence = alignSentence('Once upon a time, in a galaxy far far away...');
-        engine.appendSavedAlignment(firstSentence);
-        expect(engine.primarySavedAlignmentFrequencyIndex["far"]['raf']).toEqual(2);
-        expect(engine.primarySavedAlignmentFrequencyIndex["a"]['a']).toEqual(2);
-        expect(engine.primarySavedAlignmentFrequencyIndex["in"]['ni']).toEqual(1);
+        engine.addAlignments(firstSentence);
+        expect(engine.primaryAlignmentIndex["far"]['raf']).toEqual(2);
+        expect(engine.primaryAlignmentIndex["a"]['a']).toEqual(2);
+        expect(engine.primaryAlignmentIndex["in"]['ni']).toEqual(1);
 
         const secondSentence = alignSentence('Once upon a time');
-        engine.appendSavedAlignment(secondSentence);
-        expect(engine.primarySavedAlignmentFrequencyIndex["far"]['raf']).toEqual(2);
-        expect(engine.primarySavedAlignmentFrequencyIndex["a"]['a']).toEqual(3);
-        expect(engine.primarySavedAlignmentFrequencyIndex["in"]['ni']).toEqual(1);
+        engine.addAlignments(secondSentence);
+        expect(engine.primaryAlignmentIndex["far"]['raf']).toEqual(2);
+        expect(engine.primaryAlignmentIndex["a"]['a']).toEqual(3);
+        expect(engine.primaryAlignmentIndex["in"]['ni']).toEqual(1);
     });
 });
 
@@ -51,25 +51,22 @@ describe('alignment permutations', () => {
         const primaryNgrams = [
             new Ngram(tokenizeSentence('In')),
             new Ngram(tokenizeSentence('the')),
-            new Ngram(tokenizeSentence('beginning')),
-            new Ngram(tokenizeSentence('In the')),
-            new Ngram(tokenizeSentence('the beginning'))
+            new Ngram(tokenizeSentence('In the'))
         ];
         const secondaryNgrams = [
             new Ngram(tokenizeSentence('nI')),
             new Ngram(tokenizeSentence('eht')),
-            new Ngram(tokenizeSentence('gninnigeb')),
-            new Ngram(tokenizeSentence('nI eht')),
-            new Ngram(tokenizeSentence('eht gninnigeb'))
+            new Ngram(tokenizeSentence('nI eht'))
         ];
         const permutations = Engine.generateAlignmentPermutations(primaryNgrams, secondaryNgrams);
-        expect(permutations).toEqual([{"_sourceNgram": {"tokens": [{"text": "In"}]}, "_targetNgram": {"tokens": [{"text": "nI"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}]}, "_targetNgram": {"tokens": [{"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}]}, "_targetNgram": {"tokens": [{"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}]}, "_targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}]}, "_targetNgram": {"tokens": [{"text": "eht"}, {"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "nI"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "eht"}, {"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "nI"}]}}, {"_sourceNgram": {"tokens": [{"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "eht"}, {"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "nI"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]}, "_targetNgram": {"tokens": [{"text": "eht"}, {"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}, {"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "nI"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}, {"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}, {"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "gninnigeb"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}, {"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}}, {"_sourceNgram": {"tokens": [{"text": "the"}, {"text": "beginning"}]}, "_targetNgram": {"tokens": [{"text": "eht"}, {"text": "gninnigeb"}]}}]);
+
+        expect(permutations).toEqual([{"_sourceNgram":{"tokens":[{"text":"In"}]},"_targetNgram":{"tokens":[{"text":"nI"}]}},{"_sourceNgram":{"tokens":[{"text":"In"}]},"_targetNgram":{"tokens":[{"text":"eht"}]}},{"_sourceNgram":{"tokens":[{"text":"In"}]},"_targetNgram":{"tokens":[{"text":"nI"},{"text":"eht"}]}},{"_sourceNgram":{"tokens":[{"text":"In"}]},"_targetNgram":{"tokens":[]}},{"_sourceNgram":{"tokens":[{"text":"the"}]},"_targetNgram":{"tokens":[{"text":"nI"}]}},{"_sourceNgram":{"tokens":[{"text":"the"}]},"_targetNgram":{"tokens":[{"text":"eht"}]}},{"_sourceNgram":{"tokens":[{"text":"the"}]},"_targetNgram":{"tokens":[{"text":"nI"},{"text":"eht"}]}},{"_sourceNgram":{"tokens":[{"text":"the"}]},"_targetNgram":{"tokens":[]}},{"_sourceNgram":{"tokens":[{"text":"In"},{"text":"the"}]},"_targetNgram":{"tokens":[{"text":"nI"}]}},{"_sourceNgram":{"tokens":[{"text":"In"},{"text":"the"}]},"_targetNgram":{"tokens":[{"text":"eht"}]}},{"_sourceNgram":{"tokens":[{"text":"In"},{"text":"the"}]},"_targetNgram":{"tokens":[{"text":"nI"},{"text":"eht"}]}},{"_sourceNgram":{"tokens":[{"text":"In"},{"text":"the"}]},"_targetNgram":{"tokens":[]}}]);
     });
 });
 
 describe('append corpus', () => {
     it('is not implemented', () => {
         const engine = new Engine();
-        expect(engine.appendCorpus).toThrow(NotImplemented);
+        expect(engine.addCorpus).toThrow(NotImplemented);
     });
 });

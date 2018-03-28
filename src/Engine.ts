@@ -31,7 +31,7 @@ export default class Engine {
      * Returns the saved alignments index keyed by n-grams in the primary text
      * @return {Index}
      */
-    public get primarySavedAlignmentFrequencyIndex():Index {
+    public get primaryAlignmentIndex():Index {
         return this._primarySavedAlignmentFrequencyIndex;
     }
 
@@ -39,26 +39,26 @@ export default class Engine {
      * Returns the saved alignments index keyed by n-grams in the secondary text
      * @return {Index}
      */
-    public get secondarySavedAlignmentFrequencyIndex():Index {
+    public get secondaryAlignmentIndex():Index {
         return this._secondarySavedAlignmentFrequencyIndex;
     }
 
-    appendCorpus() {
+    addCorpus() {
         throw new NotImplemented();
     }
 
 
     /**
-     * Appends new saved allignments to the engine.
+     * Appends new saved alignments to the engine.
      * Adding saved alignments improves the quality of predictions.
      * @param {Array<Alignment>} savedAlignments - a list of alignments
      */
-    appendSavedAlignment(savedAlignments: Array<Alignment>) {
+    addAlignments(savedAlignments: Array<Alignment>) {
         for(const alignment of savedAlignments) {
             const source = alignment.sourceNgram;
             const target = alignment.targetNgram;
-            this._primarySavedAlignmentFrequencyIndex = Engine.indexAlignmentNgrams(this._primarySavedAlignmentFrequencyIndex, source, target);
-            this._secondarySavedAlignmentFrequencyIndex = Engine.indexAlignmentNgrams(this._secondarySavedAlignmentFrequencyIndex, source, target);
+            this._primarySavedAlignmentFrequencyIndex = Engine.indexAlignmentNgrams(this.primaryAlignmentIndex, source, target);
+            this._secondarySavedAlignmentFrequencyIndex = Engine.indexAlignmentNgrams(this.secondaryAlignmentIndex, target, source);
         }
     }
 
@@ -121,9 +121,9 @@ export default class Engine {
     }
 
     /**
-     * Generates an array of all possible alignments between the two texts.
-     * @param {Array<Ngram>} primaryNgrams
-     * @param {Array<Ngram>} secondaryNgrams
+     * Generates an array of all possible alignments between two texts.
+     * @param {Array<Ngram>} primaryNgrams - n-grams from the primary text
+     * @param {Array<Ngram>} secondaryNgrams - n-grams from the secondary text
      * @returns {Array<Alignment>}
      */
     public static generateAlignmentPermutations(primaryNgrams:Array<Ngram>, secondaryNgrams:Array<Ngram>):Array<Alignment> {
@@ -132,21 +132,26 @@ export default class Engine {
             for(const sgram of secondaryNgrams) {
                 alignments.push(new Alignment(pgram, sgram));
             }
+
+            // TRICKY: include empty match alignment
+            alignments.push(new Alignment(pgram, new Ngram()));
         }
         return alignments;
     }
 
 
     /**
-     * Runs the engine
+     * Runs th engine
+     *
+     * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
      */
     public run(unalignedSentencePair:[Array<Token>, Array<Token>]) {
         const primarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[0]);
         const secondarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[1]);
         const alignments = Engine.generateAlignmentPermutations(primarySentenceNgrams, secondarySentenceNgrams);
 
-        // filter corpus/saved alignment indicies to just those within the sentences.
-        // perform calculations on filterd and unfiltered indicies.
+        // filter corpus/saved alignment indices to just those within the sentences.
+        // perform calculations on filtered and unfiltered indices.
 
         let state = {};
         for(const algorithm of this._algorithms) {
