@@ -3,6 +3,9 @@ import stringTokenizer from 'string-punctuation-tokenizer';
 import Token from '../structures/Token';
 import Ngram from '../structures/Ngram';
 import Alignment from "../structures/Alignment";
+import Algorithm from "../interfaces/Algorithm";
+import KeyStore from "../interfaces/KeyStore";
+import DataIndex from "../DataIndex";
 
 /**
  * Generates a sample alignment from a sentence
@@ -62,4 +65,13 @@ export function tokenizeSentence(sentence: String): Array<Token> {
 function randNgramLength(numTokens:number, maxLength:number=3):number {
     const ceiling = Math.min(numTokens, maxLength);
     return Math.floor(Math.random() * ceiling) + 1;
+}
+
+export class MockAlgorithm implements Algorithm {
+    name: string = 'mock algorithm';
+
+    execute(state: KeyStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Array<Token>, Array<Token>]): KeyStore {
+        return {};
+    }
+
 }

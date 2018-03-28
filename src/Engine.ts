@@ -22,6 +22,14 @@ export default class Engine {
     }
 
     /**
+     * Returns a list of algorithms that are registered in the engine
+     * @return {Array<Algorithm>}
+     */
+    get algorithms() {
+        return this._algorithms;
+    }
+
+    /**
      * Adds a new algorithm to the engine.
      * @param {Algorithm} algorithm - the algorithm to run with the engine.
      */
@@ -104,7 +112,7 @@ export default class Engine {
         let state:KeyStore = {};
         for(const algorithm of this._algorithms) {
             console.log(`executing ${algorithm.name} algorithm`);
-            state = algorithm.execute(this.corpusIndex, this.savedAlignmentsIndex, unalignedSentencePair, state);
+            state = algorithm.execute(state, this.corpusIndex, this.savedAlignmentsIndex, unalignedSentencePair);
         }
     }
 }
