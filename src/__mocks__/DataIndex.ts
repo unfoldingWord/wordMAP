@@ -1,7 +1,7 @@
-export const addAlignments = jest.fn();
+export const mockAddAlignments = jest.fn();
 
 export default jest.fn().mockImplementation(() => {
     return {
-        addAlignments: addAlignments
+        addAlignments: mockAddAlignments
     }
 });

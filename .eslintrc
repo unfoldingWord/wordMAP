@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "google"
-  ],
+  "extends": "eslint:recommended",
   "plugins": [
     "jest"
   ],

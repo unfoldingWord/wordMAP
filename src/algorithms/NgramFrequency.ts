@@ -2,7 +2,6 @@ import Algorithm from '../interfaces/Algorithm';
 import KeyStore from "../interfaces/KeyStore";
 import DataIndex from "../DataIndex";
 import Token from "../structures/Token";
-import Engine from "../Engine";
 import Ngram from "../structures/Ngram";
 import Alignment from "../structures/Alignment";
 
@@ -13,9 +12,9 @@ export default class NgramFrequency implements Algorithm {
     name: string = 'n-gram frequency';
 
     execute(state: KeyStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Array<Token>, Array<Token>]): KeyStore {
-        const primarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[0]);
-        const secondarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[1]);
-        const alignments = Engine.generateAlignmentPermutations(primarySentenceNgrams, secondarySentenceNgrams);
+        const primarySentenceNgrams = NgramFrequency.generateSentenceNgrams(unalignedSentencePair[0]);
+        const secondarySentenceNgrams = NgramFrequency.generateSentenceNgrams(unalignedSentencePair[1]);
+        const alignments = NgramFrequency.generateAlignmentPermutations(primarySentenceNgrams, secondarySentenceNgrams);
 
         const filteredCorpusIndex = NgramFrequency.filterIndex(corpusIndex, alignments);
         const filteredSavedAlignmentsIndex = NgramFrequency.filterIndex(savedAlignmentsIndex, alignments);
@@ -27,6 +26,58 @@ export default class NgramFrequency implements Algorithm {
 
         // TODO: return the formatted state
         return {};
+    }
+
+    /**
+     * Generates an array of all possible contiguous n-grams within the sentence.
+     * @param {Array<Token>} sentence
+     * @param {number} maxNgramLength
+     * @returns {any[]}
+     */
+    public static generateSentenceNgrams(sentence:Array<Token>, maxNgramLength:number=3) {
+        if(maxNgramLength < 0) throw new RangeError(`Maximum n-gram size cannot be less than 0. Received ${maxNgramLength}`);
+        let ngrams:Array<Ngram> = [];
+        const maxLength = Math.min(maxNgramLength, sentence.length);
+        for(let ngramLength=1; ngramLength < maxLength; ngramLength ++) {
+            ngrams = ngrams.concat(NgramFrequency.readSizedNgrams(sentence, ngramLength));
+        }
+        return ngrams;
+    }
+
+    /**
+     * Returns an array of n-grams of a particular size from a sentence
+     * @param {Array<Token>} sentence - the sentence from which n-grams will be read
+     * @param {number} ngramLength - the length of each n-gram.
+     * @returns {Array<Ngram>}
+     */
+    public static readSizedNgrams(sentence:Array<Token>, ngramLength:number):Array<Ngram> {
+        const ngrams:Array<Ngram> = [];
+        for(let index=0; index < sentence.length; index ++) {
+            const end = index + ngramLength;
+            if(end >= sentence.length) break;
+            const ngram = new Ngram(sentence.slice(index, end));
+            ngrams.push(ngram);
+        }
+        return ngrams;
+    }
+
+    /**
+     * Generates an array of all possible alignments between two texts.
+     * @param {Array<Ngram>} primaryNgrams - n-grams from the primary text
+     * @param {Array<Ngram>} secondaryNgrams - n-grams from the secondary text
+     * @returns {Array<Alignment>}
+     */
+    public static generateAlignmentPermutations(primaryNgrams:Array<Ngram>, secondaryNgrams:Array<Ngram>):Array<Alignment> {
+        const alignments:Array<Alignment> = [];
+        for(const pgram of primaryNgrams) {
+            for(const sgram of secondaryNgrams) {
+                alignments.push(new Alignment(pgram, sgram));
+            }
+
+            // TRICKY: include empty match alignment
+            alignments.push(new Alignment(pgram, new Ngram()));
+        }
+        return alignments;
     }
 
     /**
