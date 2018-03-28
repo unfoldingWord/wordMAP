@@ -93,8 +93,12 @@ export default class DataIndex {
         for(const alignment of alignments) {
             const source = alignment.sourceNgram;
             const target = alignment.targetNgram;
+
+            // index the alignment frequency
             this._primaryAlignmentFrequencyIndex = DataIndex.indexAlignmentNgrams(this._primaryAlignmentFrequencyIndex, source, target);
             this._secondaryAlignmentFrequencyIndex = DataIndex.indexAlignmentNgrams(this._secondaryAlignmentFrequencyIndex, target, source);
+
+            // TODO: index the n-gram frequency
         }
     }
 

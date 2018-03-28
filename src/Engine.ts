@@ -101,30 +101,10 @@ export default class Engine {
      * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
      */
     public run(unalignedSentencePair:[Array<Token>, Array<Token>]) {
-        const primarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[0]);
-        const secondarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[1]);
-        const alignments = Engine.generateAlignmentPermutations(primarySentenceNgrams, secondarySentenceNgrams);
-
-        const primaryIndex:KeyStore = {};
-        const secondaryIndex:KeyStore = {};
-        for(const pNgram of primarySentenceNgrams) {
-            for(const sNgram of secondarySentenceNgrams) {
-                const alignmentFrequency = this.savedAlignmentsIndex.getPrimaryAlignmentFrequency(pNgram, sNgram);
-                primaryIndex[pNgram.toString()][sNgram.toString()] = {
-                    alignmentFrequency,
-                    primaryCorpusFrequency: 0, // TODO: calculate
-                    primaryCorpusFrequencyRatio: 0 // TODO: calculate
-                };
-            }
-        }
-        // TODO: filter corpus/saved alignment indices to just those within the sentences.
-
-        // perform calculations on filtered and unfiltered indices.
-
-        let state = {};
+        let state:KeyStore = {};
         for(const algorithm of this._algorithms) {
             console.log(`executing ${algorithm.name} algorithm`);
-            state = algorithm.execute(state);
+            state = algorithm.execute(this.corpusIndex, this.savedAlignmentsIndex, unalignedSentencePair, state);
         }
     }
 }
