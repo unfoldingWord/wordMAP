@@ -1,32 +1,7 @@
 import Engine from '../Engine';
 import NotImplemented from '../errors/NotImplemented';
-import {alignSentence, tokenizeSentence} from './testUtils';
-import Token from "../structures/Token";
+import {tokenizeSentence} from './testUtils';
 import Ngram from "../structures/Ngram";
-
-describe('append saved alignments', () => {
-    it('begins empty', () => {
-        const engine = new Engine();
-        expect(engine.primaryAlignmentIndex).toEqual({});
-        expect(engine.secondaryAlignmentIndex).toEqual({});
-    });
-
-    it('counts occurrences', () => {
-        const engine = new Engine();
-        const firstSentence = alignSentence('Once upon a time, in a galaxy far far away...');
-        engine.addAlignments(firstSentence);
-        expect(engine.primaryAlignmentIndex["far"]['raf']).toEqual(2);
-        expect(engine.primaryAlignmentIndex["a"]['a']).toEqual(2);
-        expect(engine.primaryAlignmentIndex["in"]['ni']).toEqual(1);
-
-        const secondSentence = alignSentence('Once upon a time');
-        engine.addAlignments(secondSentence);
-        expect(engine.primaryAlignmentIndex["far"]['raf']).toEqual(2);
-        expect(engine.primaryAlignmentIndex["a"]['a']).toEqual(3);
-        expect(engine.primaryAlignmentIndex["in"]['ni']).toEqual(1);
-    });
-});
-
 
 describe('sentence n-grams', () => {
     const sentence = tokenizeSentence('In the beginning God created');

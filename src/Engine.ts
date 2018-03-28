@@ -1,9 +1,10 @@
 import NotImplemented from './errors/NotImplemented';
 import Alignment from './structures/Alignment';
 import Ngram from './structures/Ngram';
-import Index from './interfaces/Index';
+import KeyStore from './interfaces/KeyStore';
 import Algorithm from './interfaces/Algorithm';
 import Token from "./structures/Token";
+import DataIndex from "./DataIndex";
 
 /**
  * Represents a multi-lingual word alignment prediction engine.
@@ -11,12 +12,13 @@ import Token from "./structures/Token";
 export default class Engine {
 
     private _algorithms:Array<Algorithm> = [];
-    private _primarySavedAlignmentFrequencyIndex:Index = {};
-    private _secondarySavedAlignmentFrequencyIndex:Index = {};
+    private corpusIndex:DataIndex;
+    private savedAlignmentsIndex:DataIndex;
 
     constructor() {
         // TODO: read in custom configuration
-
+        this.corpusIndex = new DataIndex();
+        this.savedAlignmentsIndex = new DataIndex();
     }
 
     /**
@@ -27,23 +29,7 @@ export default class Engine {
         this._algorithms.push(algorithm);
     }
 
-    /**
-     * Returns the saved alignments index keyed by n-grams in the primary text
-     * @return {Index}
-     */
-    public get primaryAlignmentIndex():Index {
-        return this._primarySavedAlignmentFrequencyIndex;
-    }
-
-    /**
-     * Returns the saved alignments index keyed by n-grams in the secondary text
-     * @return {Index}
-     */
-    public get secondaryAlignmentIndex():Index {
-        return this._secondarySavedAlignmentFrequencyIndex;
-    }
-
-    addCorpus() {
+    public addCorpus() {
         throw new NotImplemented();
     }
 
@@ -53,38 +39,8 @@ export default class Engine {
      * Adding saved alignments improves the quality of predictions.
      * @param {Array<Alignment>} savedAlignments - a list of alignments
      */
-    addAlignments(savedAlignments: Array<Alignment>) {
-        for(const alignment of savedAlignments) {
-            const source = alignment.sourceNgram;
-            const target = alignment.targetNgram;
-            this._primarySavedAlignmentFrequencyIndex = Engine.indexAlignmentNgrams(this.primaryAlignmentIndex, source, target);
-            this._secondarySavedAlignmentFrequencyIndex = Engine.indexAlignmentNgrams(this.secondaryAlignmentIndex, target, source);
-        }
-    }
-
-    /**
-     * This increments the indexed frequency count for n-grams in the alignment.
-     * This method is agnostic to the primary and secondary alignment indices therefore it
-     * accepts the n-grams directly rather than the alignment object itself.
-     *
-     * @param {Index} index - The initial index. This will not be modified directly.
-     * @param {Ngram} primaryNgram - the alignments's primary n-gram
-     * @param {Ngram} secondaryNgram - the alignment's secondary n-gram
-     * @return {Index} a copy of the index with the new data.
-     */
-    private static indexAlignmentNgrams(index:Index, primaryNgram:Ngram, secondaryNgram:Ngram) {
-        const updatedIndex = Object.assign({}, index);
-        const primaryKey:string = primaryNgram.toString();
-        const secondaryKey:string = secondaryNgram.toString();
-
-        if(!(primaryKey in updatedIndex)) {
-            updatedIndex[primaryKey] = {};
-        }
-        if(!(secondaryKey in updatedIndex[primaryKey])) {
-            updatedIndex[primaryKey][secondaryKey] = 0;
-        }
-        updatedIndex[primaryKey][secondaryKey] += 1;
-        return updatedIndex;
+    public addAlignments(savedAlignments: Array<Alignment>) {
+        this.savedAlignmentsIndex.addAlignments(savedAlignments);
     }
 
     /**
@@ -139,7 +95,6 @@ export default class Engine {
         return alignments;
     }
 
-
     /**
      * Runs th engine
      *
@@ -150,7 +105,20 @@ export default class Engine {
         const secondarySentenceNgrams = Engine.generateSentenceNgrams(unalignedSentencePair[1]);
         const alignments = Engine.generateAlignmentPermutations(primarySentenceNgrams, secondarySentenceNgrams);
 
-        // filter corpus/saved alignment indices to just those within the sentences.
+        const primaryIndex:KeyStore = {};
+        const secondaryIndex:KeyStore = {};
+        for(const pNgram of primarySentenceNgrams) {
+            for(const sNgram of secondarySentenceNgrams) {
+                const alignmentFrequency = this.savedAlignmentsIndex.getPrimaryAlignmentFrequency(pNgram, sNgram);
+                primaryIndex[pNgram.toString()][sNgram.toString()] = {
+                    alignmentFrequency,
+                    primaryCorpusFrequency: 0, // TODO: calculate
+                    primaryCorpusFrequencyRatio: 0 // TODO: calculate
+                };
+            }
+        }
+        // TODO: filter corpus/saved alignment indices to just those within the sentences.
+
         // perform calculations on filtered and unfiltered indices.
 
         let state = {};

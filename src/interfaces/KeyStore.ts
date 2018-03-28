@@ -1,6 +1,6 @@
 /**
  * Defines an interface for indices
  */
-export default interface Index {
+export default interface KeyStore {
   [key: string]: any;
 }
