@@ -4,7 +4,7 @@
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "index.js",
   "scripts": {
-    "test": "eslint ./src && jest",
+    "test": "tslint -c tslint.json src/**/*.ts && jest",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "buildold": "babel src --out-dir dist --ignore '**/__tests__,**/__mocks__'",
@@ -54,7 +54,6 @@
   "devDependencies": {
     "@types/jest": "^22.2.0",
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.2",
     "babel-jest": "^22.4.3",
     "babel-plugin-autobind-class-methods": "^5.0.1",
     "babel-plugin-jest-hoist": "^22.4.3",
@@ -63,11 +62,9 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "codecov": "^3.0.0",
-    "eslint": "^4.19.1",
-    "eslint-config-google": "^0.6.0",
-    "eslint-plugin-jest": "^21.15.0",
     "jest": "^22.4.2",
     "ts-jest": "^22.4.2",
+    "tslint": "^5.9.1",
     "typescript": "^2.8.1"
   },
   "dependencies": {

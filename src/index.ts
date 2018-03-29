@@ -1,16 +1,16 @@
-import Engine from './Engine';
-import NgramFrequency from './algorithms/NgramFrequency';
+import NgramFrequency from "./algorithms/NgramFrequency";
+import Engine from "./Engine";
 import Token from "./structures/Token";
 
 export class MAP {
-    private _engine:Engine;
+  private engine: Engine;
 
-    constructor() {
-        this._engine = new Engine();
-        this._engine.registerAlgorithm(new NgramFrequency());
-    }
+  constructor() {
+    this.engine = new Engine();
+    this.engine.registerAlgorithm(new NgramFrequency());
+  }
 
-    public predict(unalignedSentencePair:[Array<Token>, Array<Token>]):void {
-        this._engine.run(unalignedSentencePair);
-    }
+  public predict(unalignedSentencePair: [Token[], Token[]]): void {
+    this.engine.run(unalignedSentencePair);
+  }
 }
