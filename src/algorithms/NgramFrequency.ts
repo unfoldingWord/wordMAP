@@ -11,8 +11,8 @@ import Token from "../structures/Token";
 export default class NgramFrequency implements Algorithm {
   /**
    * Generates an array of all possible contiguous n-grams within the sentence.
-   * @param {Array<Token>} sentence
-   * @param {number} maxNgramLength
+   * @param {Array<Token>} sentence - the tokens in a sentence
+   * @param {number} [maxNgramLength=3] - the maximum n-gram size to generate
    * @returns {any[]}
    */
   public static generateSentenceNgrams(sentence: Token[], maxNgramLength: number = 3) {
@@ -80,21 +80,62 @@ export default class NgramFrequency implements Algorithm {
 
     for (const pNgram of primaryNgrams) {
       for (const sNgram of secondaryNgrams) {
-        const alignmentFrequency = index.getPrimaryAlignmentFrequency(
+        const primaryFrequencies = NgramFrequency.calculateNgramFrequencies(
+          index.primaryAlignmentFrequencyIndex,
           pNgram,
           sNgram
         );
+        primaryIndex.write(
+          primaryFrequencies,
+          pNgram.toString(),
+          sNgram.toString()
+        );
 
-        const calculations = {
-          alignmentFrequency,
-          primaryCorpusFrequency: 0, // TODO: calculate
-          primaryCorpusFrequencyRatio: 0 // TODO: calculate
-        };
-        primaryIndex.write(calculations, pNgram.toString(), sNgram.toString());
+        const secondaryFrequencies = NgramFrequency.calculateNgramFrequencies(
+          index.secondaryAlignmentFrequencyIndex,
+          sNgram,
+          pNgram
+        );
+        secondaryIndex.write(
+          secondaryFrequencies,
+          sNgram.toString(),
+          pNgram.toString()
+        );
       }
     }
 
     return [primaryIndex, secondaryIndex];
+  }
+
+  /**
+   * Calculates the frequency of occurrences within a store.
+   * @param {SafeStore} store - the store from which to calculate frequency
+   * @param {Ngram} primaryNgram - the primary n-gram
+   * @param {Ngram} secondaryNgram - the secondary n-gram
+   * @return {object}
+   */
+  private static calculateNgramFrequencies(store: SafeStore, primaryNgram: Ngram, secondaryNgram: Ngram): object {
+    // read alignment frequency
+    // NOTE: the alignment frequency will have the same value in both the primary and secondary store.
+    let alignmentFrequency = store.read(
+      primaryNgram.toString(),
+      secondaryNgram.toString()
+    );
+    if (alignmentFrequency === undefined) {
+      alignmentFrequency = 0;
+    }
+
+    // count n-gram frequency
+    const ngramFrequency = store.readSum(primaryNgram.toString());
+
+    // calculate ratio
+    const frequencyRatio = alignmentFrequency / ngramFrequency;
+
+    return {
+      alignmentFrequency,
+      ngramFrequency,
+      frequencyRatio
+    };
   }
 
   /**
@@ -111,17 +152,21 @@ export default class NgramFrequency implements Algorithm {
   public name: string = "n-gram frequency";
 
   public execute(state: SafeStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): SafeStore {
+    // generate sentence n-grams
     const primarySentenceNgrams = NgramFrequency.generateSentenceNgrams(
       unalignedSentencePair[0]
     );
     const secondarySentenceNgrams = NgramFrequency.generateSentenceNgrams(
       unalignedSentencePair[1]
     );
+
+    // generate alignment permutations
     const alignments = NgramFrequency.generateAlignmentPermutations(
       primarySentenceNgrams,
       secondarySentenceNgrams
     );
 
+    // generate filtered indexes
     const filteredCorpusIndex = NgramFrequency.filterIndex(
       corpusIndex,
       alignments
@@ -131,6 +176,7 @@ export default class NgramFrequency implements Algorithm {
       alignments
     );
 
+    // perform calculations
     const alignmentStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,

@@ -6,7 +6,7 @@ import DataIndex from "../../index/DataIndex";
 import Ngram from "../../structures/Ngram";
 import NgramFrequency from "../NgramFrequency";
 
-describe("sentence n-grams", () => {
+describe("process sentence n-grams", () => {
   const sentence = tokenizeMockSentence("In the beginning God created");
   it("reads sized n-grams", () => {
     const zerograms = NgramFrequency.readSizedNgrams(sentence, 0);
@@ -166,4 +166,8 @@ describe("calculate frequency", () => {
     index
   );
   // TODO: make assertions
+});
+
+it("executes", () => {
+  // TODO: perform assertions on execute
 });

@@ -74,7 +74,7 @@ export default class SafeStore {
 
   /**
    * Returns the value from the store at the given path
-   * @param {string} keys - the keys specifying the path to read
+   * @param {string[]} keys - the keys specifying the path to read
    * @return {any} - the value found at the path
    */
   public read(...keys: string[]): any {
@@ -84,9 +84,29 @@ export default class SafeStore {
   /**
    * Writes a value to the store
    * @param value - the value to write
-   * @param {string} keys - the keys specifying the path to write
+   * @param {string[]} keys - the keys specifying the path to write
    */
   public write(value: any, ...keys: string[]) {
     SafeStore.writeDeep(this.keyStore, value, [...keys]);
+  }
+
+  /**
+   * Sums all the integer values at the path
+   * @param {string[]} keys - the keys specifying the path to sum
+   * @return {number}
+   */
+  public readSum(...keys: string[]): number {
+    const obj = this.read(...keys);
+    let sum = 0;
+    if (obj && typeof obj === "object") {
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key) && typeof obj[key] === "number") {
+          sum += obj[key];
+        }
+      }
+    } else if (typeof obj === "number") {
+      sum += obj;
+    }
+    return sum;
   }
 }

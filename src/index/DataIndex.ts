@@ -11,6 +11,9 @@ export default class DataIndex {
 
   /**
    * Returns the alignment frequency found in the index.
+   *
+   * @deprecated
+   *
    * @param {SafeStore} index - the index of alignment frequencies
    * @param {Ngram} primaryNgram - the primary text n-gram
    * @param {Ngram} secondaryNgram - the secondary text n-gram
@@ -95,9 +98,13 @@ export default class DataIndex {
   }
 
   /**
-   * Returns the alignment frequency found in the primary index
-   * @param {Ngram} primaryNgram
-   * @param {Ngram} secondaryNgram
+   * Returns the frequency for which this alignment occurs in the saved alignments.
+   * This is inverse of {@link getSecondaryAlignmentFrequency}.
+   *
+   * @deprecated
+   *
+   * @param {Ngram} primaryNgram - the primary n-gram of the alignment
+   * @param {Ngram} secondaryNgram - the secondary n-gram of the alignment
    * @return {number}
    */
   public getPrimaryAlignmentFrequency(primaryNgram: Ngram, secondaryNgram: Ngram) {
@@ -109,10 +116,13 @@ export default class DataIndex {
   }
 
   /**
-   * Returns the alignment frequency found in the secondary index
+   * Returns the frequency for which this alignment occurs in the saved alignments.
+   * This is the inverse of {@link getPrimaryAlignmentFrequency}.
    *
-   * @param {Ngram} primaryNgram
-   * @param {Ngram} secondaryNgram
+   * @deprecated
+   *
+   * @param {Ngram} primaryNgram - the primary n-gram of the alignment
+   * @param {Ngram} secondaryNgram - the secondary n-gram of the alignment
    * @return {number}
    */
   public getSecondaryAlignmentFrequency(primaryNgram: Ngram, secondaryNgram: Ngram) {
@@ -131,6 +141,10 @@ export default class DataIndex {
     throw new NotImplemented();
   }
 
+  /**
+   * Adds a sentence alignment to the index.
+   * @param {Alignment[]} alignments - an array of alignments to add
+   */
   public addAlignments(alignments: Alignment[]) {
     for (const alignment of alignments) {
       const source = alignment.source;
