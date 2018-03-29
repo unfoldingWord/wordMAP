@@ -81,80 +81,52 @@ describe("alignment permutations", () => {
 
     expect(permutations).toEqual([
       {
-        "_sourceNgram": {"tokens": [{"text": "In"}]},
-        "_targetNgram": {"tokens": [{"text": "nI"}]},
+        "sourceNgram": {"tokens": [{"text": "In"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}]},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "In"}]},
-        "_targetNgram": {"tokens": [{"text": "eht"}]},
+        "sourceNgram": {"tokens": [{"text": "In"}]},
+        "targetNgram": {"tokens": [{"text": "eht"}]},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "In"}]},
-        "_targetNgram": {
-          "tokens": [
-            {"text": "nI"},
-            {"text": "eht"}],
-        },
+        "sourceNgram": {"tokens": [{"text": "In"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "In"}]},
-        "_targetNgram": {"tokens": []},
+        "sourceNgram": {"tokens": [{"text": "In"}]},
+        "targetNgram": {"tokens": []},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "the"}]},
-        "_targetNgram": {"tokens": [{"text": "nI"}]},
+        "sourceNgram": {"tokens": [{"text": "the"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}]},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "the"}]},
-        "_targetNgram": {"tokens": [{"text": "eht"}]},
+        "sourceNgram": {"tokens": [{"text": "the"}]},
+        "targetNgram": {"tokens": [{"text": "eht"}]},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "the"}]},
-        "_targetNgram": {
-          "tokens": [
-            {"text": "nI"},
-            {"text": "eht"}],
-        },
+        "sourceNgram": {"tokens": [{"text": "the"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]},
       },
       {
-        "_sourceNgram": {"tokens": [{"text": "the"}]},
-        "_targetNgram": {"tokens": []},
+        "sourceNgram": {"tokens": [{"text": "the"}]},
+        "targetNgram": {"tokens": []},
       },
       {
-        "_sourceNgram": {
-          "tokens": [
-            {"text": "In"},
-            {"text": "the"}],
-        },
-        "_targetNgram": {"tokens": [{"text": "nI"}]},
+        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}]},
       },
       {
-        "_sourceNgram": {
-          "tokens": [
-            {"text": "In"},
-            {"text": "the"}],
-        },
-        "_targetNgram": {"tokens": [{"text": "eht"}]},
+        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
+        "targetNgram": {"tokens": [{"text": "eht"}]},
       },
       {
-        "_sourceNgram": {
-          "tokens": [
-            {"text": "In"},
-            {"text": "the"}],
-        },
-        "_targetNgram": {
-          "tokens": [
-            {"text": "nI"},
-            {"text": "eht"}],
-        },
+        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]},
       },
       {
-        "_sourceNgram": {
-          "tokens": [
-            {"text": "In"},
-            {"text": "the"}],
-        },
-        "_targetNgram": {"tokens": []},
+        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
+        "targetNgram": {"tokens": []},
       }]);
   });
 });

@@ -6,6 +6,7 @@
     "jsRules": {
     },
     "rules": {
+        "no-string-literal": false,
         "max-line-length": [false],
         "object-literal-key-quotes": false,
         "no-trailing-whitespace": false,

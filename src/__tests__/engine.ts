@@ -1,4 +1,5 @@
 jest.mock("../DataIndex");
+// @ts-ignore
 import {mockAddAlignments} from "../DataIndex";
 import Engine from "../Engine";
 import NotImplemented from "../errors/NotImplemented";
