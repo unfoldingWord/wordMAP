@@ -8,6 +8,7 @@
     "rules": {
         "no-string-literal": false,
         "max-line-length": [false],
+        "object-literal-sort-keys": false,
         "object-literal-key-quotes": false,
         "no-trailing-whitespace": false,
         "interface-name": false,

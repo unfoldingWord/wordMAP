@@ -1,7 +1,7 @@
-import DataIndex from "./DataIndex";
+import Algorithm from "./Algorithm";
 import NotImplemented from "./errors/NotImplemented";
-import Algorithm from "./interfaces/Algorithm";
-import KeyStore from "./interfaces/KeyStore";
+import DataIndex from "./index/DataIndex";
+import SafeStore from "./index/SafeStore";
 import Alignment from "./structures/Alignment";
 import Token from "./structures/Token";
 
@@ -55,10 +55,10 @@ export default class Engine {
    * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
   public run(unalignedSentencePair: [Token[], Token[]]): Alignment[] {
-    let state: KeyStore = {};
+    let state = new SafeStore();
     for (const algorithm of this.registeredAlgorithms) {
       state = algorithm.execute(state, this.corpusIndex,
-        this.savedAlignmentsIndex, unalignedSentencePair,
+        this.savedAlignmentsIndex, unalignedSentencePair
       );
     }
     return [];

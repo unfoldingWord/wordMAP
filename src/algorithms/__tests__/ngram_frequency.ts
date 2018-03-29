@@ -1,10 +1,23 @@
-import {tokenizeSentence} from "../../__tests__/testUtils";
+import {
+  reverseSentenceWords,
+  tokenizeMockSentence
+} from "../../__tests__/testUtils";
+import DataIndex from "../../index/DataIndex";
 import Ngram from "../../structures/Ngram";
 import NgramFrequency from "../NgramFrequency";
 
 describe("sentence n-grams", () => {
-  const sentence = tokenizeSentence("In the beginning God created");
+  const sentence = tokenizeMockSentence("In the beginning God created");
   it("reads sized n-grams", () => {
+    const zerograms = NgramFrequency.readSizedNgrams(sentence, 0);
+    expect(zerograms).toEqual([
+      {"tokens": []},
+      {"tokens": []},
+      {"tokens": []},
+      {"tokens": []},
+      {"tokens": []}
+    ]);
+
     const unigrams = NgramFrequency.readSizedNgrams(sentence, 1);
     expect(unigrams).toEqual([
       {"tokens": [{"text": "In"}]},
@@ -18,12 +31,12 @@ describe("sentence n-grams", () => {
       {
         "tokens": [
           {"text": "the"},
-          {"text": "beginning"}],
+          {"text": "beginning"}]
       },
       {
         "tokens": [
           {"text": "beginning"},
-          {"text": "God"}],
+          {"text": "God"}]
       }]);
 
     const trigrams = NgramFrequency.readSizedNgrams(sentence, 3);
@@ -32,13 +45,13 @@ describe("sentence n-grams", () => {
         "tokens": [
           {"text": "In"},
           {"text": "the"},
-          {"text": "beginning"}],
+          {"text": "beginning"}]
       },
       {
         "tokens": [
           {"text": "the"},
           {"text": "beginning"},
-          {"text": "God"}],
+          {"text": "God"}]
       }]);
   });
   it("generates all n-grams", () => {
@@ -52,81 +65,105 @@ describe("sentence n-grams", () => {
       {
         "tokens": [
           {"text": "the"},
-          {"text": "beginning"}],
+          {"text": "beginning"}]
       },
       {
         "tokens": [
           {"text": "beginning"},
-          {"text": "God"}],
+          {"text": "God"}]
       }]);
+  });
+
+  it("throws out of range error", () => {
+    const error = () => {
+      return NgramFrequency.generateSentenceNgrams(sentence, -1);
+    };
+    expect(error).toThrow(RangeError);
   });
 });
 
 describe("alignment permutations", () => {
   it("generates permutations", () => {
     const primaryNgrams = [
-      new Ngram(tokenizeSentence("In")),
-      new Ngram(tokenizeSentence("the")),
-      new Ngram(tokenizeSentence("In the")),
+      new Ngram(tokenizeMockSentence("In")),
+      new Ngram(tokenizeMockSentence("the")),
+      new Ngram(tokenizeMockSentence("In the"))
     ];
     const secondaryNgrams = [
-      new Ngram(tokenizeSentence("nI")),
-      new Ngram(tokenizeSentence("eht")),
-      new Ngram(tokenizeSentence("nI eht")),
+      new Ngram(tokenizeMockSentence("nI")),
+      new Ngram(tokenizeMockSentence("eht")),
+      new Ngram(tokenizeMockSentence("nI eht"))
     ];
     const permutations = NgramFrequency.generateAlignmentPermutations(
       primaryNgrams,
-      secondaryNgrams,
+      secondaryNgrams
     );
 
     expect(permutations).toEqual([
       {
         "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": [{"text": "eht"}]},
+        "targetNgram": {"tokens": [{"text": "eht"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": []},
+        "targetNgram": {"tokens": []}
       },
       {
         "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "eht"}]},
+        "targetNgram": {"tokens": [{"text": "eht"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": []},
+        "targetNgram": {"tokens": []}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "eht"}]},
+        "targetNgram": {"tokens": [{"text": "eht"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]},
+        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}
       },
       {
         "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": []},
+        "targetNgram": {"tokens": []}
       }]);
   });
+});
+
+describe("calculate frequency", () => {
+  // n-grams for the un-aligned sentence pair
+  const str = "Once upon a time";
+  const primarySentence = tokenizeMockSentence(str);
+  const secondarySentence = tokenizeMockSentence(reverseSentenceWords(str));
+  const primaryNgrams = NgramFrequency.generateSentenceNgrams(primarySentence);
+  const secondaryNgrams = NgramFrequency.generateSentenceNgrams(
+    secondarySentence);
+  const index = new DataIndex();
+  const frequencies = NgramFrequency.calculateFrequency(
+    primaryNgrams,
+    secondaryNgrams,
+    index
+  );
+  // TODO: make assertions
 });

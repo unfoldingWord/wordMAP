@@ -1,8 +1,8 @@
 // @ts-ignore
 import stringTokenizer from "string-punctuation-tokenizer";
-import DataIndex from "../DataIndex";
-import Algorithm from "../interfaces/Algorithm";
-import KeyStore from "../interfaces/KeyStore";
+import Algorithm from "../Algorithm";
+import DataIndex from "../index/DataIndex";
+import SafeStore from "../index/SafeStore";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Token from "../structures/Token";
@@ -12,14 +12,14 @@ import Token from "../structures/Token";
  * @param {String} sentence - a raw sentence from which to generate a mock alignment
  * @return {Array<Alignment>} a mock alignment
  */
-export function alignSentence(sentence: string): Alignment[] {
+export function alignMockSentence(sentence: string): Alignment[] {
   let alignments: Alignment[] = [];
-  const tokens = tokenizeSentence(sentence);
+  const tokens = tokenizeMockSentence(sentence);
   while (tokens.length) {
     const ngramLength = randNgramLength(tokens.length, 1);
     alignments = [
       ...alignments,
-      alignTokens(tokens.slice(0, ngramLength)),
+      alignMockTokens(tokens.slice(0, ngramLength))
     ];
     tokens.splice(0, ngramLength);
   }
@@ -32,12 +32,12 @@ export function alignSentence(sentence: string): Alignment[] {
  * @param {Array<Token>} tokens - An array of tokens to align
  * @return {Alignment} a sample alignment
  */
-function alignTokens(tokens: Token[]): Alignment {
+function alignMockTokens(tokens: Token[]): Alignment {
   const source = new Ngram(tokens);
   const flippedTokens: Token[] = [];
   for (const token of tokens) {
     flippedTokens.push(
-      new Token(token.toString().split("").reverse().join("")),
+      new Token(token.toString().split("").reverse().join(""))
     );
   }
   const target = new Ngram(flippedTokens);
@@ -45,11 +45,22 @@ function alignTokens(tokens: Token[]): Alignment {
 }
 
 /**
+ * Reverses the character order of words in a sentence
+ * @param {string} sentence
+ * @return {string}
+ */
+export function reverseSentenceWords(sentence: string): string {
+  return sentence.split(" ").map((word: string) => {
+    return word.split("").reverse().join("");
+  }).join(" ");
+}
+
+/**
  * Converts a sentence to an array of Tokens
  * @param {String} sentence - a raw sentence to convert into tokens
  * @return {Array<Token>} an array of tokens
  */
-export function tokenizeSentence(sentence: string): Token[] {
+export function tokenizeMockSentence(sentence: string): Token[] {
   const words = stringTokenizer.tokenize(sentence);
   const tokens: Token[] = [];
   for (const word of words) {
@@ -73,9 +84,7 @@ function randNgramLength(numTokens: number, maxLength: number = 3): number {
 export class MockAlgorithm implements Algorithm {
   public name: string = "mock algorithm";
 
-  public execute(
-    state: KeyStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex,
-    unalignedSentencePair: [Token[], Token[]]): KeyStore {
-    return {};
+  public execute(state: SafeStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): SafeStore {
+    return state;
   }
 }

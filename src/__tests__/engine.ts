@@ -1,9 +1,13 @@
-jest.mock("../DataIndex");
-// @ts-ignore
-import {mockAddAlignments} from "../DataIndex";
+jest.mock("../index/DataIndex");
 import Engine from "../Engine";
 import NotImplemented from "../errors/NotImplemented";
-import {alignSentence, MockAlgorithm, tokenizeSentence} from "./testUtils";
+// @ts-ignore
+import {mockAddAlignments} from "../index/DataIndex";
+import {
+  alignMockSentence,
+  MockAlgorithm,
+  tokenizeMockSentence
+} from "./testUtils";
 
 it("is not implemented", () => {
   const engine = new Engine();
@@ -18,7 +22,7 @@ it("registers an algorithm", () => {
 });
 
 it("adds the alignment to the index", () => {
-  const sentence = alignSentence("Once upon a time");
+  const sentence = alignMockSentence("Once upon a time");
   const engine = new Engine();
   engine.addAlignments(sentence);
   expect(mockAddAlignments).toBeCalledWith(sentence);
@@ -35,8 +39,8 @@ it("runs all the algorithms", () => {
     spies.push(jest.spyOn(a, "execute"));
     engine.registerAlgorithm(a);
   }
-  const source = tokenizeSentence("Hello World");
-  const target = tokenizeSentence("olleH dlroW");
+  const source = tokenizeMockSentence("Hello World");
+  const target = tokenizeMockSentence("olleH dlroW");
   engine.run([source, target]);
 
   for (const s of spies) {

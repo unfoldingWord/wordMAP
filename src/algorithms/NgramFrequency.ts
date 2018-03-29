@@ -1,6 +1,6 @@
-import DataIndex from "../DataIndex";
-import Algorithm from "../interfaces/Algorithm";
-import KeyStore from "../interfaces/KeyStore";
+import Algorithm from "../Algorithm";
+import DataIndex from "../index/DataIndex";
+import SafeStore from "../index/SafeStore";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Token from "../structures/Token";
@@ -68,6 +68,36 @@ export default class NgramFrequency implements Algorithm {
   }
 
   /**
+   * Calculates the n-gram frequency
+   * @param {Array<Ngram>} primaryNgrams - an array of n-grams for the primary sentence
+   * @param {Array<Ngram>} secondaryNgrams - an array of n-grams from the secondary sentence
+   * @param {DataIndex} index - the index over which the calculations will be performed
+   * @return {SafeStore[]}
+   */
+  public static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], index: DataIndex) {
+    const primaryIndex = new SafeStore();
+    const secondaryIndex = new SafeStore();
+
+    for (const pNgram of primaryNgrams) {
+      for (const sNgram of secondaryNgrams) {
+        const alignmentFrequency = index.getPrimaryAlignmentFrequency(
+          pNgram,
+          sNgram
+        );
+
+        const calculations = {
+          alignmentFrequency,
+          primaryCorpusFrequency: 0, // TODO: calculate
+          primaryCorpusFrequencyRatio: 0 // TODO: calculate
+        };
+        primaryIndex.write(calculations, pNgram.toString(), sNgram.toString());
+      }
+    }
+
+    return [primaryIndex, secondaryIndex];
+  }
+
+  /**
    * Filters an index to just the data relative to the control set
    * @param {DataIndex} index - the index to be filtered.
    * @param {Array<Alignment>} controlSet - an array of alignments that will control what is filtered.
@@ -78,37 +108,9 @@ export default class NgramFrequency implements Algorithm {
     return index;
   }
 
-  /**
-   * Calculates the n-gram frequency
-   * @param {Array<Ngram>} primaryNgrams - an array of n-grams for the primary sentence
-   * @param {Array<Ngram>} secondaryNgrams - an array of n-grams from the secondary sentence
-   * @param {DataIndex} index - the index over which the calculations will be performed
-   * @return {KeyStore[]}
-   */
-  private static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], index: DataIndex) {
-    const primaryIndex: KeyStore = {};
-    const secondaryIndex: KeyStore = {};
-
-    for (const pNgram of primaryNgrams) {
-      for (const sNgram of secondaryNgrams) {
-        const alignmentFrequency = index.getPrimaryAlignmentFrequency(
-          pNgram,
-          sNgram
-        );
-        primaryIndex[pNgram.toString()][sNgram.toString()] = {
-          alignmentFrequency,
-          primaryCorpusFrequency: 0, // TODO: calculate
-          primaryCorpusFrequencyRatio: 0 // TODO: calculate
-        };
-      }
-    }
-
-    return [primaryIndex, secondaryIndex];
-  }
-
   public name: string = "n-gram frequency";
 
-  public execute(state: KeyStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): KeyStore {
+  public execute(state: SafeStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): SafeStore {
     const primarySentenceNgrams = NgramFrequency.generateSentenceNgrams(
       unalignedSentencePair[0]
     );
@@ -134,7 +136,7 @@ export default class NgramFrequency implements Algorithm {
       secondarySentenceNgrams,
       savedAlignmentsIndex
     );
-    const filteredAlignmenStuff = NgramFrequency.calculateFrequency(
+    const filteredAlignmentStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
       filteredSavedAlignmentsIndex
@@ -151,7 +153,7 @@ export default class NgramFrequency implements Algorithm {
     );
 
     // TODO: return the formatted state
-    return {};
+    return state;
   }
 
 }

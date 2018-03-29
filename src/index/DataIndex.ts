@@ -1,8 +1,8 @@
-import NotImplemented from "./errors/NotImplemented";
-import KeyStore from "./interfaces/KeyStore";
-import Alignment from "./structures/Alignment";
-import Ngram from "./structures/Ngram";
-import Token from "./structures/Token";
+import NotImplemented from "../errors/NotImplemented";
+import Alignment from "../structures/Alignment";
+import Ngram from "../structures/Ngram";
+import Token from "../structures/Token";
+import SafeStore from "./SafeStore";
 
 /**
  * Represents an index of linguistic data
@@ -11,17 +11,17 @@ export default class DataIndex {
 
   /**
    * Returns the alignment frequency found in the index.
-   * @param {KeyStore} index - the index of alignment frequencies
+   * @param {SafeStore} index - the index of alignment frequencies
    * @param {Ngram} primaryNgram - the primary text n-gram
    * @param {Ngram} secondaryNgram - the secondary text n-gram
    * @return {number}
    */
-  private static getAlignmentFrequency(
-    index: KeyStore, primaryNgram: Ngram, secondaryNgram: Ngram) {
+  public static getAlignmentFrequency(index: SafeStore, primaryNgram: Ngram, secondaryNgram: Ngram) {
     const primaryKey = primaryNgram.toString();
     const secondaryKey = secondaryNgram.toString();
-    if (primaryKey in index && secondaryKey in index[primaryKey]) {
-      return index[primaryKey][secondaryKey];
+    const frequency = index.read(primaryKey, secondaryKey);
+    if (frequency !== undefined) {
+      return frequency;
     } else {
       return 0;
     }
@@ -32,61 +32,66 @@ export default class DataIndex {
    * This method is agnostic to the primary and secondary alignment indices therefore it
    * accepts the n-grams directly rather than the alignment object itself.
    *
-   * @param {KeyStore} index - The initial index. This will not be modified directly.
+   * @param {SafeStore} index - The initial index. This will not be modified directly.
    * @param {Ngram} primaryNgram - the alignments's primary n-gram
    * @param {Ngram} secondaryNgram - the alignment's secondary n-gram
-   * @return {KeyStore} a copy of the index with the new data.
+   * @return {SafeStore} a copy of the index with the new data.
    */
-  private static indexAlignmentNgrams(index: KeyStore, primaryNgram: Ngram, secondaryNgram: Ngram) {
-    const updatedIndex = Object.assign({}, index);
+  private static indexAlignmentNgrams(index: SafeStore, primaryNgram: Ngram, secondaryNgram: Ngram) {
+    const updatedIndex = index.clone();
     const primaryKey: string = primaryNgram.toString();
     const secondaryKey: string = secondaryNgram.toString();
 
-    if (!(primaryKey in updatedIndex)) {
-      updatedIndex[primaryKey] = {};
+    let frequency = updatedIndex.read(primaryKey, secondaryKey);
+    if (frequency === undefined) {
+      frequency = 0;
     }
-    if (!(secondaryKey in updatedIndex[primaryKey])) {
-      updatedIndex[primaryKey][secondaryKey] = 0;
-    }
-    updatedIndex[primaryKey][secondaryKey] += 1;
+    updatedIndex.write(frequency + 1, primaryKey, secondaryKey);
     return updatedIndex;
   }
 
-  private primaryAlignmentFrequencyIndexStore: KeyStore = {};
-  private secondaryAlignmentFrequencyIndexStore: KeyStore = {};
-  private primaryNgramFrequencyIndexStore: KeyStore = {};
-  private secondaryNgramFrequencyIndexStore: KeyStore = {};
+  private primaryAlignmentFrequencyIndexStore: SafeStore;
+  private secondaryAlignmentFrequencyIndexStore: SafeStore;
+  private primaryNgramFrequencyIndexStore: SafeStore;
+  private secondaryNgramFrequencyIndexStore: SafeStore;
 
   /**
    * Returns the saved alignments index keyed by n-grams in the primary text
-   * @return {KeyStore}
+   * @return {SafeStore}
    */
-  public get primaryAlignmentFrequencyIndex(): KeyStore {
+  public get primaryAlignmentFrequencyIndex(): SafeStore {
     return this.primaryAlignmentFrequencyIndexStore;
   }
 
   /**
    * Returns the saved alignments index keyed by n-grams in the secondary text
-   * @return {KeyStore}
+   * @return {SafeStore}
    */
-  public get secondaryAlignmentFrequencyIndex(): KeyStore {
+  public get secondaryAlignmentFrequencyIndex(): SafeStore {
     return this.secondaryAlignmentFrequencyIndexStore;
   }
 
   /**
    * Returns the n-gram frequency index for n-grams in the primary text
-   * @return {KeyStore}
+   * @return {SafeStore}
    */
-  public get primaryNgramFrequencyIndex(): KeyStore {
+  public get primaryNgramFrequencyIndex(): SafeStore {
     return this.primaryNgramFrequencyIndexStore;
   }
 
   /**
    * Returns the n-gram frequency index for n-grams in the secondary text
-   * @return {KeyStore}
+   * @return {SafeStore}
    */
-  public get secondaryNgramFrequencyIndex(): KeyStore {
+  public get secondaryNgramFrequencyIndex(): SafeStore {
     return this.secondaryNgramFrequencyIndexStore;
+  }
+
+  constructor() {
+    this.primaryAlignmentFrequencyIndexStore = new SafeStore();
+    this.secondaryAlignmentFrequencyIndexStore = new SafeStore();
+    this.primaryNgramFrequencyIndexStore = new SafeStore();
+    this.secondaryNgramFrequencyIndexStore = new SafeStore();
   }
 
   /**
@@ -96,8 +101,10 @@ export default class DataIndex {
    * @return {number}
    */
   public getPrimaryAlignmentFrequency(primaryNgram: Ngram, secondaryNgram: Ngram) {
-    return DataIndex.getAlignmentFrequency(this.primaryAlignmentFrequencyIndexStore,
-      primaryNgram, secondaryNgram
+    return DataIndex.getAlignmentFrequency(
+      this.primaryAlignmentFrequencyIndexStore,
+      primaryNgram,
+      secondaryNgram
     );
   }
 
@@ -110,7 +117,10 @@ export default class DataIndex {
    */
   public getSecondaryAlignmentFrequency(primaryNgram: Ngram, secondaryNgram: Ngram) {
     return DataIndex.getAlignmentFrequency(
-      this.secondaryAlignmentFrequencyIndexStore, secondaryNgram, primaryNgram);
+      this.secondaryAlignmentFrequencyIndexStore,
+      secondaryNgram,
+      primaryNgram
+    );
   }
 
   /**
@@ -128,9 +138,15 @@ export default class DataIndex {
 
       // index the alignment frequency
       this.primaryAlignmentFrequencyIndexStore = DataIndex.indexAlignmentNgrams(
-        this.primaryAlignmentFrequencyIndexStore, source, target);
+        this.primaryAlignmentFrequencyIndexStore,
+        source,
+        target
+      );
       this.secondaryAlignmentFrequencyIndexStore = DataIndex.indexAlignmentNgrams(
-        this.secondaryAlignmentFrequencyIndexStore, target, source);
+        this.secondaryAlignmentFrequencyIndexStore,
+        target,
+        source
+      );
 
       // TODO: index the n-gram frequency
     }

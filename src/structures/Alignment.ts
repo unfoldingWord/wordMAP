@@ -7,6 +7,7 @@ import Ngram from "./Ngram";
 export default class Alignment {
 
   private sourceNgram: Ngram;
+  private targetNgram: Ngram;
 
   /**
    * Returns the source n-gram
@@ -15,8 +16,6 @@ export default class Alignment {
   public get source() {
     return this.sourceNgram;
   }
-
-  private targetNgram: Ngram;
 
   /**
    * Returns the target n-gram
