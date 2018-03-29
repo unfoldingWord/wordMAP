@@ -54,12 +54,13 @@ export default class Engine {
    *
    * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
-  public run(unalignedSentencePair: [Token[], Token[]]) {
+  public run(unalignedSentencePair: [Token[], Token[]]): Alignment[] {
     let state: KeyStore = {};
     for (const algorithm of this.registeredAlgorithms) {
       state = algorithm.execute(state, this.corpusIndex,
         this.savedAlignmentsIndex, unalignedSentencePair,
       );
     }
+    return [];
   }
 }

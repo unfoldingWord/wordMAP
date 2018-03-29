@@ -55,6 +55,8 @@ export default class DataIndex {
 
   private primaryAlignmentFrequencyIndexStore: KeyStore = {};
   private secondaryAlignmentFrequencyIndexStore: KeyStore = {};
+  private primaryNgramFrequencyIndexStore: KeyStore = {};
+  private secondaryNgramFrequencyIndexStore: KeyStore = {};
 
   /**
    * Returns the saved alignments index keyed by n-grams in the primary text
@@ -77,7 +79,7 @@ export default class DataIndex {
    * @return {KeyStore}
    */
   public get primaryNgramFrequencyIndex(): KeyStore {
-    return {};
+    return this.primaryNgramFrequencyIndexStore;
   }
 
   /**
@@ -85,7 +87,7 @@ export default class DataIndex {
    * @return {KeyStore}
    */
   public get secondaryNgramFrequencyIndex(): KeyStore {
-    return {};
+    return this.secondaryNgramFrequencyIndexStore;
   }
 
   /**

@@ -1,4 +1,5 @@
 import DataIndex from "../DataIndex";
+import NotImplemented from "../errors/NotImplemented";
 import {alignSentence} from "./testUtils";
 
 describe("append saved alignments", () => {
@@ -23,4 +24,9 @@ describe("append saved alignments", () => {
     expect(index.primaryAlignmentFrequencyIndex["a"]["a"]).toEqual(3);
     expect(index.primaryAlignmentFrequencyIndex["in"]["ni"]).toEqual(1);
   });
+});
+
+it("is not implemented", () => {
+  const index = new DataIndex();
+  expect(index.addSentencePair).toThrow(NotImplemented);
 });
