@@ -37,8 +37,7 @@ export default class DataIndex {
    * @param {Ngram} secondaryNgram - the alignment's secondary n-gram
    * @return {KeyStore} a copy of the index with the new data.
    */
-  private static indexAlignmentNgrams(
-    index: KeyStore, primaryNgram: Ngram, secondaryNgram: Ngram) {
+  private static indexAlignmentNgrams(index: KeyStore, primaryNgram: Ngram, secondaryNgram: Ngram) {
     const updatedIndex = Object.assign({}, index);
     const primaryKey: string = primaryNgram.toString();
     const secondaryKey: string = secondaryNgram.toString();
@@ -96,10 +95,9 @@ export default class DataIndex {
    * @param {Ngram} secondaryNgram
    * @return {number}
    */
-  public getPrimaryAlignmentFrequency(
-    primaryNgram: Ngram, secondaryNgram: Ngram) {
+  public getPrimaryAlignmentFrequency(primaryNgram: Ngram, secondaryNgram: Ngram) {
     return DataIndex.getAlignmentFrequency(this.primaryAlignmentFrequencyIndexStore,
-      primaryNgram, secondaryNgram,
+      primaryNgram, secondaryNgram
     );
   }
 
@@ -110,8 +108,7 @@ export default class DataIndex {
    * @param {Ngram} secondaryNgram
    * @return {number}
    */
-  public getSecondaryAlignmentFrequency(
-    primaryNgram: Ngram, secondaryNgram: Ngram) {
+  public getSecondaryAlignmentFrequency(primaryNgram: Ngram, secondaryNgram: Ngram) {
     return DataIndex.getAlignmentFrequency(
       this.secondaryAlignmentFrequencyIndexStore, secondaryNgram, primaryNgram);
   }

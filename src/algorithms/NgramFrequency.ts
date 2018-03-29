@@ -15,8 +15,7 @@ export default class NgramFrequency implements Algorithm {
    * @param {number} maxNgramLength
    * @returns {any[]}
    */
-  public static generateSentenceNgrams(
-    sentence: Token[], maxNgramLength: number = 3) {
+  public static generateSentenceNgrams(sentence: Token[], maxNgramLength: number = 3) {
     if (maxNgramLength < 0) {
       throw new RangeError(
         `Maximum n-gram size cannot be less than 0. Received ${maxNgramLength}`);
@@ -36,8 +35,7 @@ export default class NgramFrequency implements Algorithm {
    * @param {number} ngramLength - the length of each n-gram.
    * @returns {Array<Ngram>}
    */
-  public static readSizedNgrams(
-    sentence: Token[], ngramLength: number): Ngram[] {
+  public static readSizedNgrams(sentence: Token[], ngramLength: number): Ngram[] {
     const ngrams: Ngram[] = [];
     for (let index = 0; index < sentence.length; index++) {
       const end = index + ngramLength;
@@ -56,9 +54,7 @@ export default class NgramFrequency implements Algorithm {
    * @param {Array<Ngram>} secondaryNgrams - n-grams from the secondary text
    * @returns {Array<Alignment>}
    */
-  public static generateAlignmentPermutations(
-    primaryNgrams: Ngram[],
-    secondaryNgrams: Ngram[]): Alignment[] {
+  public static generateAlignmentPermutations(primaryNgrams: Ngram[], secondaryNgrams: Ngram[]): Alignment[] {
     const alignments: Alignment[] = [];
     for (const pgram of primaryNgrams) {
       for (const sgram of secondaryNgrams) {
@@ -89,9 +85,7 @@ export default class NgramFrequency implements Algorithm {
    * @param {DataIndex} index - the index over which the calculations will be performed
    * @return {KeyStore[]}
    */
-  private static calculateFrequency(
-    primaryNgrams: Ngram[], secondaryNgrams: Ngram[],
-    index: DataIndex) {
+  private static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], index: DataIndex) {
     const primaryIndex: KeyStore = {};
     const secondaryIndex: KeyStore = {};
 
@@ -99,12 +93,12 @@ export default class NgramFrequency implements Algorithm {
       for (const sNgram of secondaryNgrams) {
         const alignmentFrequency = index.getPrimaryAlignmentFrequency(
           pNgram,
-          sNgram,
+          sNgram
         );
         primaryIndex[pNgram.toString()][sNgram.toString()] = {
           alignmentFrequency,
           primaryCorpusFrequency: 0, // TODO: calculate
-          primaryCorpusFrequencyRatio: 0, // TODO: calculate
+          primaryCorpusFrequencyRatio: 0 // TODO: calculate
         };
       }
     }
@@ -116,44 +110,44 @@ export default class NgramFrequency implements Algorithm {
 
   public execute(state: KeyStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): KeyStore {
     const primarySentenceNgrams = NgramFrequency.generateSentenceNgrams(
-      unalignedSentencePair[0],
+      unalignedSentencePair[0]
     );
     const secondarySentenceNgrams = NgramFrequency.generateSentenceNgrams(
-      unalignedSentencePair[1],
+      unalignedSentencePair[1]
     );
     const alignments = NgramFrequency.generateAlignmentPermutations(
       primarySentenceNgrams,
-      secondarySentenceNgrams,
+      secondarySentenceNgrams
     );
 
     const filteredCorpusIndex = NgramFrequency.filterIndex(
       corpusIndex,
-      alignments,
+      alignments
     );
     const filteredSavedAlignmentsIndex = NgramFrequency.filterIndex(
       savedAlignmentsIndex,
-      alignments,
+      alignments
     );
 
     const alignmentStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
-      savedAlignmentsIndex,
+      savedAlignmentsIndex
     );
     const filteredAlignmenStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
-      filteredSavedAlignmentsIndex,
+      filteredSavedAlignmentsIndex
     );
     const corpusStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
-      corpusIndex,
+      corpusIndex
     );
     const filteredCorpusStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
-      filteredCorpusIndex,
+      filteredCorpusIndex
     );
 
     // TODO: return the formatted state
