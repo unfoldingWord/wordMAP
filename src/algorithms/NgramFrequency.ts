@@ -76,7 +76,7 @@ export default class NgramFrequency implements Algorithm {
    */
   public static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], index: DataIndex) {
     const primaryIndex = new SafeStore();
-    const secondaryIndex = new SafeStore();
+    const secondaryIndex = new SafeStore();t
 
     // calculate unfiltered frequencies
 
@@ -112,10 +112,19 @@ export default class NgramFrequency implements Algorithm {
     for (const pKey of primaryKeys) {
       const secondaryKeys = Object.keys(primaryIndex.read(pKey));
       for (const sKey of secondaryKeys) {
-        primaryIndex.append({
-          filteredNgramFrequency: 0, // TODO: sum the alignmentFrequency
-          filteredFrequencyRation: 0 // TODO: alignmentFrequency / filteredNgramFrequency
-        }, pKey, sKey);
+        const primaryFilteredFrequencies = NgramFrequency.calculateFilteredNgramFrequencies(
+          primaryIndex,
+          pKey,
+          sKey
+        );
+        primaryIndex.append(primaryFilteredFrequencies, pKey, sKey);
+
+        const secondaryFilteredFrequencies = NgramFrequency.calculateFilteredNgramFrequencies(
+          secondaryIndex,
+          sKey,
+          pKey
+        );
+        secondaryIndex.append(secondaryFilteredFrequencies, sKey, pKey);
       }
     }
 
@@ -150,6 +159,41 @@ export default class NgramFrequency implements Algorithm {
       alignmentFrequency,
       ngramFrequency,
       frequencyRatio
+    };
+  }
+
+  /**
+   * Calculates the filtered frequency of occurrences within a store.
+   * The frequency is filtered to just those alignments relative to the unaligned sentence pair.
+   * This must be run after {@link calculateNgramFrequencies}.
+   *
+   * @param {SafeStore} store - the store from which to calculate frequency
+   * @param {string} primaryKey - the primary n-gram key
+   * @param {string} secondaryKey - the secondary n-gram key
+   * @returns {object}
+   */
+  private static calculateFilteredNgramFrequencies(store: SafeStore, primaryKey: string, secondaryKey: string): object {
+    // read alignment frequency
+    // NOTE: the alignment frequency will have the same value in both the primary and secondary store.
+    const alignmentFrequency = store.read(
+      primaryKey,
+      secondaryKey,
+      "alignmentFrequency"
+    );
+
+    // count filtered n-gram frequency
+    const filteredSecondaryNgrams = store.read(primaryKey);
+    let filteredNgramFrequency = 0;
+    for (const filteredCalculation of filteredSecondaryNgrams) {
+      filteredNgramFrequency += filteredCalculation.alignmentFrequency;
+    }
+
+    // calculate ratio
+    const filteredFrequencyRatio = alignmentFrequency / filteredNgramFrequency;
+
+    return {
+      filteredNgramFrequency,
+      filteredFrequencyRatio
     };
   }
 

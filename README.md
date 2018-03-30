@@ -327,7 +327,7 @@ Object.keys(primaryIndex).forEach(primaryNgram => {
 Object.keys(secondaryIndex).forEach(secondaryNgram => {
   // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency above)
   secondaryIndex[secondaryNgram][primaryNgram].filteredFrequency = objectSumByAttribute(secondaryIndex[secondaryNgram], 'alignmentFrequency');
-  secondaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.alignmentFrequency / this.filteredFrequency;
+  secondaryIndex[secondaryNgram][primaryNgram].filteredFrequencyRatio = this.alignmentFrequency / this.filteredFrequency;
 });
 ```
 
