@@ -76,7 +76,7 @@ export default class NgramFrequency implements Algorithm {
    */
   public static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], index: DataIndex) {
     const primaryIndex = new SafeStore();
-    const secondaryIndex = new SafeStore();t
+    const secondaryIndex = new SafeStore();
 
     // calculate unfiltered frequencies
 
@@ -184,8 +184,11 @@ export default class NgramFrequency implements Algorithm {
     // count filtered n-gram frequency
     const filteredSecondaryNgrams = store.read(primaryKey);
     let filteredNgramFrequency = 0;
-    for (const filteredCalculation of filteredSecondaryNgrams) {
-      filteredNgramFrequency += filteredCalculation.alignmentFrequency;
+    for (const ngramKey in filteredSecondaryNgrams) {
+      if (filteredSecondaryNgrams.hasOwnProperty(ngramKey)) {
+        const calculations = filteredSecondaryNgrams[ngramKey];
+        filteredNgramFrequency += calculations.alignmentFrequency;
+      }
     }
 
     // calculate ratio
