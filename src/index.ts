@@ -2,6 +2,9 @@ import NgramFrequency from "./algorithms/NgramFrequency";
 import Engine from "./Engine";
 import Token from "./structures/Token";
 
+/**
+ * Word Alignment Prediction
+ */
 export class MAP {
   private engine: Engine;
 

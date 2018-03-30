@@ -1,17 +1,17 @@
-import SafeStore from "../SafeStore";
+import Index from "../Index";
 
-describe("SafeStore", () => {
+describe("Index", () => {
   it("writes", () => {
-    const store = new SafeStore();
+    const store = new Index();
     store.write("hello world", "my", "path");
-    expect(store.store).toEqual({
+    expect(store.index).toEqual({
       "my": {
         "path": "hello world"
       }
     });
 
     store.write(3, "my", "value");
-    expect(store.store).toEqual({
+    expect(store.index).toEqual({
       "my": {
         "path": "hello world",
         "value": 3
@@ -29,10 +29,10 @@ describe("SafeStore", () => {
       },
       "hello": "jon"
     };
-    const store = new SafeStore(initialState);
+    const store = new Index(initialState);
 
     store.append(newData, "my");
-    expect(store.store).toEqual({
+    expect(store.index).toEqual({
       "my": {
         "path": "hi",
         "cheese": "I love you"
@@ -55,7 +55,7 @@ describe("SafeStore", () => {
       },
       "hi": "jon"
     };
-    const store = new SafeStore(initialState);
+    const store = new Index(initialState);
     expect(store.read()).toEqual(initialState);
     expect(store.read("missing")).toBeUndefined();
     expect(store.read("my")).toEqual(initialState["my"]);
@@ -77,7 +77,7 @@ describe("SafeStore", () => {
         "ok": 2
       }
     };
-    const store = new SafeStore(initialState);
+    const store = new Index(initialState);
     expect(store.readSum("my")).toEqual(5);
     expect(store.readSum("something")).toEqual(2);
     expect(store.readSum("hi")).toEqual(1);

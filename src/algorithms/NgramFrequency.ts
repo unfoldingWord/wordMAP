@@ -1,6 +1,6 @@
 import Algorithm from "../Algorithm";
-import DataIndex from "../index/DataIndex";
-import SafeStore from "../index/SafeStore";
+import Index from "../index/Index";
+import Store from "../index/Store";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Token from "../structures/Token";
@@ -37,12 +37,12 @@ export default class NgramFrequency implements Algorithm {
    */
   public static readSizedNgrams(sentence: Token[], ngramLength: number): Ngram[] {
     const ngrams: Ngram[] = [];
-    for (let index = 0; index < sentence.length; index++) {
-      const end = index + ngramLength;
+    for (let pos = 0; pos < sentence.length; pos++) {
+      const end = pos + ngramLength;
       if (end >= sentence.length) {
         break;
       }
-      const ngram = new Ngram(sentence.slice(index, end));
+      const ngram = new Ngram(sentence.slice(pos, end));
       ngrams.push(ngram);
     }
     return ngrams;
@@ -71,19 +71,19 @@ export default class NgramFrequency implements Algorithm {
    * Calculates the n-gram frequency
    * @param {Array<Ngram>} primaryNgrams - an array of n-grams for the primary sentence
    * @param {Array<Ngram>} secondaryNgrams - an array of n-grams from the secondary sentence
-   * @param {DataIndex} index - the index over which the calculations will be performed
-   * @return {SafeStore[]}
+   * @param {Store} store - the store over which the calculations will be performed
+   * @return {Index[]}
    */
-  public static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], index: DataIndex) {
-    const primaryIndex = new SafeStore();
-    const secondaryIndex = new SafeStore();
+  public static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], store: Store) {
+    const primaryIndex = new Index();
+    const secondaryIndex = new Index();
 
     // calculate unfiltered frequencies
 
     for (const pNgram of primaryNgrams) {
       for (const sNgram of secondaryNgrams) {
         const primaryFrequencies = NgramFrequency.calculateNgramFrequencies(
-          index.primaryAlignmentFrequencyIndex,
+          store.primaryAlignmentFrequencyIndex,
           pNgram,
           sNgram
         );
@@ -94,7 +94,7 @@ export default class NgramFrequency implements Algorithm {
         );
 
         const secondaryFrequencies = NgramFrequency.calculateNgramFrequencies(
-          index.secondaryAlignmentFrequencyIndex,
+          store.secondaryAlignmentFrequencyIndex,
           sNgram,
           pNgram
         );
@@ -132,16 +132,16 @@ export default class NgramFrequency implements Algorithm {
   }
 
   /**
-   * Calculates the frequency of occurrences within a store.
-   * @param {SafeStore} store - the store from which to calculate frequency
+   * Calculates the frequency of occurrences within an index.
+   * @param {Index} index - the index from which to calculate frequency
    * @param {Ngram} primaryNgram - the primary n-gram
    * @param {Ngram} secondaryNgram - the secondary n-gram
    * @return {object}
    */
-  private static calculateNgramFrequencies(store: SafeStore, primaryNgram: Ngram, secondaryNgram: Ngram): object {
+  private static calculateNgramFrequencies(index: Index, primaryNgram: Ngram, secondaryNgram: Ngram): object {
     // read alignment frequency
-    // NOTE: the alignment frequency will have the same value in both the primary and secondary store.
-    let alignmentFrequency = store.read(
+    // NOTE: the alignment frequency will have the same value in both the primary and secondary index.
+    let alignmentFrequency = index.read(
       primaryNgram.toString(),
       secondaryNgram.toString()
     );
@@ -150,7 +150,7 @@ export default class NgramFrequency implements Algorithm {
     }
 
     // count n-gram frequency
-    const ngramFrequency = store.readSum(primaryNgram.toString());
+    const ngramFrequency = index.readSum(primaryNgram.toString());
 
     // calculate ratio
     const frequencyRatio = alignmentFrequency / ngramFrequency;
@@ -163,26 +163,26 @@ export default class NgramFrequency implements Algorithm {
   }
 
   /**
-   * Calculates the filtered frequency of occurrences within a store.
+   * Calculates the filtered frequency of occurrences within an index.
    * The frequency is filtered to just those alignments relative to the unaligned sentence pair.
    * This must be run after {@link calculateNgramFrequencies}.
    *
-   * @param {SafeStore} store - the store from which to calculate frequency
+   * @param {Index} index - the index from which to calculate frequency
    * @param {string} primaryKey - the primary n-gram key
    * @param {string} secondaryKey - the secondary n-gram key
    * @returns {object}
    */
-  private static calculateFilteredNgramFrequencies(store: SafeStore, primaryKey: string, secondaryKey: string): object {
+  private static calculateFilteredNgramFrequencies(index: Index, primaryKey: string, secondaryKey: string): object {
     // read alignment frequency
-    // NOTE: the alignment frequency will have the same value in both the primary and secondary store.
-    const alignmentFrequency = store.read(
+    // NOTE: the alignment frequency will have the same value in both the primary and secondary index.
+    const alignmentFrequency = index.read(
       primaryKey,
       secondaryKey,
       "alignmentFrequency"
     );
 
     // count filtered n-gram frequency
-    const filteredSecondaryNgrams = store.read(primaryKey);
+    const filteredSecondaryNgrams = index.read(primaryKey);
     let filteredNgramFrequency = 0;
     for (const ngramKey in filteredSecondaryNgrams) {
       if (filteredSecondaryNgrams.hasOwnProperty(ngramKey)) {
@@ -200,20 +200,9 @@ export default class NgramFrequency implements Algorithm {
     };
   }
 
-  /**
-   * Filters an index to just the data relative to the control set
-   * @param {DataIndex} index - the index to be filtered.
-   * @param {Array<Alignment>} controlSet - an array of alignments that will control what is filtered.
-   * @return {DataIndex} a new filtered index
-   */
-  private static filterIndex(index: DataIndex, controlSet: Alignment[]) {
-    // TODO: filter the index
-    return index;
-  }
-
   public name: string = "n-gram frequency";
 
-  public execute(state: SafeStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): SafeStore {
+  public execute(state: Index, corpusStore: Store, savedAlignmentsStore: Store, unalignedSentencePair: [Token[], Token[]]): Index {
     // generate sentence n-grams
     const primarySentenceNgrams = NgramFrequency.generateSentenceNgrams(
       unalignedSentencePair[0]
@@ -223,41 +212,22 @@ export default class NgramFrequency implements Algorithm {
     );
 
     // generate alignment permutations
-    const alignments = NgramFrequency.generateAlignmentPermutations(
-      primarySentenceNgrams,
-      secondarySentenceNgrams
-    );
-
-    // generate filtered indexes
-    const filteredCorpusIndex = NgramFrequency.filterIndex(
-      corpusIndex,
-      alignments
-    );
-    const filteredSavedAlignmentsIndex = NgramFrequency.filterIndex(
-      savedAlignmentsIndex,
-      alignments
-    );
+    // const alignments = NgramFrequency.generateAlignmentPermutations(
+    //   primarySentenceNgrams,
+    //   secondarySentenceNgrams
+    // );
 
     // perform calculations
     const alignmentStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
-      savedAlignmentsIndex
+      savedAlignmentsStore
     );
-    const filteredAlignmentStuff = NgramFrequency.calculateFrequency(
-      primarySentenceNgrams,
-      secondarySentenceNgrams,
-      filteredSavedAlignmentsIndex
-    );
+
     const corpusStuff = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
-      corpusIndex
-    );
-    const filteredCorpusStuff = NgramFrequency.calculateFrequency(
-      primarySentenceNgrams,
-      secondarySentenceNgrams,
-      filteredCorpusIndex
+      corpusStore
     );
 
     // TODO: return the formatted state

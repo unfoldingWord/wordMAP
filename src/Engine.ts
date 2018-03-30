@@ -1,7 +1,7 @@
 import Algorithm from "./Algorithm";
 import NotImplemented from "./errors/NotImplemented";
-import DataIndex from "./index/DataIndex";
-import SafeStore from "./index/SafeStore";
+import Store from "./index/Store";
+import Index from "./index/Index";
 import Alignment from "./structures/Alignment";
 import Token from "./structures/Token";
 
@@ -11,8 +11,8 @@ import Token from "./structures/Token";
 export default class Engine {
 
   private registeredAlgorithms: Algorithm[] = [];
-  private corpusIndex: DataIndex;
-  private savedAlignmentsIndex: DataIndex;
+  private corpusStore: Store;
+  private savedAlignmentsStore: Store;
 
   /**
    * Returns a list of algorithms that are registered in the engine
@@ -24,8 +24,8 @@ export default class Engine {
 
   constructor() {
     // TODO: read in custom configuration
-    this.corpusIndex = new DataIndex();
-    this.savedAlignmentsIndex = new DataIndex();
+    this.corpusStore = new Store();
+    this.savedAlignmentsStore = new Store();
   }
 
   /**
@@ -46,7 +46,7 @@ export default class Engine {
    * @param {Array<Alignment>} savedAlignments - a list of alignments
    */
   public addAlignments(savedAlignments: Alignment[]) {
-    this.savedAlignmentsIndex.addAlignments(savedAlignments);
+    this.savedAlignmentsStore.addAlignments(savedAlignments);
   }
 
   /**
@@ -55,10 +55,10 @@ export default class Engine {
    * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
   public run(unalignedSentencePair: [Token[], Token[]]): Alignment[] {
-    let state = new SafeStore();
+    let state = new Index();
     for (const algorithm of this.registeredAlgorithms) {
-      state = algorithm.execute(state, this.corpusIndex,
-        this.savedAlignmentsIndex, unalignedSentencePair
+      state = algorithm.execute(state, this.corpusStore,
+        this.savedAlignmentsStore, unalignedSentencePair
       );
     }
     return [];

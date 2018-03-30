@@ -1,8 +1,8 @@
-jest.mock("../index/DataIndex");
+jest.mock("../index/Store");
 import Engine from "../Engine";
 import NotImplemented from "../errors/NotImplemented";
 // @ts-ignore
-import {mockAddAlignments} from "../index/DataIndex";
+import {mockAddAlignments} from "../index/Store";
 import {
   alignMockSentence,
   MockAlgorithm,

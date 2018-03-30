@@ -1,22 +1,27 @@
-import KeyStore from "./KeyStore";
+/**
+ * Describes an object that can be used to store keys and values.
+ */
+export interface KeyValueIndex {
+  [key: string]: any;
+}
 
 /**
  * A special container that provides safe I/O operators
- * for a {@link KeyStore}.
+ * on a {@link KeyValueIndex}.
  */
-export default class SafeStore {
+export default class Index {
 
   /**
    * Recursive store reader
-   * @param {KeyStore} store - the store to read
+   * @param {KeyValueIndex} store - the store to read
    * @param {string[]} keys - an array of keys (the path) to read.
    * @return {any} the value found at the path.
    */
-  private static readDeep(store: KeyStore, keys: string[]): any {
+  private static readDeep(store: KeyValueIndex, keys: string[]): any {
     // TODO: iteration would be more efficient
     const nextKey = keys.shift();
     if (nextKey && nextKey in store) {
-      return SafeStore.readDeep(store[nextKey], keys);
+      return Index.readDeep(store[nextKey], keys);
     } else if (nextKey === undefined) {
       return store;
     } else {
@@ -26,11 +31,11 @@ export default class SafeStore {
 
   /**
    * Recursive store writer.
-   * @param {KeyStore} store - the store to write to
+   * @param {KeyValueIndex} store - the store to write to
    * @param value - the value to write
    * @param {string[]} keys - the key path to write at
    */
-  private static writeDeep(store: KeyStore, value: any, keys: string[]) {
+  private static writeDeep(store: KeyValueIndex, value: any, keys: string[]) {
     // TODO: iteration would be more efficient
     const nextKey = keys.shift();
     if (!nextKey) {
@@ -40,7 +45,7 @@ export default class SafeStore {
       store[nextKey] = {};
     }
     if (keys.length) {
-      SafeStore.writeDeep(store[nextKey], value, keys);
+      Index.writeDeep(store[nextKey], value, keys);
     } else {
       store[nextKey] = value;
     }
@@ -48,11 +53,11 @@ export default class SafeStore {
 
   /**
    * Recursive store appender.
-   * @param {KeyStore} store - the store to append to
+   * @param {KeyValueIndex} store - the store to append to
    * @param {object} value - the value to append
    * @param {string[]} keys - the key path to append at
    */
-  private static appendDeep(store: KeyStore, value: object, keys: string[]) {
+  private static appendDeep(store: KeyValueIndex, value: object, keys: string[]) {
     // TODO: iteration would be more efficient
     const nextKey = keys.shift();
     if (!nextKey) {
@@ -62,7 +67,7 @@ export default class SafeStore {
       store[nextKey] = {};
     }
     if (keys.length) {
-      SafeStore.writeDeep(store[nextKey], value, keys);
+      Index.writeDeep(store[nextKey], value, keys);
     } else {
       if (typeof store[nextKey] !== "object") {
         throw TypeError(`Cannot append to a store path that is not an object type. Found '${typeof store[nextKey]}'`);
@@ -75,30 +80,30 @@ export default class SafeStore {
     }
   }
 
-  private keyStore: KeyStore;
+  private keyIndex: KeyValueIndex;
 
   /**
-   * Retrieve the underlying store object
-   * @return {KeyStore}
+   * Retrieve the underlying index object
+   * @return {KeyValueIndex}
    */
-  get store() {
-    return this.keyStore;
+  get index() {
+    return this.keyIndex;
   }
 
-  constructor(initialState?: KeyStore) {
+  constructor(initialState?: KeyValueIndex) {
     if (initialState) {
-      this.keyStore = Object.assign({}, initialState);
+      this.keyIndex = Object.assign({}, initialState);
     } else {
-      this.keyStore = {};
+      this.keyIndex = {};
     }
   }
 
   /**
    * Returns a deep clone of this store.
-   * @return {SafeStore}
+   * @return {Index}
    */
   public clone() {
-    return new SafeStore(this.keyStore);
+    return new Index(this.keyIndex);
   }
 
   /**
@@ -107,7 +112,7 @@ export default class SafeStore {
    * @return {any} - the value found at the path
    */
   public read(...keys: string[]): any {
-    return SafeStore.readDeep(this.keyStore, [...keys]);
+    return Index.readDeep(this.keyIndex, [...keys]);
   }
 
   /**
@@ -116,7 +121,7 @@ export default class SafeStore {
    * @param {string[]} keys - the keys specifying the path to write
    */
   public write(value: any, ...keys: string[]) {
-    SafeStore.writeDeep(this.keyStore, value, [...keys]);
+    Index.writeDeep(this.keyIndex, value, [...keys]);
   }
 
   /**
@@ -127,7 +132,7 @@ export default class SafeStore {
    * @param {string} keys - the keys specifying the path to append to
    */
   public append(value: object, ...keys: string[]) {
-    SafeStore.appendDeep(this.keyStore, value, [...keys]);
+    Index.appendDeep(this.keyIndex, value, [...keys]);
   }
 
   /**

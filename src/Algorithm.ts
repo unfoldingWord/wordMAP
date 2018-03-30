@@ -1,5 +1,5 @@
-import DataIndex from "./index/DataIndex";
-import SafeStore from "./index/SafeStore";
+import Store from "./index/Store";
+import Index from "./index/Index";
 import Token from "./structures/Token";
 
 export default interface Algorithm {
@@ -11,6 +11,6 @@ export default interface Algorithm {
   /**
    * Executes the algorithm
    */
-  execute(state: SafeStore, corpusIndex: DataIndex, savedAlignmentsIndex: DataIndex, unalignedSentencePair: [Token[], Token[]]): SafeStore;
+  execute(state: Index, corpusIndex: Store, savedAlignmentsIndex: Store, unalignedSentencePair: [Token[], Token[]]): Index;
 
 }

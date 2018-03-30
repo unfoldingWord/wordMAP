@@ -2,18 +2,18 @@ import {alignMockSentence} from "../../__tests__/testUtils";
 import NotImplemented from "../../errors/NotImplemented";
 import Ngram from "../../structures/Ngram";
 import Token from "../../structures/Token";
-import DataIndex from "../DataIndex";
-import SafeStore from "../SafeStore";
+import Store from "../Store";
+import Index from "../Index";
 
 describe("append saved alignments", () => {
   it("begins empty", () => {
-    const index = new DataIndex();
-    expect(index.primaryAlignmentFrequencyIndex.store).toEqual({});
-    expect(index.secondaryAlignmentFrequencyIndex.store).toEqual({});
+    const index = new Store();
+    expect(index.primaryAlignmentFrequencyIndex.index).toEqual({});
+    expect(index.secondaryAlignmentFrequencyIndex.index).toEqual({});
   });
 
   it("counts occurrences", () => {
-    const index = new DataIndex();
+    const index = new Store();
     const firstSentence = alignMockSentence(
       "Once upon a time, in a galaxy far far away...");
     index.addAlignments(firstSentence);
@@ -30,41 +30,6 @@ describe("append saved alignments", () => {
 });
 
 it("is not implemented", () => {
-  const index = new DataIndex();
+  const index = new Store();
   expect(index.addSentencePair).toThrow(NotImplemented);
-});
-
-describe("get alignment frequency", () => {
-  it("returns the frequency", () => {
-    const expectedFrequency = 3;
-    const index = new SafeStore({
-      "hello": {
-        "world": expectedFrequency
-      }
-    });
-    const primary = new Ngram([new Token("hello")]);
-    const secondary = new Ngram([new Token("world")]);
-    const frequency = DataIndex.getAlignmentFrequency(
-      index,
-      primary,
-      secondary
-    );
-    expect(frequency).toEqual(expectedFrequency);
-  });
-
-  it("returns the default value", () => {
-    const index = new SafeStore({
-      "hello": {
-        "oops!": 3
-      }
-    });
-    const primary = new Ngram([new Token("hello")]);
-    const secondary = new Ngram([new Token("world")]);
-    const frequency = DataIndex.getAlignmentFrequency(
-      index,
-      primary,
-      secondary
-    );
-    expect(frequency).toEqual(0);
-  });
 });

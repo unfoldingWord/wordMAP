@@ -2,7 +2,7 @@ import {
   reverseSentenceWords,
   tokenizeMockSentence
 } from "../../__tests__/testUtils";
-import DataIndex from "../../index/DataIndex";
+import Store from "../../index/Store";
 import Ngram from "../../structures/Ngram";
 import NgramFrequency from "../NgramFrequency";
 
@@ -159,7 +159,7 @@ describe("calculate frequency", () => {
   const primaryNgrams = NgramFrequency.generateSentenceNgrams(primarySentence);
   const secondaryNgrams = NgramFrequency.generateSentenceNgrams(
     secondarySentence);
-  const index = new DataIndex();
+  const index = new Store();
   const frequencies = NgramFrequency.calculateFrequency(
     primaryNgrams,
     secondaryNgrams,
