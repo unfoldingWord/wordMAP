@@ -46,6 +46,35 @@ export default class SafeStore {
     }
   }
 
+  /**
+   * Recursive store appender.
+   * @param {KeyStore} store - the store to append to
+   * @param {object} value - the value to append
+   * @param {string[]} keys - the key path to append at
+   */
+  private static appendDeep(store: KeyStore, value: object, keys: string[]) {
+    // TODO: iteration would be more efficient
+    const nextKey = keys.shift();
+    if (!nextKey) {
+      return;
+    }
+    if (keys.length && !(nextKey in store)) {
+      store[nextKey] = {};
+    }
+    if (keys.length) {
+      SafeStore.writeDeep(store[nextKey], value, keys);
+    } else {
+      if (typeof store[nextKey] !== "object") {
+        throw TypeError(`Cannot append to a store path that is not an object type. Found '${typeof store[nextKey]}'`);
+      }
+
+      store[nextKey] = {
+        ...store[nextKey],
+        ...value
+      };
+    }
+  }
+
   private keyStore: KeyStore;
 
   /**
@@ -88,6 +117,17 @@ export default class SafeStore {
    */
   public write(value: any, ...keys: string[]) {
     SafeStore.writeDeep(this.keyStore, value, [...keys]);
+  }
+
+  /**
+   * Appends an object to another object.
+   * This is similar to {@link write} except this will not completely clobber the existing value.
+   *
+   * @param {object} value - the value to append
+   * @param {string} keys - the keys specifying the path to append to
+   */
+  public append(value: object, ...keys: string[]) {
+    SafeStore.appendDeep(this.keyStore, value, [...keys]);
   }
 
   /**

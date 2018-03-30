@@ -19,6 +19,34 @@ describe("SafeStore", () => {
     });
   });
 
+  it("appends", () => {
+    const newData = {
+      "cheese": "I love you"
+    };
+    const initialState = {
+      "my": {
+        "path": "hi",
+      },
+      "hello": "jon"
+    };
+    const store = new SafeStore(initialState);
+
+    store.append(newData, "my");
+    expect(store.store).toEqual({
+      "my": {
+        "path": "hi",
+        "cheese": "I love you"
+      },
+      "hello": "jon"
+    });
+
+    const fail = () => {
+      store.append(newData, "hello");
+    };
+    expect(fail).toThrow(TypeError);
+
+  });
+
   it("reads", () => {
     const initialState = {
       "my": {

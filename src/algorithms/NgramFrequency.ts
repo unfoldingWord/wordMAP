@@ -78,6 +78,8 @@ export default class NgramFrequency implements Algorithm {
     const primaryIndex = new SafeStore();
     const secondaryIndex = new SafeStore();
 
+    // calculate unfiltered frequencies
+
     for (const pNgram of primaryNgrams) {
       for (const sNgram of secondaryNgrams) {
         const primaryFrequencies = NgramFrequency.calculateNgramFrequencies(
@@ -101,6 +103,19 @@ export default class NgramFrequency implements Algorithm {
           sNgram.toString(),
           pNgram.toString()
         );
+      }
+    }
+
+    // calculate filtered frequencies
+
+    const primaryKeys = Object.keys(primaryIndex.read());
+    for (const pKey of primaryKeys) {
+      const secondaryKeys = Object.keys(primaryIndex.read(pKey));
+      for (const sKey of secondaryKeys) {
+        primaryIndex.append({
+          filteredNgramFrequency: 0, // TODO: sum the alignmentFrequency
+          filteredFrequencyRation: 0 // TODO: alignmentFrequency / filteredNgramFrequency
+        }, pKey, sKey);
       }
     }
 
