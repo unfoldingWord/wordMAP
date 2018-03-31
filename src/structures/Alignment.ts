@@ -10,7 +10,7 @@ export default class Alignment {
   private targetNgram: Ngram;
 
   /**
-   * Returns the source n-gram
+   * Returns the n-gram from the source text
    * @return {Ngram}
    */
   public get source() {
@@ -18,7 +18,7 @@ export default class Alignment {
   }
 
   /**
-   * Returns the target n-gram
+   * Returns the n-gram from the target text
    * @return {Ngram}
    */
   public get target() {

@@ -11,32 +11,32 @@ describe("process sentence n-grams", () => {
   it("reads sized n-grams", () => {
     const zerograms = NgramFrequency.readSizedNgrams(sentence, 0);
     expect(zerograms).toEqual([
-      {"tokens": []},
-      {"tokens": []},
-      {"tokens": []},
-      {"tokens": []},
-      {"tokens": []}
-    ]);
+      {"tokens": [], "positionInSentence": 0},
+      {"tokens": [], "positionInSentence": 1},
+      {"tokens": [], "positionInSentence": 2},
+      {"tokens": [], "positionInSentence": 3},
+      {"tokens": [], "positionInSentence": 4}]);
 
     const unigrams = NgramFrequency.readSizedNgrams(sentence, 1);
     expect(unigrams).toEqual([
-      {"tokens": [{"text": "In"}]},
-      {"tokens": [{"text": "the"}]},
-      {"tokens": [{"text": "beginning"}]},
-      {"tokens": [{"text": "God"}]}]);
+      {"tokens": [{"text": "In"}], "positionInSentence": 0},
+      {"tokens": [{"text": "the"}], "positionInSentence": 1},
+      {"tokens": [{"text": "beginning"}], "positionInSentence": 2},
+      {"tokens": [{"text": "God"}], "positionInSentence": 3}]);
 
     const bigrams = NgramFrequency.readSizedNgrams(sentence, 2);
     expect(bigrams).toEqual([
-      {"tokens": [{"text": "In"}, {"text": "the"}]},
       {
-        "tokens": [
-          {"text": "the"},
-          {"text": "beginning"}]
+        "tokens": [{"text": "In"}, {"text": "the"}],
+        "positionInSentence": 0
       },
       {
-        "tokens": [
-          {"text": "beginning"},
-          {"text": "God"}]
+        "tokens": [{"text": "the"}, {"text": "beginning"}],
+        "positionInSentence": 1
+      },
+      {
+        "tokens": [{"text": "beginning"}, {"text": "God"}],
+        "positionInSentence": 2
       }]);
 
     const trigrams = NgramFrequency.readSizedNgrams(sentence, 3);
@@ -45,32 +45,31 @@ describe("process sentence n-grams", () => {
         "tokens": [
           {"text": "In"},
           {"text": "the"},
-          {"text": "beginning"}]
+          {"text": "beginning"}], "positionInSentence": 0
       },
       {
-        "tokens": [
-          {"text": "the"},
-          {"text": "beginning"},
-          {"text": "God"}]
+        "tokens": [{"text": "the"}, {"text": "beginning"}, {"text": "God"}],
+        "positionInSentence": 1
       }]);
   });
   it("generates all n-grams", () => {
     const ngrams = NgramFrequency.generateSentenceNgrams(sentence);
     expect(ngrams).toEqual([
-      {"tokens": [{"text": "In"}]},
-      {"tokens": [{"text": "the"}]},
-      {"tokens": [{"text": "beginning"}]},
-      {"tokens": [{"text": "God"}]},
-      {"tokens": [{"text": "In"}, {"text": "the"}]},
       {
-        "tokens": [
-          {"text": "the"},
-          {"text": "beginning"}]
+        "tokens": [{"text": "In"}],
+        "positionInSentence": 0
+      },
+      {"tokens": [{"text": "the"}], "positionInSentence": 1},
+      {"tokens": [{"text": "beginning"}], "positionInSentence": 2},
+      {"tokens": [{"text": "God"}], "positionInSentence": 3},
+      {"tokens": [{"text": "In"}, {"text": "the"}], "positionInSentence": 0},
+      {
+        "tokens": [{"text": "the"}, {"text": "beginning"}],
+        "positionInSentence": 1
       },
       {
-        "tokens": [
-          {"text": "beginning"},
-          {"text": "God"}]
+        "tokens": [{"text": "beginning"}, {"text": "God"}],
+        "positionInSentence": 2
       }]);
   });
 
@@ -101,52 +100,72 @@ describe("alignment permutations", () => {
 
     expect(permutations).toEqual([
       {
-        "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}]}
+        "sourceNgram": {
+          "tokens": [{"text": "In"}],
+          "positionInSentence": 0
+        }, "targetNgram": {"tokens": [{"text": "nI"}], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": [{"text": "eht"}]}
+        "sourceNgram": {"tokens": [{"text": "In"}], "positionInSentence": 0},
+        "targetNgram": {"tokens": [{"text": "eht"}], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}
+        "sourceNgram": {"tokens": [{"text": "In"}], "positionInSentence": 0},
+        "targetNgram": {
+          "tokens": [{"text": "nI"}, {"text": "eht"}],
+          "positionInSentence": 0
+        }
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}]},
-        "targetNgram": {"tokens": []}
+        "sourceNgram": {"tokens": [{"text": "In"}], "positionInSentence": 0},
+        "targetNgram": {"tokens": [], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}]}
+        "sourceNgram": {"tokens": [{"text": "the"}], "positionInSentence": 0},
+        "targetNgram": {"tokens": [{"text": "nI"}], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "eht"}]}
+        "sourceNgram": {"tokens": [{"text": "the"}], "positionInSentence": 0},
+        "targetNgram": {"tokens": [{"text": "eht"}], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}
+        "sourceNgram": {"tokens": [{"text": "the"}], "positionInSentence": 0},
+        "targetNgram": {
+          "tokens": [{"text": "nI"}, {"text": "eht"}],
+          "positionInSentence": 0
+        }
       },
       {
-        "sourceNgram": {"tokens": [{"text": "the"}]},
-        "targetNgram": {"tokens": []}
+        "sourceNgram": {"tokens": [{"text": "the"}], "positionInSentence": 0},
+        "targetNgram": {"tokens": [], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}]}
+        "sourceNgram": {
+          "tokens": [{"text": "In"}, {"text": "the"}],
+          "positionInSentence": 0
+        }, "targetNgram": {"tokens": [{"text": "nI"}], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "eht"}]}
+        "sourceNgram": {
+          "tokens": [{"text": "In"}, {"text": "the"}],
+          "positionInSentence": 0
+        }, "targetNgram": {"tokens": [{"text": "eht"}], "positionInSentence": 0}
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": [{"text": "nI"}, {"text": "eht"}]}
+        "sourceNgram": {
+          "tokens": [{"text": "In"}, {"text": "the"}],
+          "positionInSentence": 0
+        },
+        "targetNgram": {
+          "tokens": [{"text": "nI"}, {"text": "eht"}],
+          "positionInSentence": 0
+        }
       },
       {
-        "sourceNgram": {"tokens": [{"text": "In"}, {"text": "the"}]},
-        "targetNgram": {"tokens": []}
+        "sourceNgram": {
+          "tokens": [{"text": "In"}, {"text": "the"}],
+          "positionInSentence": 0
+        }, "targetNgram": {"tokens": [], "positionInSentence": 0}
       }]);
   });
 });

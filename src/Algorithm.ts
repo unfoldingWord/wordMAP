@@ -1,5 +1,5 @@
-import Store from "./index/Store";
 import Index from "./index/Index";
+import Store from "./index/Store";
 import Token from "./structures/Token";
 
 export default interface Algorithm {

@@ -42,7 +42,7 @@ export default class NgramFrequency implements Algorithm {
       if (end >= sentence.length) {
         break;
       }
-      const ngram = new Ngram(sentence.slice(pos, end));
+      const ngram = new Ngram(sentence.slice(pos, end), ngrams.length);
       ngrams.push(ngram);
     }
     return ngrams;
@@ -75,7 +75,18 @@ export default class NgramFrequency implements Algorithm {
    * @return {Index[]}
    */
   public static calculateFrequency(primaryNgrams: Ngram[], secondaryNgrams: Ngram[], store: Store) {
+    /**
+     * An index of possible alignments keyed by the primary n-gram
+     * @type {Index}
+     */
     const primaryIndex = new Index();
+
+    /**
+     * An index of possible alignments keyed by the secondary n-gram
+     * TRICKY: this is redundant but generated for convenience.
+     *
+     * @type {Index}
+     */
     const secondaryIndex = new Index();
 
     // calculate unfiltered frequencies
@@ -93,6 +104,7 @@ export default class NgramFrequency implements Algorithm {
           sNgram.toString()
         );
 
+        // this is redundant but generated for convenience
         const secondaryFrequencies = NgramFrequency.calculateNgramFrequencies(
           store.secondaryAlignmentFrequencyIndex,
           sNgram,
@@ -119,6 +131,7 @@ export default class NgramFrequency implements Algorithm {
         );
         primaryIndex.append(primaryFilteredFrequencies, pKey, sKey);
 
+        // this is redundant but generated for convenience
         const secondaryFilteredFrequencies = NgramFrequency.calculateFilteredNgramFrequencies(
           secondaryIndex,
           sKey,
@@ -173,6 +186,9 @@ export default class NgramFrequency implements Algorithm {
    * @returns {object}
    */
   private static calculateFilteredNgramFrequencies(index: Index, primaryKey: string, secondaryKey: string): object {
+    // TODO: it is possible the index does not contain this alignment
+    // we need to handle this case.
+
     // read alignment frequency
     // NOTE: the alignment frequency will have the same value in both the primary and secondary index.
     const alignmentFrequency = index.read(
@@ -212,25 +228,38 @@ export default class NgramFrequency implements Algorithm {
     );
 
     // generate alignment permutations
-    // const alignments = NgramFrequency.generateAlignmentPermutations(
-    //   primarySentenceNgrams,
-    //   secondarySentenceNgrams
-    // );
+    const alignments = NgramFrequency.generateAlignmentPermutations(
+      primarySentenceNgrams,
+      secondarySentenceNgrams
+    );
+
+    // TODO: need to combine the corpus and alignment frequency calc objects
+    // into a single output so we do not need to loop more than once when updating.
+    // I could pass in both stores to the method.
+
+    // TRICKY: the below calculations actually produce alignments although
+    // they do not use the alignment class and are structured as an index.
 
     // perform calculations
-    const alignmentStuff = NgramFrequency.calculateFrequency(
+    const alignmentFrequencies = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
       savedAlignmentsStore
     );
 
-    const corpusStuff = NgramFrequency.calculateFrequency(
+    const corpusFrequencies = NgramFrequency.calculateFrequency(
       primarySentenceNgrams,
       secondarySentenceNgrams,
       corpusStore
     );
 
-    // TODO: return the formatted state
+    // I think these two should be combined into a single one.
+    state.write(alignmentFrequencies, "alignment-frequencies");
+    state.write(corpusFrequencies, "corpus-frequencies");
+
+    // state.write(primarySentenceNgrams, "primary-ngrams");
+    // state.write(secondarySentenceNgrams, "secondary-ngrams");
+    state.write(alignments, "alignments");
     return state;
   }
 

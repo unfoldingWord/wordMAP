@@ -6,12 +6,23 @@ import Token from "./Token";
 export default class Ngram {
 
   private tokens: Token[];
+  private positionInSentence: number;
 
   /**
    * @param {Array<Token>} [tokens=[]] - a list of tokens of which this n-gram is composed
+   * @param {number} position - the position of the n-gram within the sentence.
    */
-  constructor(tokens: Token[] = []) {
+  constructor(tokens: Token[] = [], position = 0) {
     this.tokens = tokens;
+    this.positionInSentence = position;
+  }
+
+  /**
+   * Returns the position at which this n-gram appears in the sentence.
+   * @return {number}
+   */
+  get position() {
+    return this.positionInSentence;
   }
 
   /**

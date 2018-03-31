@@ -283,9 +283,11 @@ The algorithm proceeds as follows:
 
 Perform the following calculations on the filtered and unfiltered corpus/saved alignment indices:
 
-1. Calculate the frequency of each filtered *primary* n-gram over the corpus/saved alignment index.
-1. Calculate the frequency of each filtered *secondary* n-gram over the corpus/saved alignment index.
+1. Calculate the frequency of each filtered *primary* n-gram over the index.
 1. Calculate the ratio of alignment frequency vs *primary* n-gram frequency.
+
+
+1. Calculate the frequency of each filtered *secondary* n-gram over the index.
 1. Calculate the ratio of alignment frequency vs *secondary* n-gram frequency.
 
 > **Note:** It is important to compare the filtered and unfiltered frequency ratios.
