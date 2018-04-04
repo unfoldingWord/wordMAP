@@ -112,7 +112,7 @@ export default class Engine {
         return index.readSum(ngram.toString());
       };
 
-      // Alignment Frequency
+      // Alignment frequency in the corpus and saved alignments
       const alignmentFrequencyCorpus = readAlignmentFrequency(
         corpusStore.primaryAlignmentFrequencyIndex,
         p.alignment.source,
@@ -124,33 +124,49 @@ export default class Engine {
         p.alignment.target
       );
 
-      // n-gram Frequency
-      const primaryNgramFrequencyCorpus = countNgramFrequency(
+      // source and target n-gram frequency in the corpus and saved alignments
+      const ngramFrequencyCorpusSource = countNgramFrequency(
         corpusStore.primaryAlignmentFrequencyIndex,
         p.alignment.source
       );
-      const primaryNgramFrequencySavedAlignments = countNgramFrequency(
+      const ngramFrequencySavedAlignmentsSource = countNgramFrequency(
         savedAlignmentsStore.primaryAlignmentFrequencyIndex,
         p.alignment.source
       );
-      const secondaryNgramFrequencyCorpus = countNgramFrequency(
+      const ngramFrequencyCorpusTarget = countNgramFrequency(
         corpusStore.secondaryNgramFrequencyIndex,
         p.alignment.target
       );
-      const secondaryNgramFrequencySavedAlignments = countNgramFrequency(
+      const ngramFrequencySavedAlignmentsTarget = countNgramFrequency(
         savedAlignmentsStore.secondaryNgramFrequencyIndex,
         p.alignment.target
       );
 
-      // Frequency Ratio
-      const primaryFrequencyRatioCorpus = alignmentFrequencyCorpus /
-        primaryNgramFrequencyCorpus;
-      const secondaryFrequencyRatioCorpus = alignmentFrequencyCorpus /
-        secondaryNgramFrequencyCorpus;
-      const primaryFrequencyRatioSavedAlignments = alignmentFrequencySavedAlignments /
-        primaryNgramFrequencySavedAlignments;
-      const secondaryFrequencyRatioSavedAlignments = alignmentFrequencySavedAlignments /
-        secondaryNgramFrequencySavedAlignments;
+      // source and target frequency ratio for the corpus and saved alignments
+      const frequencyRatioCorpusSource = alignmentFrequencyCorpus /
+        ngramFrequencyCorpusSource;
+      const frequencyRatioCorpusTarget = alignmentFrequencyCorpus /
+        ngramFrequencyCorpusTarget;
+      const frequencyRatioSavedAlignmentsSource = alignmentFrequencySavedAlignments /
+        ngramFrequencySavedAlignmentsSource;
+      const frequencyRatioSavedAlignmentsTarget = alignmentFrequencySavedAlignments /
+        ngramFrequencySavedAlignmentsTarget;
+
+      // store scores
+      p.setScores({
+        alignmentFrequencyCorpus,
+        alignmentFrequencySavedAlignments,
+
+        ngramFrequencyCorpusSource,
+        ngramFrequencyCorpusTarget,
+        ngramFrequencySavedAlignmentsSource,
+        ngramFrequencySavedAlignmentsTarget,
+
+        frequencyRatioCorpusSource,
+        frequencyRatioCorpusTarget,
+        frequencyRatioSavedAlignmentsSource,
+        frequencyRatioSavedAlignmentsTarget
+      });
     }
   }
 
