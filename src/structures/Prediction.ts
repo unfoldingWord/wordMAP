@@ -5,12 +5,32 @@ import Alignment from "./Alignment";
  * Represents a single alignment prediction
  */
 export default class Prediction {
-  private alignment: Alignment;
+  private possibleAlignment: Alignment;
   private scores: Index;
 
+  /**
+   * Returns an array of score keys
+   * @return {string[]}
+   */
+  get scoreKeys() {
+    return Object.keys(this.scores.read());
+  }
+
+  /**
+   * Returns the alignment represented by this prediction
+   * @return {Alignment}
+   */
+  get alignment() {
+    return this.possibleAlignment;
+  }
+
+  /**
+   * Instantiates a new alignment prediction
+   * @param {Alignment} alignment - the alignment for which a prediction will be calculated
+   */
   constructor(alignment: Alignment) {
     this.scores = new Index();
-    this.alignment = alignment;
+    this.possibleAlignment = alignment;
   }
 
   /**
