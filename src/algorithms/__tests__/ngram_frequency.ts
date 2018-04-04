@@ -171,20 +171,24 @@ describe("alignment permutations", () => {
 });
 
 describe("calculate frequency", () => {
-  // n-grams for the un-aligned sentence pair
-  const str = "Once upon a time";
-  const primarySentence = tokenizeMockSentence(str);
-  const secondarySentence = tokenizeMockSentence(reverseSentenceWords(str));
-  const primaryNgrams = NgramFrequency.generateSentenceNgrams(primarySentence);
-  const secondaryNgrams = NgramFrequency.generateSentenceNgrams(
-    secondarySentence);
-  const index = new Store();
-  const frequencies = NgramFrequency.calculateFrequency(
-    primaryNgrams,
-    secondaryNgrams,
-    index
-  );
-  // TODO: make assertions
+  it("has no corpus or saved alignments", () => {
+    // n-grams for the un-aligned sentence pair
+    const str = "hello world";
+    const primarySentence = tokenizeMockSentence(str);
+    const secondarySentence = tokenizeMockSentence(reverseSentenceWords(str));
+    const primaryNgrams = NgramFrequency.generateSentenceNgrams(primarySentence);
+    const secondaryNgrams = NgramFrequency.generateSentenceNgrams(
+      secondarySentence);
+    const index = new Store();
+    const frequencies = NgramFrequency.calculateFrequency(
+      primaryNgrams,
+      secondaryNgrams,
+      index
+    );
+    const primary = frequencies[0];
+    expect(primary).toEqual({});
+    // TODO: make assertions
+  });
 });
 
 it("executes", () => {
