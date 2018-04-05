@@ -97,7 +97,7 @@ function randNgramLength(numTokens: number, maxLength: number = 3): number {
 export class MockAlgorithm implements Algorithm {
   public name: string = "mock algorithm";
 
-  public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex): Prediction[] {
     return predictions;
   }
 }

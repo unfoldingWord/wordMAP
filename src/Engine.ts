@@ -158,6 +158,7 @@ export default class Engine {
     const suggestions: Prediction[] = [];
 
     for (const p of predictions) {
+      // TODO: what scores do we weight? We have primary + secondary scores and corpus + saved alignment.
       let confidence = Engine.calculateWeightedConfidence(p, [""], {});
 
       // TODO: increment if saved alignment... what does that mean?

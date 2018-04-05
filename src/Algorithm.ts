@@ -1,6 +1,5 @@
 import EngineIndex from "./index/EngineIndex";
 import Prediction from "./structures/Prediction";
-import Token from "./structures/Token";
 
 export default interface Algorithm {
   /**

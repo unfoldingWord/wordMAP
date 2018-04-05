@@ -1,7 +1,6 @@
 import Algorithm from "../Algorithm";
 import EngineIndex from "../index/EngineIndex";
 import Prediction from "../structures/Prediction";
-import Token from "../structures/Token";
 
 /**
  * This algorithm calculates the relative position of n-grams in a sentence.
@@ -12,7 +11,8 @@ export default class AlignmentPosition implements Algorithm {
 
   public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex): Prediction[] {
     for (const p of predictions) {
-      const delta = Math.abs(p.alignment.source.tokenPosition - p.alignment.target.tokenPosition);
+      const delta = Math.abs(p.alignment.source.tokenPosition -
+        p.alignment.target.tokenPosition);
       const weight = 1 - delta;
 
       p.setScores({

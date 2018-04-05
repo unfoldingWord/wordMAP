@@ -481,7 +481,12 @@ it("runs all the algorithms", () => {
   }
   const source = tokenizeMockSentence("Hello World");
   const target = tokenizeMockSentence("olleH dlroW");
-  Engine.performPrediction([source, target], new EngineIndex(), new EngineIndex(), algorithms);
+  Engine.performPrediction(
+    [source, target],
+    new EngineIndex(),
+    new EngineIndex(),
+    algorithms
+  );
 
   for (const s of spies) {
     expect(s).toHaveBeenCalled();

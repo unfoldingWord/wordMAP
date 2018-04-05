@@ -4,7 +4,6 @@ import Index from "../index/Index";
 import Ngram from "../structures/Ngram";
 import NumberObject from "../structures/NumberObject";
 import Prediction from "../structures/Prediction";
-import Token from "../structures/Token";
 
 /**
  * This algorithm calculates the frequency of n-gram occurrences.
