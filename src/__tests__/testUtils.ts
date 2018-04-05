@@ -29,6 +29,19 @@ export function alignMockSentence(sentence: string): Alignment[] {
 }
 
 /**
+ * Creates a mock alignment from two strings.
+ * The strings will be tokenized and converted to n-grams in the alignment
+ * @param {string} source
+ * @param {string} target
+ * @return {Alignment}
+ */
+export function makeMockAlignment(source: string, target: string): Alignment {
+  const sourceTokens = tokenizeMockSentence(source);
+  const targetTokens = tokenizeMockSentence(target);
+  return new Alignment(new Ngram(sourceTokens), new Ngram(targetTokens));
+}
+
+/**
  * Generates a sample alignment
  * @param {Array<Token>} tokens - An array of tokens to align
  * @return {Alignment} a sample alignment

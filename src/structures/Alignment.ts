@@ -26,6 +26,7 @@ export default class Alignment {
   }
 
   /**
+   * Instantiates a new alignment
    * @param {Ngram} sourceNgram - an n-gram from the source text
    * @param {Ngram} targetNgram - an n-gram from the secondary text
    */

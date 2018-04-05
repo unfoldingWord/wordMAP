@@ -43,7 +43,7 @@ export default class Engine {
     }
     let ngrams: Ngram[] = [];
     const maxLength = Math.min(maxNgramLength, sentence.length);
-    for (let ngramLength = 1; ngramLength < maxLength; ngramLength++) {
+    for (let ngramLength = 1; ngramLength <= maxLength; ngramLength++) {
       ngrams = ngrams.concat(
         Engine.readSizedNgrams(sentence, ngramLength));
     }
@@ -60,7 +60,7 @@ export default class Engine {
     const ngrams: Ngram[] = [];
     for (let pos = 0; pos < sentence.length; pos++) {
       const end = pos + ngramLength;
-      if (end >= sentence.length) {
+      if (end > sentence.length) {
         break;
       }
       const ngram = new Ngram(sentence.slice(pos, end));

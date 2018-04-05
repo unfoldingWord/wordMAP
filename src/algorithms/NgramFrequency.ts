@@ -42,7 +42,7 @@ export default class NgramFrequency implements Algorithm {
 
   /**
    * Performs a numerical addition with the value of a key in a number object.
-   * TODO: move this into it's own class??
+   * TODO: move this into it's own class?
    *
    * @param {NumberObject} object
    * @param {string} key
@@ -53,6 +53,23 @@ export default class NgramFrequency implements Algorithm {
       object[key] = 0;
     }
     object[key] += value;
+  }
+
+  /**
+   * Performs a numerical division.
+   * Division by zero will result in 0.
+   * TODO: move this into a math utility?
+   *
+   * @param {number} dividend
+   * @param {number} divisor
+   * @return {number}
+   */
+  private static divideSafe(dividend: number, divisor: number): number {
+    if (divisor === 0) {
+      return 0;
+    } else {
+      return dividend / divisor;
+    }
   }
 
   public name: string = "n-gram frequency";
@@ -84,23 +101,31 @@ export default class NgramFrequency implements Algorithm {
         p.alignment.source
       );
       const ngramFrequencyCorpusTarget = NgramFrequency.countNgramFrequency(
-        corpusStore.secondaryNgramFrequencyIndex,
+        corpusStore.secondaryAlignmentFrequencyIndex,
         p.alignment.target
       );
       const ngramFrequencySavedAlignmentsTarget = NgramFrequency.countNgramFrequency(
-        savedAlignmentsStore.secondaryNgramFrequencyIndex,
+        savedAlignmentsStore.secondaryAlignmentFrequencyIndex,
         p.alignment.target
       );
 
       // source and target frequency ratio for the corpus and saved alignments
-      const frequencyRatioCorpusSource: number = alignmentFrequencyCorpus /
-        ngramFrequencyCorpusSource;
-      const frequencyRatioCorpusTarget: number = alignmentFrequencyCorpus /
-        ngramFrequencyCorpusTarget;
-      const frequencyRatioSavedAlignmentsSource: number = alignmentFrequencySavedAlignments /
-        ngramFrequencySavedAlignmentsSource;
-      const frequencyRatioSavedAlignmentsTarget: number = alignmentFrequencySavedAlignments /
-        ngramFrequencySavedAlignmentsTarget;
+      const frequencyRatioCorpusSource: number = NgramFrequency.divideSafe(
+        alignmentFrequencyCorpus,
+        ngramFrequencyCorpusSource
+      );
+      const frequencyRatioCorpusTarget: number = NgramFrequency.divideSafe(
+        alignmentFrequencyCorpus,
+        ngramFrequencyCorpusTarget
+      );
+      const frequencyRatioSavedAlignmentsSource: number = NgramFrequency.divideSafe(
+        alignmentFrequencySavedAlignments,
+        ngramFrequencySavedAlignmentsSource
+      );
+      const frequencyRatioSavedAlignmentsTarget: number = NgramFrequency.divideSafe(
+        alignmentFrequencySavedAlignments,
+        ngramFrequencySavedAlignmentsTarget
+      );
 
       // store scores
       p.setScores({
@@ -145,10 +170,14 @@ export default class NgramFrequency implements Algorithm {
       const alignmentFrequencySavedAlignmentsFiltered = alignmentFrequencySavedAlignmentsSums[p.toString()];
 
       // source and target frequency ratio for the corpus and saved alignments
-      const frequencyRatioCorpusSourceFiltered: number = alignmentFrequencyCorpus /
-        alignmentFrequencyCorpusFiltered;
-      const frequencyRatioSavedAlignmentsFiltered: number = alignmentFrequencySavedAlignments /
-        alignmentFrequencySavedAlignmentsFiltered;
+      const frequencyRatioCorpusSourceFiltered: number = NgramFrequency.divideSafe(
+        alignmentFrequencyCorpus,
+        alignmentFrequencyCorpusFiltered
+      );
+      const frequencyRatioSavedAlignmentsFiltered: number = NgramFrequency.divideSafe(
+        alignmentFrequencySavedAlignments,
+        alignmentFrequencySavedAlignmentsFiltered
+      );
 
       // store scores
       p.setScores({

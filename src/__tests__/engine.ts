@@ -46,7 +46,8 @@ describe("process sentence n-grams", () => {
       {"tokens": [{"text": "In", "charPos": 0, "pos": 0}]},
       {"tokens": [{"text": "the", "charPos": 0, "pos": 0}]},
       {"tokens": [{"text": "beginning", "charPos": 0, "pos": 0}]},
-      {"tokens": [{"text": "God", "charPos": 0, "pos": 0}]}]);
+      {"tokens": [{"text": "God", "charPos": 0, "pos": 0}]},
+      {"tokens": [{"text": "created", "charPos": 0, "pos": 0}]}]);
   });
   it("reads bi-grams", () => {
     const bigrams = Engine.readSizedNgrams(sentence, 2);
@@ -65,6 +66,11 @@ describe("process sentence n-grams", () => {
         "tokens": [
           {"text": "beginning", "charPos": 0, "pos": 0},
           {"text": "God", "charPos": 0, "pos": 0}]
+      },
+      {
+        "tokens": [
+          {"text": "God", "charPos": 0, "pos": 0},
+          {"text": "created", "charPos": 0, "pos": 0}]
       }]);
   });
   it("reads tri-grams", () => {
@@ -81,6 +87,12 @@ describe("process sentence n-grams", () => {
           {"text": "the", "charPos": 0, "pos": 0},
           {"text": "beginning", "charPos": 0, "pos": 0},
           {"text": "God", "charPos": 0, "pos": 0}]
+      },
+      {
+        "tokens": [
+          {"text": "beginning", "charPos": 0, "pos": 0},
+          {"text": "God", "charPos": 0, "pos": 0},
+          {"text": "created", "charPos": 0, "pos": 0}]
       }]);
   });
   it("generates all n-grams", () => {
@@ -92,6 +104,7 @@ describe("process sentence n-grams", () => {
       {"tokens": [{"text": "the", "charPos": 0, "pos": 0}]},
       {"tokens": [{"text": "beginning", "charPos": 0, "pos": 0}]},
       {"tokens": [{"text": "God", "charPos": 0, "pos": 0}]},
+      {"tokens": [{"text": "created", "charPos": 0, "pos": 0}]},
       {
         "tokens": [
           {"text": "In", "charPos": 0, "pos": 0},
@@ -106,6 +119,29 @@ describe("process sentence n-grams", () => {
         "tokens": [
           {"text": "beginning", "charPos": 0, "pos": 0},
           {"text": "God", "charPos": 0, "pos": 0}]
+      },
+      {
+        "tokens": [
+          {"text": "God", "charPos": 0, "pos": 0},
+          {"text": "created", "charPos": 0, "pos": 0}]
+      },
+      {
+        "tokens": [
+          {"text": "In", "charPos": 0, "pos": 0},
+          {"text": "the", "charPos": 0, "pos": 0},
+          {"text": "beginning", "charPos": 0, "pos": 0}]
+      },
+      {
+        "tokens": [
+          {"text": "the", "charPos": 0, "pos": 0},
+          {"text": "beginning", "charPos": 0, "pos": 0},
+          {"text": "God", "charPos": 0, "pos": 0}]
+      },
+      {
+        "tokens": [
+          {"text": "beginning", "charPos": 0, "pos": 0},
+          {"text": "God", "charPos": 0, "pos": 0},
+          {"text": "created", "charPos": 0, "pos": 0}]
       }]);
   });
 
