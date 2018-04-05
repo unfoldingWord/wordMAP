@@ -704,3 +704,4 @@ A benefit of this approach is that it allows users to backup their configuration
 ### Limitations
 
 This approach requires a DCS account. This is not a problem for tC but other software using Word-MAP may not have support for DCS accounts. Such software would still be able to read configuration data but could not write it unless they add support for DCS user authentication.
+
