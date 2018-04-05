@@ -33,4 +33,8 @@ export default class Alignment {
     this.sourceNgram = sourceNgram;
     this.targetNgram = targetNgram;
   }
+
+  public toString(): string {
+    return `${this.sourceNgram.toString()}->${this.targetNgram.toString()}`;
+  }
 }

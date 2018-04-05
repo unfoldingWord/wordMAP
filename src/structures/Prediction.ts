@@ -1,14 +1,11 @@
 import Alignment from "./Alignment";
-
-export interface NumberObject {
-  [key: string]: number;
-}
+import NumberObject from "./NumberObject";
 
 /**
  * Represents a single alignment prediction
  */
 export default class Prediction {
-  private possibleAlignment: Alignment;
+  private predictedAlignment: Alignment;
   private scores: NumberObject;
 
   /**
@@ -24,7 +21,7 @@ export default class Prediction {
    * @return {Alignment}
    */
   get alignment() {
-    return this.possibleAlignment;
+    return this.predictedAlignment;
   }
 
   /**
@@ -33,7 +30,7 @@ export default class Prediction {
    */
   constructor(alignment: Alignment) {
     this.scores = {};
-    this.possibleAlignment = alignment;
+    this.predictedAlignment = alignment;
   }
 
   /**
@@ -42,7 +39,11 @@ export default class Prediction {
    * @param {number} value - the score value
    */
   public setScore(key: string, value: number) {
-    this.scores[key] = value;
+    if (key in this.scores) {
+      throw new Error(`Score key "${key}" already exists. Scores can only be written once.`);
+    } else {
+      this.scores[key] = value;
+    }
   }
 
   /**
@@ -50,10 +51,11 @@ export default class Prediction {
    * @param {NumberObject} scores - an object of scores
    */
   public setScores(scores: NumberObject) {
-    this.scores = {
-      ...this.scores,
-      ...scores
-    };
+    for (const key in scores) {
+      if (scores.hasOwnProperty(key)) {
+        this.setScore(key, scores[key]);
+      }
+    }
   }
 
   /**
@@ -67,5 +69,17 @@ export default class Prediction {
     } else {
       throw new Error(`Unknown score key ${key}`);
     }
+  }
+
+  /**
+   * Returns a copy of the prediction scores
+   * @return {NumberObject}
+   */
+  public getScores() {
+    return Object.assign({}, this.scores);
+  }
+
+  public toString(): string {
+    return this.predictedAlignment.toString();
   }
 }

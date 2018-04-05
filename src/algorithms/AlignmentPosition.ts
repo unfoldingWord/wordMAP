@@ -17,7 +17,7 @@ export default class AlignmentPosition implements Algorithm {
     const alignments = state.read("alignments") as Alignment[];
 
     for (const a of alignments) {
-      const delta = Math.abs(a.source.position - a.target.position);
+      const delta = Math.abs(a.source.tokenPosition - a.target.tokenPosition);
       const weight = 1 - delta;
 
       // TODO: store this in the frequencies index we generated in the ngram frequency algorithm.

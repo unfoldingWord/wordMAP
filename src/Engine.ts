@@ -1,6 +1,5 @@
 import Algorithm from "./Algorithm";
 import NotImplemented from "./errors/NotImplemented";
-import Index from "./index/Index";
 import Store from "./index/Store";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
@@ -11,26 +10,6 @@ import Token from "./structures/Token";
  * Represents a multi-lingual word alignment prediction engine.
  */
 export default class Engine {
-
-  /**
-   * @deprecated use {@link generatePredictions} instead.
-   * Generates an array of all possible alignments between two texts.
-   * @param {Array<Ngram>} primaryNgrams - n-grams from the primary text
-   * @param {Array<Ngram>} secondaryNgrams - n-grams from the secondary text
-   * @returns {Array<Alignment>}
-   */
-  public static generateAlignmentPermutations(primaryNgrams: Ngram[], secondaryNgrams: Ngram[]): Alignment[] {
-    const alignments: Alignment[] = [];
-    for (const pgram of primaryNgrams) {
-      for (const sgram of secondaryNgrams) {
-        alignments.push(new Alignment(pgram, sgram));
-      }
-
-      // TRICKY: include empty match alignment
-      alignments.push(new Alignment(pgram, new Ngram()));
-    }
-    return alignments;
-  }
 
   /**
    * Generates an array of all possible alignment predictions
@@ -84,90 +63,26 @@ export default class Engine {
       if (end >= sentence.length) {
         break;
       }
-      const ngram = new Ngram(sentence.slice(pos, end), ngrams.length);
+      const ngram = new Ngram(sentence.slice(pos, end));
       ngrams.push(ngram);
     }
     return ngrams;
   }
 
   /**
-   * This is a temporary location for the ngram algorithm
+   * Generates an array of tokens with their relative positions measured.
+   *
+   * @param {Token[]} tokens - the tokens to measure
+   * @return {Token[]} - a new list of measured tokens
    */
-  public static ngramFrequencyAlgorithm(predictions: Prediction[], corpusStore: Store, savedAlignmentsStore: Store, unalignedSentencePair: [Token[], Token[]]) {
-    for (const p  of predictions) {
-
-      const readAlignmentFrequency = (index: Index, sourceNgram: Ngram, targetNgram: Ngram): number => {
-        const alignmentFrequency = index.read(
-          sourceNgram.toString(),
-          targetNgram.toString()
-        );
-        if (alignmentFrequency === undefined) {
-          return 0;
-        } else {
-          return alignmentFrequency;
-        }
-      };
-
-      const countNgramFrequency = (index: Index, ngram: Ngram): number => {
-        return index.readSum(ngram.toString());
-      };
-
-      // Alignment frequency in the corpus and saved alignments
-      const alignmentFrequencyCorpus = readAlignmentFrequency(
-        corpusStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source,
-        p.alignment.target
-      );
-      const alignmentFrequencySavedAlignments = readAlignmentFrequency(
-        savedAlignmentsStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source,
-        p.alignment.target
-      );
-
-      // source and target n-gram frequency in the corpus and saved alignments
-      const ngramFrequencyCorpusSource = countNgramFrequency(
-        corpusStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source
-      );
-      const ngramFrequencySavedAlignmentsSource = countNgramFrequency(
-        savedAlignmentsStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source
-      );
-      const ngramFrequencyCorpusTarget = countNgramFrequency(
-        corpusStore.secondaryNgramFrequencyIndex,
-        p.alignment.target
-      );
-      const ngramFrequencySavedAlignmentsTarget = countNgramFrequency(
-        savedAlignmentsStore.secondaryNgramFrequencyIndex,
-        p.alignment.target
-      );
-
-      // source and target frequency ratio for the corpus and saved alignments
-      const frequencyRatioCorpusSource = alignmentFrequencyCorpus /
-        ngramFrequencyCorpusSource;
-      const frequencyRatioCorpusTarget = alignmentFrequencyCorpus /
-        ngramFrequencyCorpusTarget;
-      const frequencyRatioSavedAlignmentsSource = alignmentFrequencySavedAlignments /
-        ngramFrequencySavedAlignmentsSource;
-      const frequencyRatioSavedAlignmentsTarget = alignmentFrequencySavedAlignments /
-        ngramFrequencySavedAlignmentsTarget;
-
-      // store scores
-      p.setScores({
-        alignmentFrequencyCorpus,
-        alignmentFrequencySavedAlignments,
-
-        ngramFrequencyCorpusSource,
-        ngramFrequencyCorpusTarget,
-        ngramFrequencySavedAlignmentsSource,
-        ngramFrequencySavedAlignmentsTarget,
-
-        frequencyRatioCorpusSource,
-        frequencyRatioCorpusTarget,
-        frequencyRatioSavedAlignmentsSource,
-        frequencyRatioSavedAlignmentsTarget
-      });
+  public static generateMeasuredTokens(tokens: Token[]): Token[] {
+    const measuredTokens: Token[] = [];
+    let charPos = 0;
+    for (const t of tokens) {
+      measuredTokens.push(new Token(t.toString(), measuredTokens.length, charPos));
+      charPos += t.toString().length;
     }
+    return measuredTokens;
   }
 
   private registeredAlgorithms: Algorithm[] = [];
@@ -215,30 +130,31 @@ export default class Engine {
    * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
   public run(unalignedSentencePair: [Token[], Token[]]): Alignment[] {
+
+    const measuredUnalignedSentencePair: [Token[], Token[]] = [
+      Engine.generateMeasuredTokens(unalignedSentencePair[0]),
+      Engine.generateMeasuredTokens(unalignedSentencePair[1])
+    ];
+
     const sourceNgrams = Engine.generateSentenceNgrams(
-      unalignedSentencePair[0]
+      measuredUnalignedSentencePair[0]
     );
     const targetNgrams = Engine.generateSentenceNgrams(
-      unalignedSentencePair[1]
+      measuredUnalignedSentencePair[1]
     );
 
     // generate alignment permutations
-    const predictions = Engine.generatePredictions(
+    let predictions = Engine.generatePredictions(
       sourceNgrams,
       targetNgrams
     );
 
-    Engine.ngramFrequencyAlgorithm(
-      predictions,
-      this.corpusStore,
-      this.savedAlignmentsStore,
-      unalignedSentencePair
-    );
-
-    let state = new Index();
     for (const algorithm of this.registeredAlgorithms) {
-      state = algorithm.execute(state, this.corpusStore,
-        this.savedAlignmentsStore, unalignedSentencePair
+      predictions = algorithm.execute(
+        predictions,
+        this.corpusStore,
+        this.savedAlignmentsStore,
+        measuredUnalignedSentencePair
       );
     }
     return [];

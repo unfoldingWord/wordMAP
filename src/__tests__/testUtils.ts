@@ -5,6 +5,7 @@ import Index from "../index/Index";
 import Store from "../index/Store";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
+import Prediction from "../structures/Prediction";
 import Token from "../structures/Token";
 
 /**
@@ -84,7 +85,7 @@ function randNgramLength(numTokens: number, maxLength: number = 3): number {
 export class MockAlgorithm implements Algorithm {
   public name: string = "mock algorithm";
 
-  public execute(state: Index, corpusIndex: Store, savedAlignmentsIndex: Store, unalignedSentencePair: [Token[], Token[]]): Index {
-    return state;
+  public execute(predictions: Prediction[], corpusIndex: Store, savedAlignmentsIndex: Store, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+    return predictions;
   }
 }
