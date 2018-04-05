@@ -3,6 +3,7 @@ import NotImplemented from "./errors/NotImplemented";
 import EngineIndex from "./index/EngineIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
+import NumberObject from "./structures/NumberObject";
 import Prediction from "./structures/Prediction";
 import Token from "./structures/Token";
 
@@ -89,6 +90,85 @@ export default class Engine {
     return measuredTokens;
   }
 
+  /**
+   * Executes prediction algorithms on the unaligned sentence pair
+   * @param {[Token[]]} unalignedSentencePair
+   * @param {EngineIndex} corpusStore
+   * @param {EngineIndex} savedAlignmentsStore
+   * @param {Algorithm[]} algorithms
+   * @return {Prediction[]}
+   */
+  public static performPrediction(unalignedSentencePair: [Token[], Token[]], corpusStore: EngineIndex, savedAlignmentsStore: EngineIndex, algorithms: Algorithm[]) {
+    const measuredUnalignedSentencePair: [Token[], Token[]] = [
+      Engine.generateMeasuredTokens(unalignedSentencePair[0]),
+      Engine.generateMeasuredTokens(unalignedSentencePair[1])
+    ];
+
+    const sourceNgrams = Engine.generateSentenceNgrams(
+      measuredUnalignedSentencePair[0]
+    );
+    const targetNgrams = Engine.generateSentenceNgrams(
+      measuredUnalignedSentencePair[1]
+    );
+
+    // generate alignment permutations
+    let predictions = Engine.generatePredictions(
+      sourceNgrams,
+      targetNgrams
+    );
+
+    for (const algorithm of algorithms) {
+      predictions = algorithm.execute(
+        predictions,
+        corpusStore,
+        savedAlignmentsStore,
+        measuredUnalignedSentencePair
+      );
+    }
+
+    return predictions;
+  }
+
+  /**
+   * Calculates the weighted confidence score of a prediction
+   * @param {Prediction} prediction - the prediction to score
+   * @param {string[]} scoreKeys - the score keys to include in the calculation
+   * @param {NumberObject} weights - the weights to influence the calculation
+   * @return {number}
+   */
+  private static calculateWeightedConfidence(prediction: Prediction, scoreKeys: string[], weights: NumberObject): number {
+    let weightSum = 0;
+    let scoreSum = 0;
+    for (const key of scoreKeys) {
+      let weight = 1;
+      if (key in weights) {
+        weight = weights[key];
+      }
+      scoreSum += prediction.getScore(key) * weight;
+      weightSum += weight;
+    }
+    return scoreSum / weightSum;
+  }
+
+  /**
+   * Scores the predictions and returns a filtered set of suggestions
+   * @param {Prediction[]} predictions
+   * @return {Prediction[]}
+   */
+  private static score(predictions: Prediction[]): Prediction[] {
+    const suggestions: Prediction[] = [];
+
+    for (const p of predictions) {
+      let confidence = Engine.calculateWeightedConfidence(p, [""], {});
+
+      // TODO: increment if saved alignment... what does that mean?
+
+      p.setScore("confidence", confidence);
+    }
+
+    return suggestions;
+  }
+
   private registeredAlgorithms: Algorithm[] = [];
   private corpusStore: EngineIndex;
   private savedAlignmentsStore: EngineIndex;
@@ -129,38 +209,17 @@ export default class Engine {
   }
 
   /**
-   * Runs th engine
+   * Runs the engine
    *
    * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
-  public run(unalignedSentencePair: [Token[], Token[]]): Alignment[] {
-
-    const measuredUnalignedSentencePair: [Token[], Token[]] = [
-      Engine.generateMeasuredTokens(unalignedSentencePair[0]),
-      Engine.generateMeasuredTokens(unalignedSentencePair[1])
-    ];
-
-    const sourceNgrams = Engine.generateSentenceNgrams(
-      measuredUnalignedSentencePair[0]
+  public run(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+    const predictions = Engine.performPrediction(
+      unalignedSentencePair,
+      this.corpusStore,
+      this.savedAlignmentsStore,
+      this.registeredAlgorithms
     );
-    const targetNgrams = Engine.generateSentenceNgrams(
-      measuredUnalignedSentencePair[1]
-    );
-
-    // generate alignment permutations
-    let predictions = Engine.generatePredictions(
-      sourceNgrams,
-      targetNgrams
-    );
-
-    for (const algorithm of this.registeredAlgorithms) {
-      predictions = algorithm.execute(
-        predictions,
-        this.corpusStore,
-        this.savedAlignmentsStore,
-        measuredUnalignedSentencePair
-      );
-    }
-    return [];
+    return Engine.score(predictions);
   }
 }

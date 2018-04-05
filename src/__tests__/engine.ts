@@ -2,7 +2,7 @@ jest.mock("../index/EngineIndex");
 import Engine from "../Engine";
 import NotImplemented from "../errors/NotImplemented";
 // @ts-ignore
-import {mockAddAlignments} from "../index/EngineIndex";
+import {default as EngineIndex, mockAddAlignments} from "../index/EngineIndex";
 import Ngram from "../structures/Ngram";
 import {
   alignMockSentence,
@@ -481,11 +481,15 @@ it("runs all the algorithms", () => {
   }
   const source = tokenizeMockSentence("Hello World");
   const target = tokenizeMockSentence("olleH dlroW");
-  engine.run([source, target]);
+  Engine.performPrediction([source, target], new EngineIndex(), new EngineIndex(), algorithms);
 
   for (const s of spies) {
     expect(s).toHaveBeenCalled();
     s.mockReset();
     s.mockRestore();
   }
+});
+
+it("scores the predictions", () => {
+  // TODO: implement
 });
