@@ -496,8 +496,8 @@ it("runs all the algorithms", () => {
   }
 });
 
-describe("weighted confidence", () => {
-  it("calculates scores", () => {
+describe("scoring", () => {
+  it("calculates weighted scores", () => {
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({
       score1: 3,
@@ -513,8 +513,14 @@ describe("weighted confidence", () => {
     });
     expect(weightedResult).toEqual(5);
   });
-});
 
-it("scores the predictions", () => {
-  // TODO: implement
+  it("calculates prediction confidence", () => {
+    const prediction = new Prediction(makeMockAlignment("hello", "world"));
+    prediction.setScores({
+      alignmentPosition: 3,
+      alignmentFrequencyCorpus: 5
+    });
+    const result = Engine.score([prediction]);
+    expect(result[0].getScore("confidence")).toEqual(4);
+  });
 });

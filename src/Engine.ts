@@ -154,16 +154,21 @@ export default class Engine {
    * @param {Prediction[]} predictions
    * @return {Prediction[]}
    */
-  private static score(predictions: Prediction[]): Prediction[] {
+  public static score(predictions: Prediction[]): Prediction[] {
     const suggestions: Prediction[] = [];
 
     for (const p of predictions) {
       // TODO: what scores do we weight? We have primary + secondary scores and corpus + saved alignment.
-      let confidence = Engine.calculateWeightedConfidence(p, [""], {});
+      const weightedKeys = [
+        "alignmentPosition",
+        "alignmentFrequencyCorpus"
+      ];
+      let confidence = Engine.calculateWeightedConfidence(p, weightedKeys, {});
 
       // TODO: increment if saved alignment... what does that mean?
 
       p.setScore("confidence", confidence);
+      suggestions.push(p);
     }
 
     return suggestions;
