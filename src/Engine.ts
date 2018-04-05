@@ -135,7 +135,7 @@ export default class Engine {
    * @param {NumberObject} weights - the weights to influence the calculation
    * @return {number}
    */
-  private static calculateWeightedConfidence(prediction: Prediction, scoreKeys: string[], weights: NumberObject): number {
+  public static calculateWeightedConfidence(prediction: Prediction, scoreKeys: string[], weights: NumberObject): number {
     let weightSum = 0;
     let scoreSum = 0;
     for (const key of scoreKeys) {

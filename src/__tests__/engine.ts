@@ -4,8 +4,9 @@ import NotImplemented from "../errors/NotImplemented";
 // @ts-ignore
 import {default as EngineIndex, mockAddAlignments} from "../index/EngineIndex";
 import Ngram from "../structures/Ngram";
+import Prediction from "../structures/Prediction";
 import {
-  alignMockSentence,
+  alignMockSentence, makeMockAlignment,
   MockAlgorithm,
   tokenizeMockSentence
 } from "./testUtils";
@@ -493,6 +494,25 @@ it("runs all the algorithms", () => {
     s.mockReset();
     s.mockRestore();
   }
+});
+
+describe("weighted confidence", () => {
+  it("calculates scores", () => {
+    const prediction = new Prediction(makeMockAlignment("hello", "world"));
+    prediction.setScores({
+      score1: 3,
+      score2: 5,
+      score3: 6
+    });
+    const unweightedResult = Engine.calculateWeightedConfidence(prediction, ["score1", "score3"], {});
+    expect(unweightedResult).toEqual(4.5);
+
+    const weightedResult = Engine.calculateWeightedConfidence(prediction, ["score1", "score3"], {
+      score1: 0.5,
+      score2: 100
+    });
+    expect(weightedResult).toEqual(5);
+  });
 });
 
 it("scores the predictions", () => {
