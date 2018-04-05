@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/translationCoreApps/word-map.svg?branch=master)](https://travis-ci.org/translationCoreApps/word-map)
+[![codecov](https://codecov.io/gh/translationCoreApps/word-map/branch/master/graph/badge.svg)](https://codecov.io/gh/translationCoreApps/word-map)
+[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
+
 # Multi-Lingual Word Alignment Prediction (Word MAP)
 
 # Introduction
