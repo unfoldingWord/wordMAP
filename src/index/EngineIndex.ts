@@ -7,7 +7,7 @@ import Index from "./Index";
 /**
  * Represents a store of linguistic data
  */
-export default class Store {
+export default class EngineIndex {
 
   /**
    * This increments the indexed frequency count for n-grams in the alignment.
@@ -94,12 +94,12 @@ export default class Store {
       const target = alignment.target;
 
       // index the alignment frequency
-      this.primaryAlignmentFrequencyIndexStore = Store.indexAlignmentNgrams(
+      this.primaryAlignmentFrequencyIndexStore = EngineIndex.indexAlignmentNgrams(
         this.primaryAlignmentFrequencyIndexStore,
         source,
         target
       );
-      this.secondaryAlignmentFrequencyIndexStore = Store.indexAlignmentNgrams(
+      this.secondaryAlignmentFrequencyIndexStore = EngineIndex.indexAlignmentNgrams(
         this.secondaryAlignmentFrequencyIndexStore,
         target,
         source

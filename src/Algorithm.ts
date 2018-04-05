@@ -1,5 +1,4 @@
-import Index from "./index/Index";
-import Store from "./index/Store";
+import EngineIndex from "./index/EngineIndex";
 import Prediction from "./structures/Prediction";
 import Token from "./structures/Token";
 
@@ -12,6 +11,6 @@ export default interface Algorithm {
   /**
    * Executes the algorithm
    */
-  execute(predictions: Prediction[], corpusIndex: Store, savedAlignmentsIndex: Store, unalignedSentencePair: [Token[], Token[]]): Prediction[];
+  execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[];
 
 }

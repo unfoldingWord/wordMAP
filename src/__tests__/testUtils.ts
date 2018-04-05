@@ -1,8 +1,7 @@
 // @ts-ignore
 import stringTokenizer from "string-punctuation-tokenizer";
 import Algorithm from "../Algorithm";
-import Index from "../index/Index";
-import Store from "../index/Store";
+import EngineIndex from "../index/EngineIndex";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
@@ -98,7 +97,7 @@ function randNgramLength(numTokens: number, maxLength: number = 3): number {
 export class MockAlgorithm implements Algorithm {
   public name: string = "mock algorithm";
 
-  public execute(predictions: Prediction[], corpusIndex: Store, savedAlignmentsIndex: Store, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
     return predictions;
   }
 }

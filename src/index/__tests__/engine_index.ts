@@ -1,19 +1,16 @@
 import {alignMockSentence} from "../../__tests__/testUtils";
 import NotImplemented from "../../errors/NotImplemented";
-import Ngram from "../../structures/Ngram";
-import Token from "../../structures/Token";
-import Store from "../Store";
-import Index from "../Index";
+import EngineIndex from "../EngineIndex";
 
 describe("append saved alignments", () => {
   it("begins empty", () => {
-    const index = new Store();
+    const index = new EngineIndex();
     expect(index.primaryAlignmentFrequencyIndex.index).toEqual({});
     expect(index.secondaryAlignmentFrequencyIndex.index).toEqual({});
   });
 
   it("counts occurrences", () => {
-    const index = new Store();
+    const index = new EngineIndex();
     const firstSentence = alignMockSentence(
       "Once upon a time, in a galaxy far far away...");
     index.addAlignments(firstSentence);
@@ -30,6 +27,6 @@ describe("append saved alignments", () => {
 });
 
 it("is not implemented", () => {
-  const index = new Store();
+  const index = new EngineIndex();
   expect(index.addSentencePair).toThrow(NotImplemented);
 });

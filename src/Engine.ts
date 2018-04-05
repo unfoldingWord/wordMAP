@@ -1,6 +1,6 @@
 import Algorithm from "./Algorithm";
 import NotImplemented from "./errors/NotImplemented";
-import Store from "./index/Store";
+import EngineIndex from "./index/EngineIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 import Prediction from "./structures/Prediction";
@@ -79,15 +79,19 @@ export default class Engine {
     const measuredTokens: Token[] = [];
     let charPos = 0;
     for (const t of tokens) {
-      measuredTokens.push(new Token(t.toString(), measuredTokens.length, charPos));
+      measuredTokens.push(new Token(
+        t.toString(),
+        measuredTokens.length,
+        charPos
+      ));
       charPos += t.toString().length;
     }
     return measuredTokens;
   }
 
   private registeredAlgorithms: Algorithm[] = [];
-  private corpusStore: Store;
-  private savedAlignmentsStore: Store;
+  private corpusStore: EngineIndex;
+  private savedAlignmentsStore: EngineIndex;
 
   /**
    * Returns a list of algorithms that are registered in the engine
@@ -99,8 +103,8 @@ export default class Engine {
 
   constructor() {
     // TODO: read in custom configuration
-    this.corpusStore = new Store();
-    this.savedAlignmentsStore = new Store();
+    this.corpusStore = new EngineIndex();
+    this.savedAlignmentsStore = new EngineIndex();
   }
 
   /**

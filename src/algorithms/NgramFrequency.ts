@@ -1,6 +1,6 @@
 import Algorithm from "../Algorithm";
+import EngineIndex from "../index/EngineIndex";
 import Index from "../index/Index";
-import Store from "../index/Store";
 import Ngram from "../structures/Ngram";
 import NumberObject from "../structures/NumberObject";
 import Prediction from "../structures/Prediction";
@@ -74,7 +74,7 @@ export default class NgramFrequency implements Algorithm {
 
   public name: string = "n-gram frequency";
 
-  public execute(predictions: Prediction[], corpusStore: Store, savedAlignmentsStore: Store, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], corpusStore: EngineIndex, savedAlignmentsStore: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
     const alignmentFrequencyCorpusSums: NumberObject = {};
     const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
 
