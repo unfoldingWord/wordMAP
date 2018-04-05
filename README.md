@@ -491,7 +491,7 @@ However, in literal translations this positioning is usually proportional.
 Therefore, these highly probable alignments are overlooked.
 
 We want to give extra preference to those aliments for which n-grams are in relatively proportional positions within their sentences.
-The alignment position weight is proportional to the difference in n-gram position in the primary sentence vs the n-gram position in the secondary sentence.
+The alignment position weight is proportional to the difference in n-gram position in the primary and secondary sentence.
 
 ```
 where x = primary n-gram position

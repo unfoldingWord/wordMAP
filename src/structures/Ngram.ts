@@ -8,7 +8,7 @@ export default class Ngram {
   private tokens: Token[];
 
   /**
-   * Returns the {@link Token} position at which this n-gram appears in the sentence.
+   * Returns the position (in units of {@link Token} ) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */
   get tokenPosition() {
@@ -20,7 +20,7 @@ export default class Ngram {
   }
 
   /**
-   * Returns the character position at which this n-gram appears in the sentence.
+   * Returns the position (in units of character) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */
   get charPosition() {

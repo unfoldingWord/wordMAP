@@ -8,7 +8,7 @@ export default class Token {
   private charPos: number;
 
   /**
-   * Returns the {@link Token} position of the token within the sentence.
+   * Returns the position (in units of {@link Token}) of the token within the sentence.
    * @return {number}
    */
   get position() {
@@ -16,7 +16,7 @@ export default class Token {
   }
 
   /**
-   * Returns the character position of the token within the sentence.
+   * Returns the position (in units of character) of the token within the sentence.
    * @return {number}
    */
   get charPosition() {
