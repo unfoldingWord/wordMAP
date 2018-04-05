@@ -10,5 +10,5 @@ before_install:
 install:
   - npm ci
 script:
-  - eslint ./src ./index.js && jest --coverage
+  - npm run lint && jest --coverage
   - codecov

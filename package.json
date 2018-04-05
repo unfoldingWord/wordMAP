@@ -4,7 +4,8 @@
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "index.js",
   "scripts": {
-    "test": "tslint -c tslint.json src/**/*.ts && jest",
+    "lint": "tslint -c tslint.json src/**/*.ts",
+    "test": "npm run lint && jest",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "buildold": "babel src --out-dir dist --ignore '**/__tests__,**/__mocks__'",
