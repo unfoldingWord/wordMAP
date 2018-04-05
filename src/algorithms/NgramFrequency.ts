@@ -74,7 +74,7 @@ export default class NgramFrequency implements Algorithm {
 
   public name: string = "n-gram frequency";
 
-  public execute(predictions: Prediction[], corpusStore: EngineIndex, savedAlignmentsStore: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], corpusStore: EngineIndex, savedAlignmentsStore: EngineIndex): Prediction[] {
     const alignmentFrequencyCorpusSums: NumberObject = {};
     const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
 

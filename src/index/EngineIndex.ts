@@ -34,8 +34,8 @@ export default class EngineIndex {
 
   private primaryAlignmentFrequencyIndexStore: Index;
   private secondaryAlignmentFrequencyIndexStore: Index;
-  private primaryNgramFrequencyIndexStore: Index;
-  private secondaryNgramFrequencyIndexStore: Index;
+  // private primaryNgramFrequencyIndexStore: Index;
+  // private secondaryNgramFrequencyIndexStore: Index;
 
   /**
    * Returns the saved alignments index keyed by n-grams in the primary text
@@ -57,23 +57,23 @@ export default class EngineIndex {
    * Returns the n-gram frequency index for n-grams in the primary text
    * @return {Index}
    */
-  public get primaryNgramFrequencyIndex(): Index {
-    return this.primaryNgramFrequencyIndexStore;
-  }
+  // public get primaryNgramFrequencyIndex(): Index {
+  //   return this.primaryNgramFrequencyIndexStore;
+  // }
 
   /**
    * Returns the n-gram frequency index for n-grams in the secondary text
    * @return {Index}
    */
-  public get secondaryNgramFrequencyIndex(): Index {
-    return this.secondaryNgramFrequencyIndexStore;
-  }
+  // public get secondaryNgramFrequencyIndex(): Index {
+  //   return this.secondaryNgramFrequencyIndexStore;
+  // }
 
   constructor() {
     this.primaryAlignmentFrequencyIndexStore = new Index();
     this.secondaryAlignmentFrequencyIndexStore = new Index();
-    this.primaryNgramFrequencyIndexStore = new Index();
-    this.secondaryNgramFrequencyIndexStore = new Index();
+    // this.primaryNgramFrequencyIndexStore = new Index();
+    // this.secondaryNgramFrequencyIndexStore = new Index();
   }
 
   /**

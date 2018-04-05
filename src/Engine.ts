@@ -121,8 +121,7 @@ export default class Engine {
       predictions = algorithm.execute(
         predictions,
         corpusStore,
-        savedAlignmentsStore,
-        measuredUnalignedSentencePair
+        savedAlignmentsStore
       );
     }
 

@@ -63,11 +63,11 @@ export default class Index {
     if (!nextKey) {
       return;
     }
-    if (keys.length && !(nextKey in store)) {
+    if (!(nextKey in store)) {
       store[nextKey] = {};
     }
     if (keys.length) {
-      Index.writeDeep(store[nextKey], value, keys);
+      Index.appendDeep(store[nextKey], value, keys);
     } else {
       if (typeof store[nextKey] !== "object") {
         throw TypeError(`Cannot append to a store path that is not an object type. Found '${typeof store[nextKey]}'`);

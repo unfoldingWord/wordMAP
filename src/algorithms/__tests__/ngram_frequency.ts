@@ -17,8 +17,7 @@ describe("calculate frequency", () => {
     const result = engine.execute(
       predictions,
       new EngineIndex(),
-      new EngineIndex(),
-      [[], []]
+      new EngineIndex()
     );
     expect(result).toHaveLength(0);
   });
@@ -34,8 +33,7 @@ describe("calculate frequency", () => {
     const result = engine.execute(
       predictions,
       new EngineIndex(),
-      new EngineIndex(),
-      [[], []]
+      new EngineIndex()
     );
     for (const r of result) {
       expectEmptyScores(r.getScores());
@@ -61,8 +59,7 @@ describe("calculate frequency", () => {
     const result = engine.execute(
       predictions,
       new EngineIndex(),
-      savedAlignmentStore,
-      [[], []]
+      savedAlignmentStore
     );
     // aligned to something
     expect(result[0].getScores()).toEqual({

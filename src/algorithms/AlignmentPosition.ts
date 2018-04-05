@@ -10,7 +10,7 @@ import Token from "../structures/Token";
 export default class AlignmentPosition implements Algorithm {
   public name = "alignment position";
 
-  public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex): Prediction[] {
     for (const p of predictions) {
       const delta = Math.abs(p.alignment.source.tokenPosition - p.alignment.target.tokenPosition);
       const weight = 1 - delta;

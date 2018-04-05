@@ -12,7 +12,7 @@ export default class Ngram {
    * @return {number} - the position
    */
   get tokenPosition() {
-    if (this.tokens) {
+    if (this.tokens.length) {
       return this.tokens[0].position;
     } else {
       return 0;
@@ -24,7 +24,7 @@ export default class Ngram {
    * @return {number} - the position
    */
   get charPosition() {
-    if (this.tokens) {
+    if (this.tokens.length) {
       return this.tokens[0].charPosition;
     } else {
       return 0;

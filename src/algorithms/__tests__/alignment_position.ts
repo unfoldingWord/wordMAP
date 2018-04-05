@@ -17,8 +17,7 @@ describe("AlignmentPosition", () => {
     const result = engine.execute(
       predictions,
       new EngineIndex(),
-      new EngineIndex(),
-      [[], []]
+      new EngineIndex()
     );
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": 1
@@ -36,8 +35,7 @@ describe("AlignmentPosition", () => {
     const result = engine.execute(
       predictions,
       new EngineIndex(),
-      new EngineIndex(),
-      [[], []]
+      new EngineIndex()
     );
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": 0
@@ -55,8 +53,7 @@ describe("AlignmentPosition", () => {
     const result = engine.execute(
       predictions,
       new EngineIndex(),
-      new EngineIndex(),
-      [[], []]
+      new EngineIndex()
     );
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": -1

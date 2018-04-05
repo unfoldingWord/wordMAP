@@ -11,6 +11,6 @@ export default interface Algorithm {
   /**
    * Executes the algorithm
    */
-  execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[];
+  execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex): Prediction[];
 
 }

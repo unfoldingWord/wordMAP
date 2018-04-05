@@ -2,14 +2,12 @@ import Index from "../Index";
 
 describe("Index", () => {
   it("writes", () => {
-    const store = new Index();
-    store.write("hello world", "my", "path");
-    expect(store.index).toEqual({
+    const initialState = {
       "my": {
         "path": "hello world"
       }
-    });
-
+    };
+    const store = new Index(initialState);
     store.write(3, "my", "value");
     expect(store.index).toEqual({
       "my": {
@@ -19,7 +17,22 @@ describe("Index", () => {
     });
   });
 
-  it("appends", () => {
+  it("does not write to empty path", () => {
+    const initialState = {
+      "my": {
+        "path": "hello world"
+      }
+    };
+    const store = new Index(initialState);
+    store.write(3);
+    expect(store.index).toEqual({
+      "my": {
+        "path": "hello world"
+      }
+    });
+  });
+
+  it("appends to object", () => {
     const newData = {
       "cheese": "I love you"
     };
@@ -39,7 +52,93 @@ describe("Index", () => {
       },
       "hello": "jon"
     });
+  });
 
+  it("appends deeply", () => {
+    const newData = {
+      "cheese": "I love you"
+    };
+    const initialState = {
+      "my": {
+        "path": {
+          "deep": "value"
+        }
+      },
+      "hello": "jon"
+    };
+    const store = new Index(initialState);
+
+    store.append(newData, "my", "path");
+    expect(store.index).toEqual({
+      "my": {
+        "path": {
+          "deep": "value",
+          "cheese": "I love you"
+        },
+      },
+      "hello": "jon"
+    });
+  });
+
+  it("appends new path", () => {
+    const newData = {
+      "cheese": "I love you"
+    };
+    const initialState = {
+      "my": {
+        "path": {
+          "deep": "value"
+        }
+      },
+      "hello": "jon"
+    };
+    const store = new Index(initialState);
+
+    store.append(newData, "new", "path");
+    expect(store.index).toEqual({
+      "my": {
+        "path": {
+          "deep": "value"
+        },
+      },
+      "new": {
+        "path": {
+          "cheese": "I love you"
+        }
+      },
+      "hello": "jon"
+    });
+  });
+
+  it("does not append to empty path", () => {
+    const newData = {
+      "cheese": "I love you"
+    };
+    const initialState = {
+      "my": {
+        "path": {
+          "deep": "value"
+        }
+      },
+      "hello": "jon"
+    };
+    const store = new Index(initialState);
+
+    store.append(newData);
+    expect(store.index).toEqual(initialState);
+  });
+
+  it("cannot append to non-object", () => {
+    const newData = {
+      "cheese": "I love you"
+    };
+    const initialState = {
+      "my": {
+        "path": "hi",
+      },
+      "hello": "jon"
+    };
+    const store = new Index(initialState);
     const fail = () => {
       store.append(newData, "hello");
     };
