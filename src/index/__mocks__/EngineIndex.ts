@@ -1,7 +1,13 @@
-export const mockAddAlignments = jest.fn();
+export const mockAddAlignments = jest.fn(() => {
+  console.log("added alignment");
+});
+export const mockAddSentencePair = jest.fn(() => {
+  console.log("added corpus");
+});
 
 export default jest.fn().mockImplementation(() => {
   return {
-    addAlignments: mockAddAlignments
+    addAlignments: mockAddAlignments,
+    addSentencePair: mockAddSentencePair
   };
 });

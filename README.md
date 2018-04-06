@@ -108,7 +108,7 @@ We need a tool that:
 
 ## Input Prerequisites
 
-* The corpus must tokenized
+* The corpus must be tokenized
 * The unaligned sentence pairs must be tokenized.
 * The corpus and unaligned sentence pairs must be in the same primary and secondary languages.
 * Input must be in utf8.

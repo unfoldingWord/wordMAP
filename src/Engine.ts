@@ -1,5 +1,4 @@
 import Algorithm from "./Algorithm";
-import NotImplemented from "./errors/NotImplemented";
 import EngineIndex from "./index/EngineIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
@@ -201,8 +200,19 @@ export default class Engine {
     this.registeredAlgorithms.push(algorithm);
   }
 
-  public addCorpus() {
-    throw new NotImplemented();
+  /**
+   * Appends new corpus to the engine.
+   * @param {[Token[]]} source - an array of tokenized source sentences.
+   * @param {[Token[]]} target - an array of tokenized target sentences.
+   */
+  public addCorpus(source: Token[][], target: Token[][]) {
+    if (source.length !== target.length) {
+      throw Error("source and target corpus must be the same length");
+    } else {
+      for (let i = 0; i < source.length; i++) {
+        this.corpusStore.addSentencePair([source[i], target[i]]);
+      }
+    }
   }
 
   /**

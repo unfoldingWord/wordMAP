@@ -44,7 +44,7 @@ export default class Ngram {
    * Returns the position (in units of character) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */
-  get charPosition() {
+  get characterPosition() {
     if (this.tokens.length) {
       return this.tokens[0].charPosition;
     } else {

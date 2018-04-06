@@ -1,19 +1,20 @@
 jest.mock("../index/EngineIndex");
 import Engine from "../Engine";
-import NotImplemented from "../errors/NotImplemented";
 // @ts-ignore
-import {default as EngineIndex, mockAddAlignments} from "../index/EngineIndex";
+import EngineIndex, {mockAddAlignments, mockAddSentencePair} from "../index/EngineIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
+import Token from "../structures/Token";
 import {
-  alignMockSentence, makeMockAlignment,
+  alignMockSentence,
+  makeMockAlignment,
   MockAlgorithm,
+  reverseSentenceWords,
   tokenizeMockSentence
 } from "./testUtils";
 
-it("is not implemented", () => {
-  const engine = new Engine();
-  expect(engine.addCorpus).toThrow(NotImplemented);
+beforeAll(() => {
+  jest.clearAllMocks();
 });
 
 it("registers an algorithm", () => {
@@ -29,6 +30,41 @@ it("adds the alignment to the index", () => {
   engine.addAlignments(sentence);
   expect(mockAddAlignments).toBeCalledWith(sentence);
 });
+
+describe("add corpus", () => {
+  it("adds the corpus to the index", () => {
+    const sentences = [
+      "Once upon a time",
+      "in a galaxy far far away"
+    ];
+    const source = [];
+    const target = [];
+    for (const s of sentences) {
+      source.push(tokenizeMockSentence(s));
+      target.push(tokenizeMockSentence(reverseSentenceWords(s)));
+    }
+    const engine = new Engine();
+    engine.addCorpus(source, target);
+    expect(mockAddSentencePair).toBeCalledWith([source[0], target[0]]);
+  });
+
+  it("rejects mismatched source and target lengths", () => {
+    const sentences = [
+      "Once upon a time",
+      "in a galaxy far far away"
+    ];
+    const source: Token[][] = [];
+    const target: Token[][] = [];
+    for (const s of sentences) {
+      source.push(tokenizeMockSentence(s));
+      target.push(tokenizeMockSentence(reverseSentenceWords(s)));
+    }
+    source.push(tokenizeMockSentence("too long!"));
+    const engine = new Engine();
+    expect(() => engine.addCorpus(source, target)).toThrow(Error);
+  });
+});
+
 
 describe("process sentence n-grams", () => {
   const sentence = tokenizeMockSentence("In the beginning God created");
@@ -504,13 +540,21 @@ describe("scoring", () => {
       score2: 5,
       score3: 6
     });
-    const unweightedResult = Engine.calculateWeightedConfidence(prediction, ["score1", "score3"], {});
+    const unweightedResult = Engine.calculateWeightedConfidence(
+      prediction,
+      ["score1", "score3"],
+      {}
+    );
     expect(unweightedResult).toEqual(4.5);
 
-    const weightedResult = Engine.calculateWeightedConfidence(prediction, ["score1", "score3"], {
-      score1: 0.5,
-      score2: 100
-    });
+    const weightedResult = Engine.calculateWeightedConfidence(
+      prediction,
+      ["score1", "score3"],
+      {
+        score1: 0.5,
+        score2: 100
+      }
+    );
     expect(weightedResult).toEqual(5);
   });
 
