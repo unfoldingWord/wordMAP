@@ -142,6 +142,10 @@ export default class NgramFrequency implements Algorithm {
         frequencyRatioSavedAlignmentsTarget
       });
 
+      // TODO: I think we need to include the frequency scores for the unaligned sentence as well.
+      // the predictions is built on this so we can sum these in this loop and inject them
+      // in the filter loop below
+
       // sum alignment frequencies
       NgramFrequency.addObjectNumber(
         alignmentFrequencyCorpusSums,
@@ -157,12 +161,11 @@ export default class NgramFrequency implements Algorithm {
 
     // calculate filtered frequency ratios
     for (const p of predictions) {
-      const {
-        alignmentFrequencyCorpus,
-        alignmentFrequencySavedAlignments
-      } = p.getScores();
+      const alignmentFrequencyCorpus = p.getScore("alignmentFrequencyCorpus");
+      const alignmentFrequencySavedAlignments = p.getScore("alignmentFrequencySavedAlignments");
 
       // TODO: is this correct terminology?
+      // TODO: we are missing something here.
 
       // alignment frequency in the filtered corpus and saved alignments
       const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.toString()];

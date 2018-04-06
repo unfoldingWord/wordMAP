@@ -11,13 +11,12 @@ export default class AlignmentPosition implements Algorithm {
 
   public execute(predictions: Prediction[], corpusIndex: EngineIndex, savedAlignmentsIndex: EngineIndex): Prediction[] {
     for (const p of predictions) {
-      const delta = Math.abs(p.alignment.source.tokenPosition -
-        p.alignment.target.tokenPosition);
+      const sourcePosition = p.alignment.source.tokenPosition;
+      const targetPosition = p.alignment.target.tokenPosition;
+      const delta = Math.abs(sourcePosition - targetPosition);
       const weight = 1 - delta;
 
-      p.setScores({
-        alignmentPosition: weight
-      });
+      p.setScore("alignmentPosition", weight);
     }
     return predictions;
   }

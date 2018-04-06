@@ -8,6 +8,27 @@ export default class Ngram {
   private tokens: Token[];
 
   /**
+   * Returns the length of the n-gram in {@link Token}'s
+   * @return {number}
+   */
+  get tokenLength() {
+    return this.tokens.length;
+  }
+
+  /**
+   * Returns the length of the n-gram in characters.
+   * This does not account for whitespace.
+   * @return {number}
+   */
+  get characterLength() {
+    let length = 0;
+    for (const token of this.tokens) {
+      length += token.toString().length;
+    }
+    return length;
+  }
+
+  /**
    * Returns the position (in units of {@link Token} ) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */

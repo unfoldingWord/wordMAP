@@ -353,7 +353,7 @@ Larger n-grams use the calculated commonality.
 ### Commonality
 
 Commonality demonstrates the likely-hood that both n-grams are phrases.
-And a high scores indicates it is plausible that as phrases, they could be equivalent.
+And a high score indicates it is plausible that as phrases, they could be equivalent.
 
 ```
 where x = primary n-gram corpusFrequency.
@@ -708,4 +708,3 @@ A benefit of this approach is that it allows users to backup their configuration
 ### Limitations
 
 This approach requires a DCS account. This is not a problem for tC but other software using Word-MAP may not have support for DCS accounts. Such software would still be able to read configuration data but could not write it unless they add support for DCS user authentication.
-
