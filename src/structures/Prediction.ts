@@ -25,6 +25,14 @@ export default class Prediction {
   }
 
   /**
+   * Returns the prediction key
+   * @return {string}
+   */
+  public get key(): string {
+    return this.predictedAlignment.key;
+  }
+
+  /**
    * Instantiates a new alignment prediction
    * @param {Alignment} alignment - the alignment for which a prediction will be calculated
    */
@@ -77,9 +85,5 @@ export default class Prediction {
    */
   public getScores() {
     return Object.assign({}, this.scores);
-  }
-
-  public toString(): string {
-    return this.predictedAlignment.toString();
   }
 }

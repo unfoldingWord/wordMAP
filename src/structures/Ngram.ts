@@ -53,21 +53,22 @@ export default class Ngram {
   }
 
   /**
-   * @param {Array<Token>} [tokens=[]] - a list of tokens of which this n-gram is composed
-   */
-  constructor(tokens: Token[] = []) {
-    this.tokens = tokens;
-  }
-
-  /**
    * Returns a human readable form of the n-gram.
    * @return {string}
    */
-  public toString(): string {
+  public get key(): string {
+    // TODO: for better performance we could build the key in the constructor.
     const tokenValues = [];
     for (const token of this.tokens) {
       tokenValues.push(token.toString());
     }
     return tokenValues.join(":");
+  }
+
+  /**
+   * @param {Array<Token>} [tokens=[]] - a list of tokens of which this n-gram is composed
+   */
+  constructor(tokens: Token[] = []) {
+    this.tokens = tokens;
   }
 }

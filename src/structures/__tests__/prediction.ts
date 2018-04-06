@@ -8,7 +8,7 @@ describe("prediction", () => {
     const prediction = new Prediction(alignment);
     expect(prediction.alignment).toEqual(alignment);
     expect(prediction.scoreKeys).toEqual([]);
-    expect(prediction.toString()).toEqual(alignment.toString());
+    expect(prediction.key).toEqual(alignment.key);
     expect(() => prediction.getScore("key")).toThrow(Error);
   });
 

@@ -191,8 +191,8 @@ export default class Engine {
 
       // boost confidence for saved alignments
       const isSavedAlignment = savedAlignmentsStore.primaryAlignmentFrequencyIndex.read(
-        p.alignment.source.toString(),
-        p.alignment.target.toString()
+        p.alignment.source.key,
+        p.alignment.target.key
       );
       if (isSavedAlignment) {
         confidence ++;

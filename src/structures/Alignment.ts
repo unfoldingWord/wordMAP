@@ -26,6 +26,14 @@ export default class Alignment {
   }
 
   /**
+   * Returns the alignment key
+   * @return {string}
+   */
+  public get key(): string {
+    return `${this.sourceNgram.key}->${this.targetNgram.key}`;
+  }
+
+  /**
    * Instantiates a new alignment
    * @param {Ngram} sourceNgram - an n-gram from the source text
    * @param {Ngram} targetNgram - an n-gram from the secondary text
@@ -33,9 +41,5 @@ export default class Alignment {
   constructor(sourceNgram: Ngram, targetNgram: Ngram) {
     this.sourceNgram = sourceNgram;
     this.targetNgram = targetNgram;
-  }
-
-  public toString(): string {
-    return `${this.sourceNgram.toString()}->${this.targetNgram.toString()}`;
   }
 }

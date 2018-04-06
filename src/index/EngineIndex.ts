@@ -1,7 +1,5 @@
-import NotImplemented from "../errors/NotImplemented";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
-import Token from "../structures/Token";
 import Index from "./Index";
 
 /**
@@ -21,8 +19,8 @@ export default class EngineIndex {
    */
   private static indexAlignmentNgrams(index: Index, primaryNgram: Ngram, secondaryNgram: Ngram) {
     const updatedIndex = index.clone();
-    const primaryKey: string = primaryNgram.toString();
-    const secondaryKey: string = secondaryNgram.toString();
+    const primaryKey: string = primaryNgram.key;
+    const secondaryKey: string = secondaryNgram.key;
 
     let frequency = updatedIndex.read(primaryKey, secondaryKey);
     if (frequency === undefined) {
@@ -34,8 +32,8 @@ export default class EngineIndex {
 
   private primaryAlignmentFrequencyIndexStore: Index;
   private secondaryAlignmentFrequencyIndexStore: Index;
-  // private primaryNgramFrequencyIndexStore: Index;
-  // private secondaryNgramFrequencyIndexStore: Index;
+  private primaryNgramFrequencyIndexStore: Index;
+  private secondaryNgramFrequencyIndexStore: Index;
 
   /**
    * Returns the saved alignments index keyed by n-grams in the primary text
@@ -72,16 +70,8 @@ export default class EngineIndex {
   constructor() {
     this.primaryAlignmentFrequencyIndexStore = new Index();
     this.secondaryAlignmentFrequencyIndexStore = new Index();
-    // this.primaryNgramFrequencyIndexStore = new Index();
-    // this.secondaryNgramFrequencyIndexStore = new Index();
-  }
-
-  /**
-   * This will be used to append sentence pairs to the index.
-   * @param {[Array<Token>]} sentencePair
-   */
-  public addSentencePair(sentencePair: [Token[], Token[]]) {
-    throw new NotImplemented();
+    this.primaryNgramFrequencyIndexStore = new Index();
+    this.secondaryNgramFrequencyIndexStore = new Index();
   }
 
   /**
@@ -93,7 +83,7 @@ export default class EngineIndex {
       const source = alignment.source;
       const target = alignment.target;
 
-      // index the alignment frequency
+      // alignment frequency
       this.primaryAlignmentFrequencyIndexStore = EngineIndex.indexAlignmentNgrams(
         this.primaryAlignmentFrequencyIndexStore,
         source,
@@ -105,7 +95,25 @@ export default class EngineIndex {
         source
       );
 
-      // TODO: index the n-gram frequency
+      // frequency of n-grams in the alignments
+
+      // primary n-gram frequency
+      let primaryNgramFrequency = this.primaryNgramFrequencyIndexStore.read(
+        source.key);
+      if (primaryNgramFrequency === undefined) {
+        primaryNgramFrequency = 0;
+      }
+      this.primaryNgramFrequencyIndexStore.write(
+        primaryNgramFrequency + 1, source.key);
+
+      // secondary n-gram frequency
+      let secondaryNgramFrequency = this.secondaryNgramFrequencyIndexStore.read(
+        source.key);
+      if (secondaryNgramFrequency === undefined) {
+        secondaryNgramFrequency = 0;
+      }
+      this.secondaryNgramFrequencyIndexStore.write(
+        secondaryNgramFrequency + 1, target.key);
     }
   }
 }

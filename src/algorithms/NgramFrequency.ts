@@ -17,7 +17,7 @@ export default class NgramFrequency implements Algorithm {
    * @return {number}
    */
   private static countNgramFrequency(index: Index, ngram: Ngram): number {
-    return index.readSum(ngram.toString());
+    return index.readSum(ngram.key);
   }
 
   /**
@@ -29,8 +29,8 @@ export default class NgramFrequency implements Algorithm {
    */
   private static readAlignmentFrequency(index: Index, sourceNgram: Ngram, targetNgram: Ngram): number {
     const alignmentFrequency = index.read(
-      sourceNgram.toString(),
-      targetNgram.toString()
+      sourceNgram.key,
+      targetNgram.key
     );
     if (alignmentFrequency === undefined) {
       return 0;
@@ -91,6 +91,7 @@ export default class NgramFrequency implements Algorithm {
       );
 
       // source and target n-gram frequency in the corpus and saved alignments
+      // counts how many times an n-gram appears in an alignment
       const ngramFrequencyCorpusSource = NgramFrequency.countNgramFrequency(
         corpusStore.primaryAlignmentFrequencyIndex,
         p.alignment.source
@@ -149,12 +150,12 @@ export default class NgramFrequency implements Algorithm {
       // sum alignment frequencies
       NgramFrequency.addObjectNumber(
         alignmentFrequencyCorpusSums,
-        p.toString(),
+        p.key,
         alignmentFrequencyCorpus
       );
       NgramFrequency.addObjectNumber(
         alignmentFrequencySavedAlignmentsSums,
-        p.toString(),
+        p.key,
         alignmentFrequencySavedAlignments
       );
     }
@@ -162,14 +163,15 @@ export default class NgramFrequency implements Algorithm {
     // calculate filtered frequency ratios
     for (const p of predictions) {
       const alignmentFrequencyCorpus = p.getScore("alignmentFrequencyCorpus");
-      const alignmentFrequencySavedAlignments = p.getScore("alignmentFrequencySavedAlignments");
+      const alignmentFrequencySavedAlignments = p.getScore(
+        "alignmentFrequencySavedAlignments");
 
       // TODO: is this correct terminology?
       // TODO: we are missing something here.
 
       // alignment frequency in the filtered corpus and saved alignments
-      const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.toString()];
-      const alignmentFrequencySavedAlignmentsFiltered = alignmentFrequencySavedAlignmentsSums[p.toString()];
+      const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.key];
+      const alignmentFrequencySavedAlignmentsFiltered = alignmentFrequencySavedAlignmentsSums[p.key];
 
       // source and target frequency ratio for the corpus and saved alignments
       const frequencyRatioCorpusSourceFiltered: number = NgramFrequency.divideSafe(

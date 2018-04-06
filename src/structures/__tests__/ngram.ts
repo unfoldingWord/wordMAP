@@ -5,7 +5,7 @@ describe("creates an n-gram", () => {
 
   it("has no tokens", () => {
     const ngram = new Ngram();
-    expect(ngram.toString()).toEqual("");
+    expect(ngram.key).toEqual("");
     expect(ngram.tokenPosition).toEqual(0);
     expect(ngram.characterPosition).toEqual(0);
     expect(ngram.tokenLength).toEqual(0);
@@ -14,7 +14,7 @@ describe("creates an n-gram", () => {
 
   it("has a single token", () => {
     const ngram = new Ngram([new Token("hello", 1, 2)]);
-    expect(ngram.toString()).toEqual("hello");
+    expect(ngram.key).toEqual("hello");
     expect(ngram.tokenPosition).toEqual(1);
     expect(ngram.characterPosition).toEqual(2);
     expect(ngram.tokenLength).toEqual(1);
@@ -23,7 +23,7 @@ describe("creates an n-gram", () => {
 
   it("has multiple tokens", () => {
     const ngram = new Ngram([new Token("hello"), new Token("world")]);
-    expect(ngram.toString()).toEqual("hello:world");
+    expect(ngram.key).toEqual("hello:world");
     expect(ngram.tokenLength).toEqual(2);
     expect(ngram.characterLength).toEqual(10);
   });
@@ -34,7 +34,7 @@ describe("creates an n-gram", () => {
       new Token("hello"),
       new Token(),
       new Token("world")]);
-    expect(ngram.toString()).toEqual(":hello::world");
+    expect(ngram.key).toEqual(":hello::world");
     expect(ngram.tokenLength).toEqual(4);
     expect(ngram.characterLength).toEqual(10);
   });

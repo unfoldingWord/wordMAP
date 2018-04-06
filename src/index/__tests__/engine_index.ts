@@ -25,8 +25,3 @@ describe("append saved alignments", () => {
     expect(index.primaryAlignmentFrequencyIndex.read("in", "ni")).toEqual(1);
   });
 });
-
-it("is not implemented", () => {
-  const index = new EngineIndex();
-  expect(index.addSentencePair).toThrow(NotImplemented);
-});
