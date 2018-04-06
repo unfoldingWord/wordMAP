@@ -31,6 +31,25 @@ export default class Engine {
   }
 
   /**
+   * Generates an array of all possible alignments
+   * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
+   * @param {Ngram[]} targetNgrams - every possible n-gram in the target text
+   * @return {Alignment[]}
+   */
+  public static generateAlignments(sourceNgrams: Ngram[], targetNgrams: Ngram[]): Alignment[] {
+    const alignments: Alignment[] = [];
+    for (const source of sourceNgrams) {
+      for (const target of targetNgrams) {
+        alignments.push(new Alignment(source, target));
+      }
+
+      // TRICKY: include empty match alignment
+      alignments.push(new Alignment(source, new Ngram()));
+    }
+    return alignments;
+  }
+
+  /**
    * Generates an array of all possible contiguous n-grams within the sentence.
    * @param {Array<Token>} sentence - the tokens in a sentence
    * @param {number} [maxNgramLength=3] - the maximum n-gram size to generate
@@ -222,7 +241,18 @@ export default class Engine {
       throw Error("source and target corpus must be the same length");
     } else {
       for (let i = 0; i < source.length; i++) {
-        this.corpusStore.addSentencePair([source[i], target[i]]);
+        const measuredUnalignedSentencePair: [Token[], Token[]] = [
+          Engine.generateMeasuredTokens(source[i]),
+          Engine.generateMeasuredTokens(target[i])
+        ];
+        const sourceNgrams = Engine.generateSentenceNgrams(
+          measuredUnalignedSentencePair[0]
+        );
+        const targetNgrams = Engine.generateSentenceNgrams(
+          measuredUnalignedSentencePair[1]
+        );
+        const alignments = Engine.generateAlignments(sourceNgrams, targetNgrams);
+        this.corpusStore.addAlignments(alignments);
       }
     }
   }

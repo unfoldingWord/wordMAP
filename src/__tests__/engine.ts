@@ -45,7 +45,7 @@ describe("add corpus", () => {
     }
     const engine = new Engine();
     engine.addCorpus(source, target);
-    expect(mockAddSentencePair).toBeCalledWith([source[0], target[0]]);
+    expect(mockAddAlignments).toBeCalled();
   });
 
   it("rejects mismatched source and target lengths", () => {
