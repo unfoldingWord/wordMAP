@@ -91,13 +91,13 @@ export default class Engine {
   /**
    * Generates an array of tokens with their relative positions measured.
    *
-   * @param {Token[]} tokens - the tokens to measure
+   * @param {Token[]} sentence - the tokens to measure
    * @return {Token[]} - a new list of measured tokens
    */
-  public static generateMeasuredTokens(tokens: Token[]): Token[] {
+  public static generateMeasuredTokens(sentence: Token[]): Token[] {
     const measuredTokens: Token[] = [];
     let charPos = 0;
-    for (const t of tokens) {
+    for (const t of sentence) {
       measuredTokens.push(new Token(
         t.toString(),
         measuredTokens.length,

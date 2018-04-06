@@ -95,7 +95,9 @@ export default class EngineIndex {
         source
       );
 
-      // frequency of n-grams in the alignments
+      // TODO: count frequency of n-grams in the linguistic data (NOT the permutations!)
+
+      // frequency of n-grams in the permuation of alignments
 
       // primary n-gram frequency
       let primaryNgramFrequency = this.primaryNgramFrequencyIndexStore.read(

@@ -2,6 +2,7 @@ import AlignmentPosition from "./algorithms/AlignmentPosition";
 import NgramFrequency from "./algorithms/NgramFrequency";
 import Engine from "./Engine";
 import Token from "./structures/Token";
+import Prediction from "./structures/Prediction";
 
 /**
  * Word Alignment Prediction
@@ -15,7 +16,7 @@ export class MAP {
     this.engine.registerAlgorithm(new AlignmentPosition());
   }
 
-  public predict(unalignedSentencePair: [Token[], Token[]]): void {
-    this.engine.run(unalignedSentencePair);
+  public predict(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+    return this.engine.run(unalignedSentencePair);
   }
 }

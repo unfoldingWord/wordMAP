@@ -186,7 +186,7 @@ permutations = [
 ];
 
 // keyed by n-grams in the primary text.
-// These are the number of occurrences an n-gram occurs in the text
+// These are the number of times an n-gram occurs in the primary text.
 primaryNgramFrequencyIndex = {
   "a": 5,
   "b": 2,
@@ -196,7 +196,7 @@ primaryNgramFrequencyIndex = {
 }
 
 // keyed by n-grams in the secondary text.
-// These are the number of occurrences an n-gram occurs in the text
+// These are the number of occurrences an n-gram occurs in the secondary text.
 secondaryNgramFrequencyIndex = {
   "d": 5,
   "e": 2,
@@ -205,7 +205,8 @@ secondaryNgramFrequencyIndex = {
   ...
 }
 
-// keyed by n-grams in the primary text. These the frequency of permutations.
+// keyed by n-grams in the primary text.
+// These the frequency of possible alignments within the primary text.
 primaryAlignmentFrequencyIndex = {
   "a": {
     "d": 1,
@@ -230,7 +231,8 @@ primaryAlignmentFrequencyIndex = {
   ...
 }
 
-// keyed by n-grams in the secondary text. These are the frequency of permutations.
+// keyed by n-grams in the secondary text.
+// These are the frequency of possible alignments within the secondary text.
 secondaryAlignmentFrequencyIndex = {
   "d": {
     "a": 1,
@@ -308,9 +310,10 @@ secondaryIndex = {};
 primaryNgrams.forEach(primaryNgram => {
   secondaryNgrams.forEach(secondaryNgram => {
     primaryIndex[primaryNgram][secondaryNgram] = {
-      // frequency of this alignment in the corpus (this is the same value as the frequency below)
+      // frequency of this possible alignment in the corpus (this is the same value as the frequency below)
       alignmentFrequency: primaryAlignmentFrequencyIndex[primaryNgram][secondaryNgram],
-      // frequency of primary n-gram in the corpus
+      // frequency of primary n-gram in the entire corpus (not filtered)
+      // total number of possible alignments against the primary n-gram in the entire corpus.
       primaryCorpusFrequency: objectSum(primaryAlignmentFrequencyIndex[primaryNgram]),
       primaryCorpusFrequencyRatio: this.alignmentFrequency / this.primaryCorpusFrequency
     };
@@ -326,12 +329,12 @@ primaryNgrams.forEach(primaryNgram => {
 
 // add filtered frequency sums and ratios
 Object.keys(primaryIndex).forEach(primaryNgram => {
-  // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency below)
+  // frequency of this alignment in the filtered corpus (this is the same value as the frequency below)
   primaryIndex[primaryNgram][secondaryNgram].filteredFrequency = objectSumByAttribute(primaryIndex[primaryNgram], 'alignmentFrequency');
   primaryIndex[primaryNgram][secondaryNgram].filteredFrequencyRatio = this.alignmentFrequency / this.filteredFrequency;
 });
 Object.keys(secondaryIndex).forEach(secondaryNgram => {
-  // frequency of this n-gram combination in the filtered corpus (this is the same value as the frequency above)
+  // frequency of this alignment in the filtered corpus (this is the same value as the frequency above)
   secondaryIndex[secondaryNgram][primaryNgram].filteredFrequency = objectSumByAttribute(secondaryIndex[secondaryNgram], 'alignmentFrequency');
   secondaryIndex[secondaryNgram][primaryNgram].filteredFrequencyRatio = this.alignmentFrequency / this.filteredFrequency;
 });

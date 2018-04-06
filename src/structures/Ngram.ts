@@ -57,7 +57,6 @@ export default class Ngram {
    * @return {string}
    */
   public get key(): string {
-    // TODO: for better performance we could build the key in the constructor.
     const tokenValues = [];
     for (const token of this.tokens) {
       tokenValues.push(token.toString());

@@ -78,7 +78,7 @@ export default class NgramFrequency implements Algorithm {
     const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
 
     for (const p  of predictions) {
-      // Alignment frequency in the corpus and saved alignments
+      // frequency of this alignment in the possible predictions for corpus and saved alignments
       const alignmentFrequencyCorpus = NgramFrequency.readAlignmentFrequency(
         corpusStore.primaryAlignmentFrequencyIndex,
         p.alignment.source,
@@ -90,8 +90,10 @@ export default class NgramFrequency implements Algorithm {
         p.alignment.target
       );
 
-      // source and target n-gram frequency in the corpus and saved alignments
-      // counts how many times an n-gram appears in an alignment
+      // source and target n-gram frequency in the alignment permutations,
+      // TODO: this can be red from secondaryNgramFrequencyIndexStore (needs better name)
+      // This is the same as primaryCorpusFrequency in the documentation.
+      // Total number of possible alignments against the n-gram in the entire corpus.
       const ngramFrequencyCorpusSource = NgramFrequency.countNgramFrequency(
         corpusStore.primaryAlignmentFrequencyIndex,
         p.alignment.source
@@ -108,6 +110,15 @@ export default class NgramFrequency implements Algorithm {
         savedAlignmentsStore.secondaryAlignmentFrequencyIndex,
         p.alignment.target
       );
+
+      // TODO: get n-gram frequency for the corpus and saved alignments (not the permuations)
+      // sentenceNgrams = readNgram(sentence, ngram.length);
+      // ["hello", "world"]
+      // {
+      //  "hello": 1
+      // }
+      // We still need to index this data.
+      // we won't need this until we are calculating commonality and uniqueness.
 
       // source and target frequency ratio for the corpus and saved alignments
       const frequencyRatioCorpusSource: number = NgramFrequency.divideSafe(
