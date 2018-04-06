@@ -152,9 +152,10 @@ export default class Engine {
   /**
    * Scores the predictions and returns a filtered set of suggestions
    * @param {Prediction[]} predictions
+   * @param {EngineIndex} savedAlignmentsStore
    * @return {Prediction[]}
    */
-  public static score(predictions: Prediction[]): Prediction[] {
+  public static score(predictions: Prediction[], savedAlignmentsStore: EngineIndex): Prediction[] {
     const suggestions: Prediction[] = [];
 
     for (const p of predictions) {
@@ -163,9 +164,20 @@ export default class Engine {
         "alignmentPosition",
         "alignmentFrequencyCorpus"
       ];
-      let confidence = Engine.calculateWeightedConfidence(p, weightedKeys, {});
+      let confidence = Engine.calculateWeightedConfidence(
+        p,
+        weightedKeys,
+        {}
+      );
 
-      // TODO: increment if saved alignment... what does that mean?
+      // boost confidence for saved alignments
+      const isSavedAlignment = savedAlignmentsStore.primaryAlignmentFrequencyIndex.read(
+        p.alignment.source.toString(),
+        p.alignment.target.toString()
+      );
+      if (isSavedAlignment) {
+        confidence ++;
+      }
 
       p.setScore("confidence", confidence);
       suggestions.push(p);
@@ -236,6 +248,6 @@ export default class Engine {
       this.savedAlignmentsStore,
       this.registeredAlgorithms
     );
-    return Engine.score(predictions);
+    return Engine.score(predictions, this.savedAlignmentsStore);
   }
 }

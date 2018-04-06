@@ -65,7 +65,6 @@ describe("add corpus", () => {
   });
 });
 
-
 describe("process sentence n-grams", () => {
   const sentence = tokenizeMockSentence("In the beginning God created");
   it("reads 0 sized n-grams", () => {
@@ -559,12 +558,14 @@ describe("scoring", () => {
   });
 
   it("calculates prediction confidence", () => {
+    jest.unmock("../index/EngineIndex");
+    jest.resetModules();
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({
       alignmentPosition: 3,
       alignmentFrequencyCorpus: 5
     });
-    const result = Engine.score([prediction]);
+    const result = Engine.score([prediction], new EngineIndex());
     expect(result[0].getScore("confidence")).toEqual(4);
   });
 });
