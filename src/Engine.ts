@@ -195,7 +195,7 @@ export default class Engine {
         p.alignment.target.key
       );
       if (isSavedAlignment) {
-        confidence ++;
+        confidence++;
       }
 
       p.setScore("confidence", confidence);
@@ -251,7 +251,10 @@ export default class Engine {
         const targetNgrams = Engine.generateSentenceNgrams(
           measuredUnalignedSentencePair[1]
         );
-        const alignments = Engine.generateAlignments(sourceNgrams, targetNgrams);
+        const alignments = Engine.generateAlignments(
+          sourceNgrams,
+          targetNgrams
+        );
         this.corpusStore.addAlignments(alignments);
       }
     }
@@ -267,17 +270,26 @@ export default class Engine {
   }
 
   /**
-   * Runs the engine
-   *
-   * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
+   * Performs the prediction calculations
+   * @param {[Token[]]} unalignedSentencePair
+   * @return {Prediction[]}
    */
-  public run(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
-    const predictions = Engine.performPrediction(
+  public calculate(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+    return Engine.performPrediction(
       unalignedSentencePair,
       this.corpusStore,
       this.savedAlignmentsStore,
       this.registeredAlgorithms
     );
+  }
+
+  /**
+   * Runs the engine
+   *
+   * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
+   */
+  public predict(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+    const predictions = this.calculate(unalignedSentencePair);
     return Engine.score(predictions, this.savedAlignmentsStore);
   }
 }

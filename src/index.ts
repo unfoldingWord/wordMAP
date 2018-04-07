@@ -17,6 +17,6 @@ export class MAP {
   }
 
   public predict(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
-    return this.engine.run(unalignedSentencePair);
+    return this.engine.predict(unalignedSentencePair);
   }
 }

@@ -61,7 +61,7 @@ export default class Ngram {
     for (const token of this.tokens) {
       tokenValues.push(token.toString());
     }
-    return tokenValues.join(":");
+    return "n:" + tokenValues.join(":");
   }
 
   /**

@@ -1,6 +1,7 @@
 import {
   alignMockSentence,
-  makeMockAlignment,
+  makeCorpus,
+  makeMockAlignment, makeUnalignedSentence,
   reverseSentenceWords,
   tokenizeMockSentence
 } from "../../__tests__/testUtils";
@@ -96,6 +97,104 @@ describe("calculate frequency", () => {
       "frequencyRatioSavedAlignmentsFiltered": 0
     });
   });
+
+  it("should return correct scores based on the corpus", () => {
+    const unalignedSentence = makeUnalignedSentence("hello", "olleh");
+    const engine = new Engine();
+    engine.registerAlgorithm(new NgramFrequency());
+
+    // training data
+    const initialCorpus = makeCorpus(
+      "hello taco world",
+      "dlalignment ocat olleh"
+    );
+    engine.addCorpus(initialCorpus[0], initialCorpus[1]);
+
+    // first prediction
+    const firstPredictions = engine.calculate(unalignedSentence);
+    expect(firstPredictions[0].getScores()).toEqual({
+      "alignmentFrequencyCorpus": 1,
+      "alignmentFrequencySavedAlignments": 0,
+      "ngramFrequencyCorpusSource": 7,
+      "ngramFrequencyCorpusTarget": 6,
+      "ngramFrequencySavedAlignmentsSource": 0,
+      "ngramFrequencySavedAlignmentsTarget": 0,
+      "frequencyRatioCorpusSource": 0.14285714285714285,
+      "frequencyRatioCorpusTarget": 0.16666666666666666,
+      "frequencyRatioSavedAlignmentsSource": 0,
+      "frequencyRatioSavedAlignmentsTarget": 0,
+      "alignmentFrequencyCorpusFiltered": 1,
+      "alignmentFrequencySavedAlignmentsFiltered": 0,
+      "frequencyRatioCorpusSourceFiltered": 1,
+      "frequencyRatioSavedAlignmentsFiltered": 0
+    });
+
+    // append new corpus
+    const secondCorpus = makeCorpus(
+      "hello taco world and",
+      "dlalignment ocat olleh dna"
+    );
+    engine.addCorpus(secondCorpus[0], secondCorpus[1]);
+
+    // second prediction
+    const secondPredictions = engine.calculate(unalignedSentence);
+    expect(secondPredictions[0].getScores()).toEqual({
+      "alignmentFrequencyCorpus": 2,
+      "alignmentFrequencySavedAlignments": 0,
+      "ngramFrequencyCorpusSource": 17,
+      "ngramFrequencyCorpusTarget": 15,
+      "ngramFrequencySavedAlignmentsSource": 0,
+      "ngramFrequencySavedAlignmentsTarget": 0,
+      "frequencyRatioCorpusSource": 0.11764705882352941,
+      "frequencyRatioCorpusTarget": 0.13333333333333333,
+      "frequencyRatioSavedAlignmentsSource": 0,
+      "frequencyRatioSavedAlignmentsTarget": 0,
+      "alignmentFrequencyCorpusFiltered": 2,
+      "alignmentFrequencySavedAlignmentsFiltered": 0,
+      "frequencyRatioCorpusSourceFiltered": 1,
+      "frequencyRatioSavedAlignmentsFiltered": 0
+    });
+  });
+
+  it(
+    "should return correct scores based on the corpus and saved alignments",
+    () => {
+      const engine = new Engine();
+      engine.registerAlgorithm(new NgramFrequency());
+
+      // training data
+      const sourceCorpusSentence = "hello taco world";
+      const targetCorpusSentence = "dlalignment ocat olleh";
+      const sourceCorpusTokens = tokenizeMockSentence(sourceCorpusSentence);
+      const targetCorpusTokens = tokenizeMockSentence(targetCorpusSentence);
+      engine.addCorpus([sourceCorpusTokens], [targetCorpusTokens]);
+      engine.addAlignments([makeMockAlignment("hello", "olleh")]);
+
+      // un-aligned sentence pair
+      const sourceSentence = "hello";
+      const targetSentence = "olleh";
+      const sourceTokens = tokenizeMockSentence(sourceSentence);
+      const targetTokens = tokenizeMockSentence(targetSentence);
+      const predictions = engine.calculate([sourceTokens, targetTokens]);
+
+      expect(predictions[0].getScores()).toEqual({
+        "alignmentFrequencyCorpus": 1,
+        "alignmentFrequencySavedAlignments": 1,
+        "ngramFrequencyCorpusSource": 7,
+        "ngramFrequencyCorpusTarget": 6,
+        "ngramFrequencySavedAlignmentsSource": 1,
+        "ngramFrequencySavedAlignmentsTarget": 1,
+        "frequencyRatioCorpusSource": 0.14285714285714285,
+        "frequencyRatioCorpusTarget": 0.16666666666666666,
+        "frequencyRatioSavedAlignmentsSource": 1,
+        "frequencyRatioSavedAlignmentsTarget": 1,
+        "alignmentFrequencyCorpusFiltered": 1,
+        "alignmentFrequencySavedAlignmentsFiltered": 1,
+        "frequencyRatioCorpusSourceFiltered": 1,
+        "frequencyRatioSavedAlignmentsFiltered": 1
+      });
+    }
+  );
 });
 
 /**

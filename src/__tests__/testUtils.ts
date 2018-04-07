@@ -8,6 +8,34 @@ import Prediction from "../structures/Prediction";
 import Token from "../structures/Token";
 
 /**
+ * converts some strings into corpus.
+ * @param {string} source
+ * @param {string} target
+ * @return {Token[][][]}
+ */
+export function makeCorpus(source: string, target: string): Token[][][] {
+  const sourceCorpusTokens = tokenizeMockSentence(source);
+  const targetCorpusTokens = tokenizeMockSentence(target);
+  return [
+    [sourceCorpusTokens],
+    [targetCorpusTokens]
+  ];
+}
+
+/**
+ * converts some strings into an unaligned sentence pair
+ * @param {string} source
+ * @param {string} target
+ * @return {Token[][]}
+ */
+export function makeUnalignedSentence(source: string, target: string): [Token[], Token[]] {
+  return [
+    tokenizeMockSentence(source),
+    tokenizeMockSentence(target)
+  ];
+}
+
+/**
  * Generates a sample alignment from a sentence
  * @param {String} sentence - a raw sentence from which to generate a mock alignment
  * @return {Array<Alignment>} a mock alignment

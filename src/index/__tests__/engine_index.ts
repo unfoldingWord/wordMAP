@@ -14,14 +14,14 @@ describe("append saved alignments", () => {
     const firstSentence = alignMockSentence(
       "Once upon a time, in a galaxy far far away...");
     index.addAlignments(firstSentence);
-    expect(index.primaryAlignmentFrequencyIndex.read("far", "raf")).toEqual(2);
-    expect(index.primaryAlignmentFrequencyIndex.read("a", "a")).toEqual(2);
-    expect(index.primaryAlignmentFrequencyIndex.read("in", "ni")).toEqual(1);
+    expect(index.primaryAlignmentFrequencyIndex.read("n:far", "n:raf")).toEqual(2);
+    expect(index.primaryAlignmentFrequencyIndex.read("n:a", "n:a")).toEqual(2);
+    expect(index.primaryAlignmentFrequencyIndex.read("n:in", "n:ni")).toEqual(1);
 
     const secondSentence = alignMockSentence("Once upon a time");
     index.addAlignments(secondSentence);
-    expect(index.primaryAlignmentFrequencyIndex.read("far", "raf")).toEqual(2);
-    expect(index.primaryAlignmentFrequencyIndex.read("a", "a")).toEqual(3);
-    expect(index.primaryAlignmentFrequencyIndex.read("in", "ni")).toEqual(1);
+    expect(index.primaryAlignmentFrequencyIndex.read("n:far", "n:raf")).toEqual(2);
+    expect(index.primaryAlignmentFrequencyIndex.read("n:a", "n:a")).toEqual(3);
+    expect(index.primaryAlignmentFrequencyIndex.read("n:in", "n:ni")).toEqual(1);
   });
 });
