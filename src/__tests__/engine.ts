@@ -1,7 +1,7 @@
-jest.mock("../index/EngineIndex");
+jest.mock("../index/PermutationIndex");
 import Engine from "../Engine";
 // @ts-ignore
-import EngineIndex, {mockAddAlignments, mockAddSentencePair} from "../index/EngineIndex";
+import PermutationIndex, {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
 import Token from "../structures/Token";
@@ -519,8 +519,8 @@ it("runs all the algorithms", () => {
   const target = tokenizeMockSentence("olleH dlroW");
   Engine.performPrediction(
     [source, target],
-    new EngineIndex(),
-    new EngineIndex(),
+    new PermutationIndex(),
+    new PermutationIndex(),
     algorithms
   );
 
@@ -558,14 +558,14 @@ describe("scoring", () => {
   });
 
   it("calculates prediction confidence", () => {
-    jest.unmock("../index/EngineIndex");
+    jest.unmock("../index/PermutationIndex");
     jest.resetModules();
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({
       alignmentPosition: 3,
       alignmentFrequencyCorpus: 5
     });
-    const result = Engine.score([prediction], new EngineIndex());
+    const result = Engine.score([prediction], new PermutationIndex());
     expect(result[0].getScore("confidence")).toEqual(4);
   });
 });

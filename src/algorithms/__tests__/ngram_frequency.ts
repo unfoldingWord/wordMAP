@@ -6,8 +6,8 @@ import {
   tokenizeMockSentence
 } from "../../__tests__/testUtils";
 import Engine from "../../Engine";
-import EngineIndex from "../../index/EngineIndex";
-import NumberObject from "../../structures/NumberObject";
+import PermutationIndex from "../../index/PermutationIndex";
+import NumberObject from "../../index/NumberObject";
 import Prediction from "../../structures/Prediction";
 import NgramFrequency from "../NgramFrequency";
 
@@ -17,8 +17,8 @@ describe("calculate frequency", () => {
     const engine = new NgramFrequency();
     const result = engine.execute(
       predictions,
-      new EngineIndex(),
-      new EngineIndex()
+      new PermutationIndex(),
+      new PermutationIndex()
     );
     expect(result).toHaveLength(0);
   });
@@ -33,8 +33,8 @@ describe("calculate frequency", () => {
     const engine = new NgramFrequency();
     const result = engine.execute(
       predictions,
-      new EngineIndex(),
-      new EngineIndex()
+      new PermutationIndex(),
+      new PermutationIndex()
     );
     for (const r of result) {
       expectEmptyScores(r.getScores());
@@ -50,7 +50,7 @@ describe("calculate frequency", () => {
     const targetNgrams = Engine.generateSentenceNgrams(targetTokens);
     const predictions = Engine.generatePredictions(sourceNgrams, targetNgrams);
 
-    const savedAlignmentStore = new EngineIndex();
+    const savedAlignmentStore = new PermutationIndex();
     savedAlignmentStore.addAlignments([
       ...alignMockSentence("the the red fox trots at midnight"),
       makeMockAlignment("the", "fox")
@@ -59,7 +59,7 @@ describe("calculate frequency", () => {
     const engine = new NgramFrequency();
     const result = engine.execute(
       predictions,
-      new EngineIndex(),
+      new PermutationIndex(),
       savedAlignmentStore
     );
     // aligned to something

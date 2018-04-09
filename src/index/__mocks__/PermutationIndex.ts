@@ -11,7 +11,6 @@ export default jest.fn().mockImplementation(() => {
   return {
     addAlignments: mockAddAlignments,
     addSentencePair: mockAddSentencePair,
-    primaryAlignmentFrequencyIndex: new Index(),
-    secondaryAlignmentFrequencyIndex: new Index()
+    alignmentFrequencyIndex: new Index()
   };
 });

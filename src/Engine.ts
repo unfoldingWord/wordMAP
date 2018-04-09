@@ -1,8 +1,8 @@
 import Algorithm from "./Algorithm";
-import EngineIndex from "./index/EngineIndex";
+import NumberObject from "./index/NumberObject";
+import PermutationIndex from "./index/PermutationIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
-import NumberObject from "./structures/NumberObject";
 import Prediction from "./structures/Prediction";
 import Token from "./structures/Token";
 
@@ -111,12 +111,12 @@ export default class Engine {
   /**
    * Executes prediction algorithms on the unaligned sentence pair
    * @param {[Token[]]} unalignedSentencePair
-   * @param {EngineIndex} corpusStore
-   * @param {EngineIndex} savedAlignmentsStore
+   * @param {PermutationIndex} corpusStore
+   * @param {PermutationIndex} savedAlignmentsStore
    * @param {Algorithm[]} algorithms
    * @return {Prediction[]}
    */
-  public static performPrediction(unalignedSentencePair: [Token[], Token[]], corpusStore: EngineIndex, savedAlignmentsStore: EngineIndex, algorithms: Algorithm[]) {
+  public static performPrediction(unalignedSentencePair: [Token[], Token[]], corpusStore: PermutationIndex, savedAlignmentsStore: PermutationIndex, algorithms: Algorithm[]) {
     const measuredUnalignedSentencePair: [Token[], Token[]] = [
       Engine.generateMeasuredTokens(unalignedSentencePair[0]),
       Engine.generateMeasuredTokens(unalignedSentencePair[1])
@@ -171,10 +171,10 @@ export default class Engine {
   /**
    * Scores the predictions and returns a filtered set of suggestions
    * @param {Prediction[]} predictions
-   * @param {EngineIndex} savedAlignmentsStore
+   * @param {PermutationIndex} savedAlignmentsStore
    * @return {Prediction[]}
    */
-  public static score(predictions: Prediction[], savedAlignmentsStore: EngineIndex): Prediction[] {
+  public static score(predictions: Prediction[], savedAlignmentsStore: PermutationIndex): Prediction[] {
     const suggestions: Prediction[] = [];
 
     for (const p of predictions) {
@@ -190,10 +190,8 @@ export default class Engine {
       );
 
       // boost confidence for saved alignments
-      const isSavedAlignment = savedAlignmentsStore.primaryAlignmentFrequencyIndex.read(
-        p.alignment.source.key,
-        p.alignment.target.key
-      );
+      const isSavedAlignment = savedAlignmentsStore.alignmentFrequencyIndex.read(
+        p.alignment);
       if (isSavedAlignment) {
         confidence++;
       }
@@ -206,8 +204,8 @@ export default class Engine {
   }
 
   private registeredAlgorithms: Algorithm[] = [];
-  private corpusStore: EngineIndex;
-  private savedAlignmentsStore: EngineIndex;
+  private corpusStore: PermutationIndex;
+  private savedAlignmentsStore: PermutationIndex;
 
   /**
    * Returns a list of algorithms that are registered in the engine
@@ -219,8 +217,8 @@ export default class Engine {
 
   constructor() {
     // TODO: read in custom configuration
-    this.corpusStore = new EngineIndex();
-    this.savedAlignmentsStore = new EngineIndex();
+    this.corpusStore = new PermutationIndex();
+    this.savedAlignmentsStore = new PermutationIndex();
   }
 
   /**

@@ -1,5 +1,5 @@
+import NumberObject from "../index/NumberObject";
 import Alignment from "./Alignment";
-import NumberObject from "./NumberObject";
 
 /**
  * Represents a single alignment prediction

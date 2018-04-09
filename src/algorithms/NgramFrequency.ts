@@ -1,8 +1,8 @@
 import Algorithm from "../Algorithm";
-import EngineIndex from "../index/EngineIndex";
 import Index from "../index/Index";
+import NumberObject from "../index/NumberObject";
+import PermutationIndex from "../index/PermutationIndex";
 import Ngram from "../structures/Ngram";
-import NumberObject from "../structures/NumberObject";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -73,43 +73,29 @@ export default class NgramFrequency implements Algorithm {
 
   public name: string = "n-gram frequency";
 
-  public execute(predictions: Prediction[], corpusStore: EngineIndex, savedAlignmentsStore: EngineIndex): Prediction[] {
+  public execute(predictions: Prediction[], corpusStore: PermutationIndex, savedAlignmentsStore: PermutationIndex): Prediction[] {
     const alignmentFrequencyCorpusSums: NumberObject = {};
     const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
 
     for (const p  of predictions) {
       // frequency of this alignment in the possible predictions for corpus and saved alignments
-      const alignmentFrequencyCorpus = NgramFrequency.readAlignmentFrequency(
-        corpusStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source,
-        p.alignment.target
-      );
-      const alignmentFrequencySavedAlignments = NgramFrequency.readAlignmentFrequency(
-        savedAlignmentsStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source,
-        p.alignment.target
-      );
+      const alignmentFrequencyCorpus = corpusStore.alignmentFrequencyIndex.read(
+        p.alignment);
+      const alignmentFrequencySavedAlignments = savedAlignmentsStore.alignmentFrequencyIndex.read(
+        p.alignment);
 
       // source and target n-gram frequency in the alignment permutations,
       // TODO: this can be red from secondaryNgramFrequencyIndexStore (needs better name)
       // This is the same as primaryCorpusFrequency in the documentation.
       // Total number of possible alignments against the n-gram in the entire corpus.
-      const ngramFrequencyCorpusSource = NgramFrequency.countNgramFrequency(
-        corpusStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source
-      );
-      const ngramFrequencySavedAlignmentsSource = NgramFrequency.countNgramFrequency(
-        savedAlignmentsStore.primaryAlignmentFrequencyIndex,
-        p.alignment.source
-      );
-      const ngramFrequencyCorpusTarget = NgramFrequency.countNgramFrequency(
-        corpusStore.secondaryAlignmentFrequencyIndex,
-        p.alignment.target
-      );
-      const ngramFrequencySavedAlignmentsTarget = NgramFrequency.countNgramFrequency(
-        savedAlignmentsStore.secondaryAlignmentFrequencyIndex,
-        p.alignment.target
-      );
+      const ngramFrequencyCorpusSource = corpusStore.sourceNgramFrequencyIndex.read(
+        p.alignment.source);
+      const ngramFrequencySavedAlignmentsSource = savedAlignmentsStore.sourceNgramFrequencyIndex.read(
+        p.alignment.source);
+      const ngramFrequencyCorpusTarget = corpusStore.targetNgramFrequencyIndex.read(
+        p.alignment.target);
+      const ngramFrequencySavedAlignmentsTarget = savedAlignmentsStore.targetNgramFrequencyIndex.read(
+        p.alignment.target);
 
       // TODO: get n-gram frequency for the corpus and saved alignments (not the permuations)
       // sentenceNgrams = readNgram(sentence, ngram.length);

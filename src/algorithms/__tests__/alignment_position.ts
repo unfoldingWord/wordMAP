@@ -1,4 +1,4 @@
-import EngineIndex from "../../index/EngineIndex";
+import PermutationIndex from "../../index/PermutationIndex";
 import Alignment from "../../structures/Alignment";
 import Ngram from "../../structures/Ngram";
 import Prediction from "../../structures/Prediction";
@@ -16,8 +16,8 @@ describe("AlignmentPosition", () => {
     ];
     const result = engine.execute(
       predictions,
-      new EngineIndex(),
-      new EngineIndex()
+      new PermutationIndex(),
+      new PermutationIndex()
     );
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": 1
@@ -34,8 +34,8 @@ describe("AlignmentPosition", () => {
     ];
     const result = engine.execute(
       predictions,
-      new EngineIndex(),
-      new EngineIndex()
+      new PermutationIndex(),
+      new PermutationIndex()
     );
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": 0
@@ -52,8 +52,8 @@ describe("AlignmentPosition", () => {
     ];
     const result = engine.execute(
       predictions,
-      new EngineIndex(),
-      new EngineIndex()
+      new PermutationIndex(),
+      new PermutationIndex()
     );
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": -1
