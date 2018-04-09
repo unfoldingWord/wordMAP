@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "tslint -c tslint.json src/**/*.ts",
+    "docs": "typedoc --out docs --mode modules --target ES6",
     "test": "npm run lint && jest",
     "prebuild": "rm -rf dist",
     "build": "tsc",
@@ -66,6 +67,7 @@
     "jest": "^22.4.2",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
+    "typedoc": "^0.11.1",
     "typescript": "^2.8.1"
   },
   "dependencies": {
