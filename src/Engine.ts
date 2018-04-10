@@ -173,7 +173,7 @@ export default class Engine {
    * @param predictions
    * @param saIndex
    */
-  public static score(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
+  public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const suggestions: Prediction[] = [];
 
     for (const p of predictions) {
@@ -250,7 +250,7 @@ export default class Engine {
    * @param {[Token[]]} unalignedSentencePair
    * @return {Prediction[]}
    */
-  public calculate(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public calculateScores(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
     return Engine.performPrediction(
       unalignedSentencePair,
       this.corpusIndex,
@@ -265,7 +265,7 @@ export default class Engine {
    * @param unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
   public predict(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
-    const predictions = this.calculate(unalignedSentencePair);
-    return Engine.score(predictions, this.savedAlignmentsIndex);
+    const predictions = this.calculateScores(unalignedSentencePair);
+    return Engine.calculateConfidence(predictions, this.savedAlignmentsIndex);
   }
 }

@@ -567,7 +567,7 @@ describe("scoring", () => {
       alignmentPosition: 3,
       alignmentFrequencyCorpus: 5
     });
-    const result = Engine.score([prediction], new SavedAlignmentsIndex());
+    const result = Engine.calculateConfidence([prediction], new SavedAlignmentsIndex());
     expect(result[0].getScore("confidence")).toEqual(4);
   });
 });

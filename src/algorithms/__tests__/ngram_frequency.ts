@@ -113,7 +113,7 @@ describe("calculate frequency", () => {
     engine.addCorpus(initialCorpus[0], initialCorpus[1]);
 
     // first prediction
-    const firstPredictions = engine.calculate(unalignedSentence);
+    const firstPredictions = engine.calculateScores(unalignedSentence);
     expect(firstPredictions[0].getScores()).toEqual({
       "alignmentFrequencyCorpus": 1,
       "alignmentFrequencySavedAlignments": 0,
@@ -139,7 +139,7 @@ describe("calculate frequency", () => {
     engine.addCorpus(secondCorpus[0], secondCorpus[1]);
 
     // second prediction
-    const secondPredictions = engine.calculate(unalignedSentence);
+    const secondPredictions = engine.calculateScores(unalignedSentence);
     expect(secondPredictions[0].getScores()).toEqual({
       "alignmentFrequencyCorpus": 2,
       "alignmentFrequencySavedAlignments": 0,
@@ -177,7 +177,7 @@ describe("calculate frequency", () => {
       const targetSentence = "olleh";
       const sourceTokens = tokenizeMockSentence(sourceSentence);
       const targetTokens = tokenizeMockSentence(targetSentence);
-      const predictions = engine.calculate([sourceTokens, targetTokens]);
+      const predictions = engine.calculateScores([sourceTokens, targetTokens]);
 
       expect(predictions[0].getScores()).toEqual({
         "alignmentFrequencyCorpus": 1,
