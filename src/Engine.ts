@@ -6,6 +6,7 @@ import Parser from "./Parser";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 import Prediction from "./structures/Prediction";
+import Suggestion from "./structures/Suggestion";
 import Token from "./structures/Token";
 
 /**
@@ -178,6 +179,28 @@ export default class Engine {
   }
 
   /**
+   * Scores the predictions and returns the best results
+   * @param {Prediction[]} predictions
+   * @return {Prediction[]}
+   */
+  public score(predictions: Prediction[]): Prediction[] {
+    return Engine.calculateConfidence(predictions, this.savedAlignmentsIndex);
+  }
+
+  /**
+   *
+   * @param predictions - the predictions from which to base the suggestion
+   * @param maxSuggestions - the maximum number of suggestions to return
+   * @return {Suggestion}
+   */
+  public suggest(predictions: Prediction[], maxSuggestions: number = 1): Suggestion {
+    const suggestions: Suggestion[] = [];
+    // TODO: in order to pick these out I need to select n-grams by name.
+
+    return suggestions;
+  }
+
+  /**
    * Adds a new algorithm to the engine.
    * @param {Algorithm} algorithm - the algorithm to run with the engine.
    */
@@ -209,7 +232,7 @@ export default class Engine {
    * @param {Token[]} targetSentence
    * @return {Prediction[]}
    */
-  public calculateScores(sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
+  public run(sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
     return Engine.performPrediction(
       sourceSentence,
       targetSentence,
@@ -217,15 +240,5 @@ export default class Engine {
       this.savedAlignmentsIndex,
       this.registeredAlgorithms
     );
-  }
-
-  /**
-   * Runs the engine
-   * @param {Token[]} sourceSentence
-   * @param {Token[]} targetSentence
-   */
-  public predict(sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
-    const predictions = this.calculateScores(sourceSentence, targetSentence);
-    return Engine.calculateConfidence(predictions, this.savedAlignmentsIndex);
   }
 }

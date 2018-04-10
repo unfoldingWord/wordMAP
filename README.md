@@ -659,7 +659,7 @@ Word-MAP will be extended to support the storing and retrieving of language spec
 
 ## Potential API Implementation in DCS
 
-Using [DCS](https://git.door43.org/) we could define a repository naming convention and and repository structure that would allow the optimal storage of Word-MAP configuration variables and alignment data.  For an example:
+Using [DCS](https://git.door43.org/) we could define a repository naming convention and repository structure that would allow the optimal storage of Word-MAP configuration variables and alignment data.  For an example:
 
 Repository: `jag3773/word-map_en-hbo`
 

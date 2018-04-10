@@ -47,7 +47,7 @@ export default class CorpusIndex {
         const targetNgrams = Parser.ngrams(target[i]);
 
         // index static metrics
-        this.staticIndex.addSentence(sourceNgrams, targetNgrams);
+        this.staticIndex.addSentence(source[i], target[i], sourceNgrams, targetNgrams);
 
         // index permutation metrics
         const alignments = Parser.alignments(sourceNgrams, targetNgrams);
