@@ -1,43 +1,13 @@
 import Algorithm from "../Algorithm";
-import Index from "../index/Index";
+import CorpusIndex from "../index/CorpusIndex";
 import NumberObject from "../index/NumberObject";
-import PermutationIndex from "../index/PermutationIndex";
-import Ngram from "../structures/Ngram";
+import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
  * This algorithm calculates the frequency of n-gram occurrences.
  */
 export default class NgramFrequency implements Algorithm {
-
-  /**
-   * Counts how often an ngram appears in the index
-   * @param {Index} index - the index to search
-   * @param {Ngram} ngram - the ngram to count
-   * @return {number}
-   */
-  private static countNgramFrequency(index: Index, ngram: Ngram): number {
-    return index.readSum(ngram.key);
-  }
-
-  /**
-   * Reads the alignment frequency from an index
-   * @param {Index} index
-   * @param {Ngram} sourceNgram
-   * @param {Ngram} targetNgram
-   * @return {number}
-   */
-  private static readAlignmentFrequency(index: Index, sourceNgram: Ngram, targetNgram: Ngram): number {
-    const alignmentFrequency = index.read(
-      sourceNgram.key,
-      targetNgram.key
-    );
-    if (alignmentFrequency === undefined) {
-      return 0;
-    } else {
-      return alignmentFrequency;
-    }
-  }
 
   /**
    * Performs a numerical addition with the value of a key in a number object.
@@ -73,28 +43,27 @@ export default class NgramFrequency implements Algorithm {
 
   public name: string = "n-gram frequency";
 
-  public execute(predictions: Prediction[], corpusStore: PermutationIndex, savedAlignmentsStore: PermutationIndex): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
     const alignmentFrequencyCorpusSums: NumberObject = {};
     const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
 
     for (const p  of predictions) {
       // frequency of this alignment in the possible predictions for corpus and saved alignments
-      const alignmentFrequencyCorpus = corpusStore.alignmentFrequencyIndex.read(
+      const alignmentFrequencyCorpus = cIndex.permutations.alignmentFrequency.read(
         p.alignment);
-      const alignmentFrequencySavedAlignments = savedAlignmentsStore.alignmentFrequencyIndex.read(
+      const alignmentFrequencySavedAlignments = saIndex.alignmentFrequency.read(
         p.alignment);
 
       // source and target n-gram frequency in the alignment permutations,
-      // TODO: this can be red from secondaryNgramFrequencyIndexStore (needs better name)
       // This is the same as primaryCorpusFrequency in the documentation.
       // Total number of possible alignments against the n-gram in the entire corpus.
-      const ngramFrequencyCorpusSource = corpusStore.sourceNgramFrequencyIndex.read(
+      const ngramFrequencyCorpusSource = cIndex.permutations.sourceNgramFrequency.read(
         p.alignment.source);
-      const ngramFrequencySavedAlignmentsSource = savedAlignmentsStore.sourceNgramFrequencyIndex.read(
+      const ngramFrequencySavedAlignmentsSource = saIndex.sourceNgramFrequency.read(
         p.alignment.source);
-      const ngramFrequencyCorpusTarget = corpusStore.targetNgramFrequencyIndex.read(
+      const ngramFrequencyCorpusTarget = cIndex.permutations.targetNgramFrequency.read(
         p.alignment.target);
-      const ngramFrequencySavedAlignmentsTarget = savedAlignmentsStore.targetNgramFrequencyIndex.read(
+      const ngramFrequencySavedAlignmentsTarget = saIndex.targetNgramFrequency.read(
         p.alignment.target);
 
       // TODO: get n-gram frequency for the corpus and saved alignments (not the permuations)

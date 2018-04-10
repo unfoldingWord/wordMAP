@@ -17,7 +17,7 @@ export default abstract class FrequencyIndex {
    * @param {string} key
    * @return {number | undefined}
    */
-  protected readIndex(key: string): number | undefined {
+  protected readIndex(key: string): number {
     if (key in this.index) {
       return this.index[key];
     } else {
@@ -28,8 +28,8 @@ export default abstract class FrequencyIndex {
   /**
    * Adds a number to the key's value.
    * If no number is given the default amount will be added to the value.
-   * @param {string} key
-   * @param {number} [value=1] - optional value to add
+   * @param key
+   * @param value - optional value to add
    */
   protected incrementIndex(key: string, value: number = 1) {
     const originalValue = this.readIndex(key);

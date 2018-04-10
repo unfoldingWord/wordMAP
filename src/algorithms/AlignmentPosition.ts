@@ -1,5 +1,6 @@
 import Algorithm from "../Algorithm";
-import PermutationIndex from "../index/PermutationIndex";
+import CorpusIndex from "../index/CorpusIndex";
+import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -9,7 +10,7 @@ import Prediction from "../structures/Prediction";
 export default class AlignmentPosition implements Algorithm {
   public name = "alignment position";
 
-  public execute(predictions: Prediction[], corpusIndex: PermutationIndex, savedAlignmentsIndex: PermutationIndex): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
     for (const p of predictions) {
       const sourcePosition = p.alignment.source.tokenPosition;
       const targetPosition = p.alignment.target.tokenPosition;

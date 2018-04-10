@@ -11,10 +11,9 @@ export default class AlignmentIndex extends FrequencyIndex {
 
   /**
    * Reads a value from the index
-   * @param {Alignment} alignment
-   * @return {number | undefined}
+   * @param alignment
    */
-  public read(alignment: Alignment): number | undefined {
+  public read(alignment: Alignment): number {
     const key = AlignmentIndex.makeKey(alignment);
     return this.readIndex(key);
   }

@@ -1,7 +1,9 @@
 jest.mock("../index/PermutationIndex");
 import Engine from "../Engine";
+import CorpusIndex from "../index/CorpusIndex";
 // @ts-ignore
-import PermutationIndex, {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
+import {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
+import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
 import Token from "../structures/Token";
@@ -27,7 +29,7 @@ it("registers an algorithm", () => {
 it("adds the alignment to the index", () => {
   const sentence = alignMockSentence("Once upon a time");
   const engine = new Engine();
-  engine.addAlignments(sentence);
+  engine.addSavedAlignments(sentence);
   expect(mockAddAlignments).toBeCalledWith(sentence);
 });
 
@@ -519,8 +521,8 @@ it("runs all the algorithms", () => {
   const target = tokenizeMockSentence("olleH dlroW");
   Engine.performPrediction(
     [source, target],
-    new PermutationIndex(),
-    new PermutationIndex(),
+    new CorpusIndex(),
+    new SavedAlignmentsIndex(),
     algorithms
   );
 
@@ -565,7 +567,7 @@ describe("scoring", () => {
       alignmentPosition: 3,
       alignmentFrequencyCorpus: 5
     });
-    const result = Engine.score([prediction], new PermutationIndex());
+    const result = Engine.score([prediction], new SavedAlignmentsIndex());
     expect(result[0].getScore("confidence")).toEqual(4);
   });
 });

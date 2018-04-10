@@ -1,4 +1,5 @@
-import PermutationIndex from "./index/PermutationIndex";
+import CorpusIndex from "./index/CorpusIndex";
+import SavedAlignmentsIndex from "./index/SavedAlignmentsIndex";
 import Prediction from "./structures/Prediction";
 import Token from "./structures/Token";
 
@@ -11,6 +12,6 @@ export default interface Algorithm {
   /**
    * Executes the algorithm
    */
-  execute(predictions: Prediction[], corpusIndex: PermutationIndex, savedAlignmentsIndex: PermutationIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[];
+  execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[];
 
 }

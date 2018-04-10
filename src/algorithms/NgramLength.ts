@@ -1,12 +1,13 @@
 import Algorithm from "../Algorithm";
-import PermutationIndex from "../index/PermutationIndex";
+import CorpusIndex from "../index/CorpusIndex";
+import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 import Token from "../structures/Token";
 
 export default class NgramLength implements Algorithm {
   public name = "n-gram length";
 
-  public execute(predictions: Prediction[], corpusIndex: PermutationIndex, savedAlignmentsIndex: PermutationIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
     for (const p of predictions) {
       // length ratios
       const sourceLength = p.alignment.source.tokenLength;

@@ -1,4 +1,4 @@
-import Index from "../Index";
+import AlignmentIndex from "../AlignmentIndex";
 
 export const mockAddAlignments = jest.fn(() => {
   console.log("added alignment");
@@ -11,6 +11,6 @@ export default jest.fn().mockImplementation(() => {
   return {
     addAlignments: mockAddAlignments,
     addSentencePair: mockAddSentencePair,
-    alignmentFrequencyIndex: new Index()
+    alignmentFrequency: new AlignmentIndex()
   };
 });

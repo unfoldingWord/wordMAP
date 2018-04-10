@@ -1,6 +1,5 @@
 import Alignment from "../structures/Alignment";
 import AlignmentIndex from "./AlignmentIndex";
-import Index from "./Index";
 import NgramIndex from "./NgramIndex";
 
 /**
@@ -28,17 +27,16 @@ export default class PermutationIndex {
 
   /**
    * Returns the saved alignments index keyed by n-grams in the primary text
-   * @return {Index}
    */
-  public get alignmentFrequencyIndex(): AlignmentIndex {
+  public get alignmentFrequency(): AlignmentIndex {
     return this.alignPermFreqIndex;
   }
 
-  public get sourceNgramFrequencyIndex(): NgramIndex {
+  public get sourceNgramFrequency(): NgramIndex {
     return this.srcNgramPermFreqIndex;
   }
 
-  public get targetNgramFrequencyIndex(): NgramIndex {
+  public get targetNgramFrequency(): NgramIndex {
     return this.tgtNgramPermFreqIndex;
   }
 
@@ -56,9 +54,6 @@ export default class PermutationIndex {
     for (const alignment of alignments) {
       // alignment frequency in permutations
       this.alignPermFreqIndex.increment(alignment);
-
-      // TODO: count frequency of n-grams in the linguistic data (NOT the permutations!)
-      // we'll count this elsewhere.
 
       // n-gram frequency in permutations
       this.srcNgramPermFreqIndex.increment(alignment.source);

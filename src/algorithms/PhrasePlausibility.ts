@@ -1,5 +1,6 @@
 import Algorithm from "../Algorithm";
-import PermutationIndex from "../index/PermutationIndex";
+import CorpusIndex from "../index/CorpusIndex";
+import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -12,8 +13,10 @@ export default class PhrasePlausibility implements Algorithm {
    * @return {number}
    */
   private static commonality(prediction: Prediction): number {
-    const ngramFrequencyCorpusSource = prediction.getScore("ngramFrequencyCorpusSource");
-    const ngramFrequencyCorpusTarget = prediction.getScore("ngramFrequencyCorpusTarget");
+    const ngramFrequencyCorpusSource = prediction.getScore(
+      "ngramFrequencyCorpusSource");
+    const ngramFrequencyCorpusTarget = prediction.getScore(
+      "ngramFrequencyCorpusTarget");
 
     const x = 1 - 1 / ngramFrequencyCorpusSource;
     const y = 1 - 1 / ngramFrequencyCorpusTarget;
@@ -22,7 +25,7 @@ export default class PhrasePlausibility implements Algorithm {
 
   public name = "phrase plausibility";
 
-  public execute(predictions: Prediction[], corpusIndex: PermutationIndex, savedAlignmentsIndex: PermutationIndex): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
     for (const p of predictions) {
       const commonality = PhrasePlausibility.commonality(p);
       p.setScore("phrasePlausibility", commonality);

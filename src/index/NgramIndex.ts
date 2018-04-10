@@ -8,10 +8,9 @@ export default class NgramIndex extends FrequencyIndex {
 
   /**
    * Reads a value from the index
-   * @param {Ngram} ngram - the n-gram index to read
-   * @return {number | undefined}
+   * @param ngram - the n-gram index to read
    */
-  public read(ngram: Ngram): number | undefined {
+  public read(ngram: Ngram): number {
     return this.readIndex(ngram.key);
   }
 

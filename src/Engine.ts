@@ -1,6 +1,7 @@
 import Algorithm from "./Algorithm";
+import CorpusIndex from "./index/CorpusIndex";
 import NumberObject from "./index/NumberObject";
-import PermutationIndex from "./index/PermutationIndex";
+import SavedAlignmentsIndex from "./index/SavedAlignmentsIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 import Prediction from "./structures/Prediction";
@@ -110,13 +111,12 @@ export default class Engine {
 
   /**
    * Executes prediction algorithms on the unaligned sentence pair
-   * @param {[Token[]]} unalignedSentencePair
-   * @param {PermutationIndex} corpusStore
-   * @param {PermutationIndex} savedAlignmentsStore
-   * @param {Algorithm[]} algorithms
-   * @return {Prediction[]}
+   * @param unalignedSentencePair
+   * @param cIndex
+   * @param saIndex
+   * @param algorithms
    */
-  public static performPrediction(unalignedSentencePair: [Token[], Token[]], corpusStore: PermutationIndex, savedAlignmentsStore: PermutationIndex, algorithms: Algorithm[]) {
+  public static performPrediction(unalignedSentencePair: [Token[], Token[]], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, algorithms: Algorithm[]) {
     const measuredUnalignedSentencePair: [Token[], Token[]] = [
       Engine.generateMeasuredTokens(unalignedSentencePair[0]),
       Engine.generateMeasuredTokens(unalignedSentencePair[1])
@@ -138,8 +138,8 @@ export default class Engine {
     for (const algorithm of algorithms) {
       predictions = algorithm.execute(
         predictions,
-        corpusStore,
-        savedAlignmentsStore,
+        cIndex,
+        saIndex,
         unalignedSentencePair
       );
     }
@@ -170,11 +170,10 @@ export default class Engine {
 
   /**
    * Scores the predictions and returns a filtered set of suggestions
-   * @param {Prediction[]} predictions
-   * @param {PermutationIndex} savedAlignmentsStore
-   * @return {Prediction[]}
+   * @param predictions
+   * @param saIndex
    */
-  public static score(predictions: Prediction[], savedAlignmentsStore: PermutationIndex): Prediction[] {
+  public static score(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const suggestions: Prediction[] = [];
 
     for (const p of predictions) {
@@ -190,7 +189,7 @@ export default class Engine {
       );
 
       // boost confidence for saved alignments
-      const isSavedAlignment = savedAlignmentsStore.alignmentFrequencyIndex.read(
+      const isSavedAlignment = saIndex.alignmentFrequency.read(
         p.alignment);
       if (isSavedAlignment) {
         confidence++;
@@ -204,8 +203,8 @@ export default class Engine {
   }
 
   private registeredAlgorithms: Algorithm[] = [];
-  private corpusStore: PermutationIndex;
-  private savedAlignmentsStore: PermutationIndex;
+  private corpusIndex: CorpusIndex;
+  private savedAlignmentsIndex: SavedAlignmentsIndex;
 
   /**
    * Returns a list of algorithms that are registered in the engine
@@ -216,9 +215,8 @@ export default class Engine {
   }
 
   constructor() {
-    // TODO: read in custom configuration
-    this.corpusStore = new PermutationIndex();
-    this.savedAlignmentsStore = new PermutationIndex();
+    this.corpusIndex = new CorpusIndex();
+    this.savedAlignmentsIndex = new SavedAlignmentsIndex();
   }
 
   /**
@@ -235,27 +233,7 @@ export default class Engine {
    * @param {[Token[]]} target - an array of tokenized target sentences.
    */
   public addCorpus(source: Token[][], target: Token[][]) {
-    if (source.length !== target.length) {
-      throw Error("source and target corpus must be the same length");
-    } else {
-      for (let i = 0; i < source.length; i++) {
-        const measuredUnalignedSentencePair: [Token[], Token[]] = [
-          Engine.generateMeasuredTokens(source[i]),
-          Engine.generateMeasuredTokens(target[i])
-        ];
-        const sourceNgrams = Engine.generateSentenceNgrams(
-          measuredUnalignedSentencePair[0]
-        );
-        const targetNgrams = Engine.generateSentenceNgrams(
-          measuredUnalignedSentencePair[1]
-        );
-        const alignments = Engine.generateAlignments(
-          sourceNgrams,
-          targetNgrams
-        );
-        this.corpusStore.addAlignments(alignments);
-      }
-    }
+    this.corpusIndex.append(source, target);
   }
 
   /**
@@ -263,8 +241,8 @@ export default class Engine {
    * Adding saved alignments improves the quality of predictions.
    * @param {Array<Alignment>} savedAlignments - a list of alignments
    */
-  public addAlignments(savedAlignments: Alignment[]) {
-    this.savedAlignmentsStore.addAlignments(savedAlignments);
+  public addSavedAlignments(savedAlignments: Alignment[]) {
+    this.savedAlignmentsIndex.append(savedAlignments);
   }
 
   /**
@@ -275,8 +253,8 @@ export default class Engine {
   public calculate(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
     return Engine.performPrediction(
       unalignedSentencePair,
-      this.corpusStore,
-      this.savedAlignmentsStore,
+      this.corpusIndex,
+      this.savedAlignmentsIndex,
       this.registeredAlgorithms
     );
   }
@@ -284,10 +262,10 @@ export default class Engine {
   /**
    * Runs the engine
    *
-   * @param {[Array<Token>]} unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
+   * @param unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
    */
   public predict(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
     const predictions = this.calculate(unalignedSentencePair);
-    return Engine.score(predictions, this.savedAlignmentsStore);
+    return Engine.score(predictions, this.savedAlignmentsIndex);
   }
 }

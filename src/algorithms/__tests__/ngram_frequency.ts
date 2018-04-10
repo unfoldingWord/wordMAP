@@ -1,13 +1,15 @@
 import {
   alignMockSentence,
   makeCorpus,
-  makeMockAlignment, makeUnalignedSentence,
+  makeMockAlignment,
+  makeUnalignedSentence,
   reverseSentenceWords,
   tokenizeMockSentence
 } from "../../__tests__/testUtils";
 import Engine from "../../Engine";
-import PermutationIndex from "../../index/PermutationIndex";
+import CorpusIndex from "../../index/CorpusIndex";
 import NumberObject from "../../index/NumberObject";
+import SavedAlignmentsIndex from "../../index/SavedAlignmentsIndex";
 import Prediction from "../../structures/Prediction";
 import NgramFrequency from "../NgramFrequency";
 
@@ -17,8 +19,8 @@ describe("calculate frequency", () => {
     const engine = new NgramFrequency();
     const result = engine.execute(
       predictions,
-      new PermutationIndex(),
-      new PermutationIndex()
+      new CorpusIndex(),
+      new SavedAlignmentsIndex()
     );
     expect(result).toHaveLength(0);
   });
@@ -33,8 +35,8 @@ describe("calculate frequency", () => {
     const engine = new NgramFrequency();
     const result = engine.execute(
       predictions,
-      new PermutationIndex(),
-      new PermutationIndex()
+      new CorpusIndex(),
+      new SavedAlignmentsIndex()
     );
     for (const r of result) {
       expectEmptyScores(r.getScores());
@@ -50,8 +52,8 @@ describe("calculate frequency", () => {
     const targetNgrams = Engine.generateSentenceNgrams(targetTokens);
     const predictions = Engine.generatePredictions(sourceNgrams, targetNgrams);
 
-    const savedAlignmentStore = new PermutationIndex();
-    savedAlignmentStore.addAlignments([
+    const saIndex = new SavedAlignmentsIndex();
+    saIndex.append([
       ...alignMockSentence("the the red fox trots at midnight"),
       makeMockAlignment("the", "fox")
     ]);
@@ -59,8 +61,8 @@ describe("calculate frequency", () => {
     const engine = new NgramFrequency();
     const result = engine.execute(
       predictions,
-      new PermutationIndex(),
-      savedAlignmentStore
+      new CorpusIndex(),
+      saIndex
     );
     // aligned to something
     expect(result[0].getScores()).toEqual({
@@ -168,7 +170,7 @@ describe("calculate frequency", () => {
       const sourceCorpusTokens = tokenizeMockSentence(sourceCorpusSentence);
       const targetCorpusTokens = tokenizeMockSentence(targetCorpusSentence);
       engine.addCorpus([sourceCorpusTokens], [targetCorpusTokens]);
-      engine.addAlignments([makeMockAlignment("hello", "olleh")]);
+      engine.addSavedAlignments([makeMockAlignment("hello", "olleh")]);
 
       // un-aligned sentence pair
       const sourceSentence = "hello";

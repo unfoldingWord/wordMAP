@@ -1,5 +1,6 @@
 import Algorithm from "../Algorithm";
-import PermutationIndex from "../index/PermutationIndex";
+import CorpusIndex from "../index/CorpusIndex";
+import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -9,7 +10,7 @@ export default class CharacterLength implements Algorithm {
 
   public name = "phrase plausibility";
 
-  public execute(predictions: Prediction[], corpusIndex: PermutationIndex, savedAlignmentsIndex: PermutationIndex): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
     for (const p of predictions) {
       const sourceLength = p.alignment.source.characterLength;
       const targetLength = p.alignment.target.characterLength;
