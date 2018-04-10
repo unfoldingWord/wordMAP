@@ -48,15 +48,13 @@ export default class NgramFrequency implements Algorithm {
     const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
 
     for (const p  of predictions) {
-      // frequency of this alignment in the possible predictions for corpus and saved alignments
+      // alignment permutation frequency
       const alignmentFrequencyCorpus = cIndex.permutations.alignmentFrequency.read(
         p.alignment);
       const alignmentFrequencySavedAlignments = saIndex.alignmentFrequency.read(
         p.alignment);
 
-      // source and target n-gram frequency in the alignment permutations,
-      // This is the same as primaryCorpusFrequency in the documentation.
-      // Total number of possible alignments against the n-gram in the entire corpus.
+      // n-gram permutation frequency
       const ngramFrequencyCorpusSource = cIndex.permutations.sourceNgramFrequency.read(
         p.alignment.source);
       const ngramFrequencySavedAlignmentsSource = saIndex.sourceNgramFrequency.read(
@@ -66,18 +64,13 @@ export default class NgramFrequency implements Algorithm {
       const ngramFrequencySavedAlignmentsTarget = saIndex.targetNgramFrequency.read(
         p.alignment.target);
 
-      // TODO: get n-gram frequency for the corpus and saved alignments (not the permuations)
-      // cIndex.sourceNgramFrequency.read(p.alignment.source);
-      // cIndex.targetNgramFrequency.read(p.alignment.target);
-      // sentenceNgrams = readNgram(sentence, ngram.length);
-      // ["hello", "world"]
-      // {
-      //  "hello": 1
-      // }
-      // We still need to index this data.
-      // we won't need this until we are calculating commonality and uniqueness.
+      // n-gram static frequency
+      // const ngramStaticFrequencyCorpusSource = cIndex.static.sourceNgramFrequency.read(
+      //   p.alignment.source);
+      // const ngramStaticFrequencyCorpusTarget = cIndex.static.targetNgramFrequency.read(
+      //   p.alignment.target);
 
-      // source and target frequency ratio for the corpus and saved alignments
+      // permutation frequency ratio
       const frequencyRatioCorpusSource: number = NgramFrequency.divideSafe(
         alignmentFrequencyCorpus,
         ngramFrequencyCorpusSource
@@ -97,6 +90,7 @@ export default class NgramFrequency implements Algorithm {
 
       // store scores
       p.setScores({
+        // permutation scores
         alignmentFrequencyCorpus,
         alignmentFrequencySavedAlignments,
 
@@ -110,10 +104,6 @@ export default class NgramFrequency implements Algorithm {
         frequencyRatioSavedAlignmentsSource,
         frequencyRatioSavedAlignmentsTarget
       });
-
-      // TODO: I think we need to include the frequency scores for the unaligned sentence as well.
-      // the predictions is built on this so we can sum these in this loop and inject them
-      // in the filter loop below
 
       // sum alignment frequencies
       NgramFrequency.addObjectNumber(
@@ -133,9 +123,6 @@ export default class NgramFrequency implements Algorithm {
       const alignmentFrequencyCorpus = p.getScore("alignmentFrequencyCorpus");
       const alignmentFrequencySavedAlignments = p.getScore(
         "alignmentFrequencySavedAlignments");
-
-      // TODO: is this correct terminology?
-      // TODO: we are missing something here.
 
       // alignment frequency in the filtered corpus and saved alignments
       const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.key];
