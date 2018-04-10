@@ -71,6 +71,19 @@ export function makeMockAlignment(source: string, target: string): Alignment {
 }
 
 /**
+ * Creates a mock prediction from two strings
+ * @param {string} source
+ * @param {string} target
+ * @param {number} confidence - the confidence of the prediction
+ * @return {Prediction}
+ */
+export function makeMockPrediction(source: string, target: string, confidence: number): Prediction {
+  const prediction = new Prediction(makeMockAlignment(source, target));
+  prediction.setScore("confidence", confidence);
+  return prediction;
+}
+
+/**
  * Generates a sample alignment
  * @param {Array<Token>} tokens - An array of tokens to align
  * @return {Alignment} a sample alignment

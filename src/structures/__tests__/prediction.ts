@@ -56,4 +56,24 @@ describe("prediction", () => {
     expect(prediction.getScore("score")).toEqual(4);
     expect(() => prediction.getScore("missing")).toThrow(Error);
   });
+
+  it("intersects", () => {
+    const alignment = makeMockAlignment("hello", "world");
+    const prediction = new Prediction(alignment);
+
+    const altAlignment = makeMockAlignment("hello", "john");
+    const altPrediction = new Prediction(altAlignment);
+
+    expect(prediction.intersects(altPrediction)).toEqual(true);
+  });
+
+  it("does not intersect", () => {
+    const alignment = makeMockAlignment("hello", "world");
+    const prediction = new Prediction(alignment);
+
+    const altAlignment = makeMockAlignment("john", "doe");
+    const altPrediction = new Prediction(altAlignment);
+
+    expect(prediction.intersects(altPrediction)).toEqual(false);
+  });
 });

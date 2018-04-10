@@ -1,4 +1,3 @@
-import Engine from "../Engine";
 import Parser from "../Parser";
 import Token from "../structures/Token";
 import PermutationIndex from "./PermutationIndex";

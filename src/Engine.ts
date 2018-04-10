@@ -133,7 +133,7 @@ export default class Engine {
    * @param saIndex
    */
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
-    const suggestions: Prediction[] = [];
+    const finalPredictions: Prediction[] = [];
 
     for (const p of predictions) {
       // TODO: what scores do we weight? We have primary + secondary scores and corpus + saved alignment.
@@ -155,8 +155,52 @@ export default class Engine {
       }
 
       p.setScore("confidence", confidence);
-      suggestions.push(p);
+      finalPredictions.push(p);
     }
+
+    return finalPredictions;
+  }
+
+  /**
+   *
+   * @param predictions - the predictions from which to base the suggestion
+   * @param maxSuggestions - the maximum number of suggestions to return
+   * @return {Suggestion}
+   */
+  public static suggest(predictions: Prediction[], maxSuggestions: number = 1): Suggestion[] {
+    const suggestions: Suggestion[] = [];
+
+    // build suggestions
+    for (let i = 0; i < maxSuggestions; i++) {
+      const suggestion = new Suggestion();
+      let filtered = [...predictions];
+
+      // TRICKY: sequentially pick the best starting point in descending order
+      const best = filtered.splice(i, 1)[0];
+      suggestion.addPrediction(best);
+      filtered = filtered.filter((p) => {
+        return !best.intersects(p);
+      });
+
+      // fill suggestion
+      while (filtered.length) {
+        const nextBest = filtered.shift();
+        if (nextBest === undefined) {
+          break;
+        }
+        suggestion.addPrediction(nextBest);
+        filtered = filtered.filter((p) => {
+          return !nextBest.intersects(p);
+        });
+      }
+      suggestions.push(suggestion);
+    }
+    // TODO: take the remaining
+    // 1. sort by confidence
+    // 2. take most confident predictions
+    // - for each suggestion desired we'll take the remaining predictions and run them through `suggest` again.
+    // 3. filter out remaining predictions that contain primary tokens in previously selected prediction.
+    // 4. repeat until all of the primary words are used.
 
     return suggestions;
   }
@@ -199,50 +243,6 @@ export default class Engine {
       }
       return 0;
     });
-  }
-
-  /**
-   *
-   * @param predictions - the predictions from which to base the suggestion
-   * @param maxSuggestions - the maximum number of suggestions to return
-   * @return {Suggestion}
-   */
-  public suggest(predictions: Prediction[], maxSuggestions: number = 1): Suggestion[] {
-    const suggestions: Suggestion[] = [];
-
-    // build suggestions
-    for (let i = 0; i < maxSuggestions; i++) {
-      const suggestion = new Suggestion();
-      let filtered = [...predictions];
-
-      // TRICKY: sequentially pick the best starting point in descending order
-      const best = filtered.splice(i, 1)[0];
-      suggestion.addPrediction(best);
-      filtered = filtered.filter((p) => {
-        return !best.intersects(p);
-      });
-
-      // fill suggestion
-      while (filtered.length) {
-        const nextBest = filtered.shift();
-        if (nextBest === undefined) {
-          break;
-        }
-        suggestion.addPrediction(nextBest);
-        filtered = filtered.filter((p) => {
-          return !nextBest.intersects(p);
-        });
-      }
-      suggestions.push(suggestion);
-    }
-    // TODO: take the remaining
-    // 1. sort by confidence
-    // 2. take most confident predictions
-    // - for each suggestion desired we'll take the remaining predictions and run them through `suggest` again.
-    // 3. filter out remaining predictions that contain primary tokens in previously selected prediction.
-    // 4. repeat until all of the primary words are used.
-
-    return suggestions;
   }
 
   /**

@@ -10,6 +10,7 @@ import Token from "../structures/Token";
 import {
   alignMockSentence,
   makeMockAlignment,
+  makeMockPrediction,
   MockAlgorithm,
   reverseSentenceWords,
   tokenizeMockSentence
@@ -573,5 +574,54 @@ describe("scoring", () => {
       new SavedAlignmentsIndex()
     );
     expect(result[0].getScore("confidence")).toEqual(4);
+  });
+});
+
+describe("suggest", () => {
+  it("suggests a single prediction", () => {
+    const predictions = [
+      makeMockPrediction("hello", "olleh", 1),
+      makeMockPrediction("world", "dlrow", 0.9),
+      makeMockPrediction("hello world", "olleh dlrow", .8),
+      makeMockPrediction("world", "huh", 0.4),
+      makeMockPrediction("hello world", "huh olleh", .3),
+      makeMockPrediction("hello", "huh", 0.2),
+      makeMockPrediction("hello", "hmm", 0.1)
+    ];
+    const suggestions = Engine.suggest(predictions);
+    expect(suggestions.length).toEqual(1);
+    const s = suggestions[0];
+    expect(s.getPredictions().length).toEqual(2);
+    const suggestedPredictions = s.getPredictions();
+    expect(suggestedPredictions[0].alignment.key).toEqual("n:hello->n:olleh");
+    expect(suggestedPredictions[1].alignment.key).toEqual("n:world->n:dlrow");
+  });
+
+  it("suggests multiple predictions", () => {
+    const predictions = [
+      makeMockPrediction("hello", "olleh", 1),
+      makeMockPrediction("world", "dlrow", 0.9),
+      makeMockPrediction("hello world", "olleh dlrow", .8),
+      makeMockPrediction("world", "huh", 0.4),
+      makeMockPrediction("hello world", "huh olleh", .3),
+      makeMockPrediction("hello", "huh", 0.2),
+      makeMockPrediction("hello", "hmm", 0.1)
+    ];
+    const suggestions = Engine.suggest(predictions, 3);
+    expect(suggestions.length).toEqual(3);
+
+    const s1 = suggestions[0];
+    expect(s1.getPredictions().length).toEqual(2);
+    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh");
+    expect(s1.getPredictions()[1].alignment.key).toEqual("n:world->n:dlrow");
+
+    const s2 = suggestions[1];
+    expect(s2.getPredictions().length).toEqual(2);
+    expect(s2.getPredictions()[0].alignment.key).toEqual("n:world->n:dlrow");
+    expect(s2.getPredictions()[1].alignment.key).toEqual("n:hello->n:olleh");
+
+    const s3 = suggestions[2];
+    expect(s3.getPredictions().length).toEqual(1);
+    expect(s3.getPredictions()[0].alignment.key).toEqual("n:hello:world->n:olleh:dlrow");
   });
 });

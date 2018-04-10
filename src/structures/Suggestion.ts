@@ -17,4 +17,8 @@ export default class Suggestion {
   public addPrediction(prediction: Prediction) {
     this.predictions.push(prediction);
   }
+
+  public getPredictions() {
+    return this.predictions;
+  }
 }
