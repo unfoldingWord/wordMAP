@@ -15,7 +15,6 @@ export default abstract class FrequencyIndex {
    * Reads a value from the index.
    * If the key does not exist the result will be 0.
    * @param {string} key
-   * @return {number | undefined}
    */
   protected readIndex(key: string): number {
     if (key in this.index) {
@@ -33,11 +32,7 @@ export default abstract class FrequencyIndex {
    */
   protected incrementIndex(key: string, value: number = 1) {
     const originalValue = this.readIndex(key);
-    if (originalValue === undefined) {
-      this.writeIndex(key, value);
-    } else {
-      this.writeIndex(key, originalValue + value);
-    }
+    this.writeIndex(key, originalValue + value);
   }
 
   /**
