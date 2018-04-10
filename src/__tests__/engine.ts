@@ -520,7 +520,8 @@ it("runs all the algorithms", () => {
   const source = tokenizeMockSentence("Hello World");
   const target = tokenizeMockSentence("olleH dlroW");
   Engine.performPrediction(
-    [source, target],
+    source,
+    target,
     new CorpusIndex(),
     new SavedAlignmentsIndex(),
     algorithms
@@ -567,7 +568,10 @@ describe("scoring", () => {
       alignmentPosition: 3,
       alignmentFrequencyCorpus: 5
     });
-    const result = Engine.calculateConfidence([prediction], new SavedAlignmentsIndex());
+    const result = Engine.calculateConfidence(
+      [prediction],
+      new SavedAlignmentsIndex()
+    );
     expect(result[0].getScore("confidence")).toEqual(4);
   });
 });

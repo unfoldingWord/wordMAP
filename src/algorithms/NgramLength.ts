@@ -7,16 +7,16 @@ import Token from "../structures/Token";
 export default class NgramLength implements Algorithm {
   public name = "n-gram length";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
     for (const p of predictions) {
       // length ratios
       const sourceLength = p.alignment.source.tokenLength;
       const targetLength = p.alignment.target.tokenLength;
 
       const primaryLengthRatio = sourceLength /
-        unalignedSentencePair[0].length;
+        sourceSentence.length;
       const secondaryLengthRatio = targetLength /
-        unalignedSentencePair[1].length;
+        targetSentence.length;
 
       // length affinity
       const delta = Math.abs(primaryLengthRatio - secondaryLengthRatio);

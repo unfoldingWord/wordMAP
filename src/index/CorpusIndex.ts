@@ -1,4 +1,5 @@
 import Engine from "../Engine";
+import Parser from "../Parser";
 import Token from "../structures/Token";
 import PermutationIndex from "./PermutationIndex";
 import StaticIndex from "./StaticIndex";
@@ -29,32 +30,27 @@ export default class CorpusIndex {
     this.staticIndex = new StaticIndex();
   }
 
+  /**
+   * Appends sentences to the index.
+   * The tokens must contain positional metrics for better accuracy.
+   *
+   * @param {Token[][]} source
+   * @param {Token[][]} target
+   */
   public append(source: Token[][], target: Token[][]) {
     if (source.length !== target.length) {
       throw Error("source and target corpus must be the same length");
     } else {
       for (let i = 0; i < source.length; i++) {
-        // measure tokens for positional metrics
-        const measuredUnalignedSentencePair: [Token[], Token[]] = [
-          Engine.generateMeasuredTokens(source[i]),
-          Engine.generateMeasuredTokens(target[i])
-        ];
 
-        const sourceNgrams = Engine.generateSentenceNgrams(
-          measuredUnalignedSentencePair[0]
-        );
-        const targetNgrams = Engine.generateSentenceNgrams(
-          measuredUnalignedSentencePair[1]
-        );
+        const sourceNgrams = Parser.ngrams(source[i]);
+        const targetNgrams = Parser.ngrams(target[i]);
 
         // index static metrics
         this.staticIndex.addSentence(sourceNgrams, targetNgrams);
 
         // index permutation metrics
-        const alignments = Engine.generateAlignments(
-          sourceNgrams,
-          targetNgrams
-        );
+        const alignments = Parser.alignments(sourceNgrams, targetNgrams);
         this.permutationIndex.addAlignments(alignments);
       }
     }

@@ -2,6 +2,7 @@ import Algorithm from "./Algorithm";
 import CorpusIndex from "./index/CorpusIndex";
 import NumberObject from "./index/NumberObject";
 import SavedAlignmentsIndex from "./index/SavedAlignmentsIndex";
+import Parser from "./Parser";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 import Prediction from "./structures/Prediction";
@@ -29,25 +30,6 @@ export default class Engine {
       predictions.push(new Prediction(new Alignment(source, new Ngram())));
     }
     return predictions;
-  }
-
-  /**
-   * Generates an array of all possible alignments
-   * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
-   * @param {Ngram[]} targetNgrams - every possible n-gram in the target text
-   * @return {Alignment[]}
-   */
-  public static generateAlignments(sourceNgrams: Ngram[], targetNgrams: Ngram[]): Alignment[] {
-    const alignments: Alignment[] = [];
-    for (const source of sourceNgrams) {
-      for (const target of targetNgrams) {
-        alignments.push(new Alignment(source, target));
-      }
-
-      // TRICKY: include empty match alignment
-      alignments.push(new Alignment(source, new Ngram()));
-    }
-    return alignments;
   }
 
   /**
@@ -90,44 +72,19 @@ export default class Engine {
   }
 
   /**
-   * Generates an array of tokens with their relative positions measured.
+   * Executes prediction algorithms on the unaligned sentence pair.
+   * The sentence tokens should contain positional metrics for better accuracy.
    *
-   * @param {Token[]} sentence - the tokens to measure
-   * @return {Token[]} - a new list of measured tokens
+   * @param {Token[]} sourceSentence - the source sentence tokens.
+   * @param {Token[]} targetSentence - the target sentence tokens.
+   * @param {CorpusIndex} cIndex
+   * @param {SavedAlignmentsIndex} saIndex
+   * @param {Algorithm[]} algorithms
+   * @return {Prediction[]}
    */
-  public static generateMeasuredTokens(sentence: Token[]): Token[] {
-    const measuredTokens: Token[] = [];
-    let charPos = 0;
-    for (const t of sentence) {
-      measuredTokens.push(new Token(
-        t.toString(),
-        measuredTokens.length,
-        charPos
-      ));
-      charPos += t.toString().length;
-    }
-    return measuredTokens;
-  }
-
-  /**
-   * Executes prediction algorithms on the unaligned sentence pair
-   * @param unalignedSentencePair
-   * @param cIndex
-   * @param saIndex
-   * @param algorithms
-   */
-  public static performPrediction(unalignedSentencePair: [Token[], Token[]], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, algorithms: Algorithm[]) {
-    const measuredUnalignedSentencePair: [Token[], Token[]] = [
-      Engine.generateMeasuredTokens(unalignedSentencePair[0]),
-      Engine.generateMeasuredTokens(unalignedSentencePair[1])
-    ];
-
-    const sourceNgrams = Engine.generateSentenceNgrams(
-      measuredUnalignedSentencePair[0]
-    );
-    const targetNgrams = Engine.generateSentenceNgrams(
-      measuredUnalignedSentencePair[1]
-    );
+  public static performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, algorithms: Algorithm[]) {
+    const sourceNgrams = Parser.ngrams(sourceSentence);
+    const targetNgrams = Parser.ngrams(targetSentence);
 
     // generate alignment permutations
     let predictions = Engine.generatePredictions(
@@ -140,7 +97,8 @@ export default class Engine {
         predictions,
         cIndex,
         saIndex,
-        unalignedSentencePair
+        sourceSentence,
+        targetSentence
       );
     }
 
@@ -247,12 +205,14 @@ export default class Engine {
 
   /**
    * Performs the prediction calculations
-   * @param {[Token[]]} unalignedSentencePair
+   * @param {Token[]} sourceSentence
+   * @param {Token[]} targetSentence
    * @return {Prediction[]}
    */
-  public calculateScores(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
+  public calculateScores(sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
     return Engine.performPrediction(
-      unalignedSentencePair,
+      sourceSentence,
+      targetSentence,
       this.corpusIndex,
       this.savedAlignmentsIndex,
       this.registeredAlgorithms
@@ -261,11 +221,11 @@ export default class Engine {
 
   /**
    * Runs the engine
-   *
-   * @param unalignedSentencePair - The unaligned sentence pair for which alignments will be predicted.
+   * @param {Token[]} sourceSentence
+   * @param {Token[]} targetSentence
    */
-  public predict(unalignedSentencePair: [Token[], Token[]]): Prediction[] {
-    const predictions = this.calculateScores(unalignedSentencePair);
+  public predict(sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
+    const predictions = this.calculateScores(sourceSentence, targetSentence);
     return Engine.calculateConfidence(predictions, this.savedAlignmentsIndex);
   }
 }
