@@ -179,12 +179,26 @@ export default class Engine {
   }
 
   /**
-   * Scores the predictions and returns the best results
+   * Generates the final confidence scores and sorts the predictions.
    * @param {Prediction[]} predictions
    * @return {Prediction[]}
    */
   public score(predictions: Prediction[]): Prediction[] {
-    return Engine.calculateConfidence(predictions, this.savedAlignmentsIndex);
+    const results = Engine.calculateConfidence(
+      predictions,
+      this.savedAlignmentsIndex
+    );
+    return results.sort((a, b) => {
+      const aConfidence = a.getScore("confidence");
+      const bConfidence = b.getScore("confidence");
+      if (aConfidence < bConfidence) {
+        return -1;
+      }
+      if (aConfidence > bConfidence) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   /**
@@ -193,9 +207,40 @@ export default class Engine {
    * @param maxSuggestions - the maximum number of suggestions to return
    * @return {Suggestion}
    */
-  public suggest(predictions: Prediction[], maxSuggestions: number = 1): Suggestion {
+  public suggest(predictions: Prediction[], maxSuggestions: number = 1): Suggestion[] {
     const suggestions: Suggestion[] = [];
-    // TODO: in order to pick these out I need to select n-grams by name.
+
+    // build suggestions
+    for (let i = 0; i < maxSuggestions; i++) {
+      const suggestion = new Suggestion();
+      let filtered = [...predictions];
+
+      // TRICKY: sequentially pick the best starting point in descending order
+      const best = filtered.splice(i, 1)[0];
+      suggestion.addPrediction(best);
+      filtered = filtered.filter((p) => {
+        return !best.intersects(p);
+      });
+
+      // fill suggestion
+      while (filtered.length) {
+        const nextBest = filtered.shift();
+        if (nextBest === undefined) {
+          break;
+        }
+        suggestion.addPrediction(nextBest);
+        filtered = filtered.filter((p) => {
+          return !nextBest.intersects(p);
+        });
+      }
+      suggestions.push(suggestion);
+    }
+    // TODO: take the remaining
+    // 1. sort by confidence
+    // 2. take most confident predictions
+    // - for each suggestion desired we'll take the remaining predictions and run them through `suggest` again.
+    // 3. filter out remaining predictions that contain primary tokens in previously selected prediction.
+    // 4. repeat until all of the primary words are used.
 
     return suggestions;
   }

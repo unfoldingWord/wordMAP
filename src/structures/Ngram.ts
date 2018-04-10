@@ -70,4 +70,12 @@ export default class Ngram {
   constructor(tokens: Token[] = []) {
     this.tokens = tokens;
   }
+
+  /**
+   * Returns the tokens in this n-gram
+   * @return {Token[]}
+   */
+  public getTokens() {
+    return this.tokens;
+  }
 }

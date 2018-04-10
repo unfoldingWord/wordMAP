@@ -86,4 +86,24 @@ export default class Prediction {
   public getScores() {
     return Object.assign({}, this.scores);
   }
+
+  /**
+   * Checks if this prediction intersects with another prediction.
+   * @param {Prediction} prediction
+   * @return {boolean}
+   */
+  public intersects(prediction: Prediction): boolean {
+    const predictionTokens = prediction.alignment.source.getTokens();
+    const tokens = this.alignment.source.getTokens();
+
+    for (const t of tokens) {
+      for (const pt of predictionTokens) {
+        if (t.toString() === pt.toString()) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
 }
