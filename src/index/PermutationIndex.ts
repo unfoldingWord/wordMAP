@@ -26,16 +26,24 @@ export default class PermutationIndex {
   private tgtNgramPermFreqIndex: NgramIndex;
 
   /**
-   * Returns the saved alignments index keyed by n-grams in the primary text
+   * Returns an index of alignment frequencies in the permutations
    */
   public get alignmentFrequency(): AlignmentIndex {
     return this.alignPermFreqIndex;
   }
 
+  /**
+   * Returns an index of source n-gram frequencies in the permutations
+   * @return {NgramIndex}
+   */
   public get sourceNgramFrequency(): NgramIndex {
     return this.srcNgramPermFreqIndex;
   }
 
+  /**
+   * Returns an index of target n-gram frequencies in the permutations
+   * @return {NgramIndex}
+   */
   public get targetNgramFrequency(): NgramIndex {
     return this.tgtNgramPermFreqIndex;
   }

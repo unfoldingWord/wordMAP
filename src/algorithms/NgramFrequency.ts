@@ -67,6 +67,8 @@ export default class NgramFrequency implements Algorithm {
         p.alignment.target);
 
       // TODO: get n-gram frequency for the corpus and saved alignments (not the permuations)
+      // cIndex.sourceNgramFrequency.read(p.alignment.source);
+      // cIndex.targetNgramFrequency.read(p.alignment.target);
       // sentenceNgrams = readNgram(sentence, ngram.length);
       // ["hello", "world"]
       // {

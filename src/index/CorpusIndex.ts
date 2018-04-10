@@ -20,7 +20,7 @@ export default class CorpusIndex {
   }
 
   /**
-   * Returns an index of source n-gram frequencies
+   * Returns an index of source n-gram frequencies in the corpus
    * @return {NgramIndex}
    */
   get sourceNgramFrequency() {
@@ -28,7 +28,7 @@ export default class CorpusIndex {
   }
 
   /**
-   * Returns an index of target n-gram frequencies
+   * Returns an index of target n-gram frequencies in the corpus
    * @return {NgramIndex}
    */
   get targetNgramFrequency() {
