@@ -195,13 +195,8 @@ export default class Engine {
       }
       suggestions.push(suggestion);
     }
-    // TODO: take the remaining
-    // 1. sort by confidence
-    // 2. take most confident predictions
-    // - for each suggestion desired we'll take the remaining predictions and run them through `suggest` again.
-    // 3. filter out remaining predictions that contain primary tokens in previously selected prediction.
-    // 4. repeat until all of the primary words are used.
 
+    // TODO: sort suggestions
     return suggestions;
   }
 

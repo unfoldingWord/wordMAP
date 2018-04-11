@@ -16,6 +16,7 @@ export default class Suggestion {
    */
   public addPrediction(prediction: Prediction) {
     this.predictions.push(prediction);
+    // TODO: sort predictions
   }
 
   public getPredictions() {

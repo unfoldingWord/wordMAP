@@ -3,13 +3,13 @@ import NgramFrequency from "./algorithms/NgramFrequency";
 import Engine from "./Engine";
 import Lexer from "./Lexer";
 import Alignment from "./structures/Alignment";
-import Prediction from "./structures/Prediction";
+import Suggestion from "./structures/Suggestion";
 import Token from "./structures/Token";
 
 /**
  * Word Alignment Prediction
  */
-export class MAP {
+export default class MAP {
   private engine: Engine;
 
   constructor() {
@@ -18,19 +18,38 @@ export class MAP {
     this.engine.registerAlgorithm(new AlignmentPosition());
   }
 
-  public appendCorpus(source: Token[][], target: Token[][]) {
-    this.engine.addCorpus(source, target);
+  /**
+   * Add corpus to the MAP.
+   * These may be single sentences or multiple sentence delimited by new lines.
+   * @param {string} source
+   * @param {string} target
+   */
+  public appendCorpus(source: string, target: string) {
+    const sourceSentences = source.split("\n");
+    const targetSentences = target.split("\n");
+    const sourceTokens: Token[][] = [];
+    const targetTokens: Token[][] = [];
+
+    for (const s of sourceSentences) {
+      sourceTokens.push(Lexer.tokenize(s));
+    }
+    for (const s of targetSentences) {
+      targetTokens.push(Lexer.tokenize(s));
+    }
+
+    this.engine.addCorpus(sourceTokens, targetTokens);
   }
 
   public appendSavedAlignments(alignments: Alignment[]) {
     this.engine.addSavedAlignments(alignments);
   }
 
-  public predict(sourceSentence: string, targetSentence: string): Prediction[] {
+  public predict(sourceSentence: string, targetSentence: string): Suggestion[] {
     const sourceTokens = Lexer.tokenize(sourceSentence);
     const targetTokens = Lexer.tokenize(targetSentence);
 
-    const predictions = this.engine.run(sourceTokens, targetTokens);
-    return this.engine.score(predictions);
+    let predictions = this.engine.run(sourceTokens, targetTokens);
+    predictions = this.engine.score(predictions);
+    return Engine.suggest(predictions);
   }
 }
