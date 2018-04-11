@@ -1,9 +1,7 @@
-// @ts-ignore
-import stringTokenizer from "string-punctuation-tokenizer";
 import Algorithm from "../Algorithm";
 import CorpusIndex from "../index/CorpusIndex";
-import PermutationIndex from "../index/PermutationIndex";
 import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
+import Lexer from "../Lexer";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
@@ -16,8 +14,8 @@ import Token from "../structures/Token";
  * @return {Token[][][]}
  */
 export function makeCorpus(source: string, target: string): Token[][][] {
-  const sourceCorpusTokens = tokenizeMockSentence(source);
-  const targetCorpusTokens = tokenizeMockSentence(target);
+  const sourceCorpusTokens = Lexer.tokenize(source);
+  const targetCorpusTokens = Lexer.tokenize(target);
   return [
     [sourceCorpusTokens],
     [targetCorpusTokens]
@@ -65,8 +63,8 @@ export function alignMockSentence(sentence: string): Alignment[] {
  * @return {Alignment}
  */
 export function makeMockAlignment(source: string, target: string): Alignment {
-  const sourceTokens = tokenizeMockSentence(source);
-  const targetTokens = tokenizeMockSentence(target);
+  const sourceTokens = Lexer.tokenize(source);
+  const targetTokens = Lexer.tokenize(target);
   return new Alignment(new Ngram(sourceTokens), new Ngram(targetTokens));
 }
 
@@ -117,12 +115,7 @@ export function reverseSentenceWords(sentence: string): string {
  * @return {Array<Token>} an array of tokens
  */
 export function tokenizeMockSentence(sentence: string): Token[] {
-  const words = stringTokenizer.tokenize(sentence);
-  const tokens: Token[] = [];
-  for (const word of words) {
-    tokens.push(new Token(word));
-  }
-  return tokens;
+  return Lexer.tokenize(sentence);
 }
 
 /**

@@ -196,8 +196,17 @@ export default class Engine {
       suggestions.push(suggestion);
     }
 
-    // TODO: sort suggestions
-    return suggestions;
+    return suggestions.sort((a, b) => {
+      const aConfidence = a.compoundConfidence();
+      const bConfidence = b.compoundConfidence();
+      if (aConfidence < bConfidence) {
+        return -1;
+      }
+      if (aConfidence > bConfidence) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   private registeredAlgorithms: Algorithm[] = [];
