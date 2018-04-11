@@ -19,12 +19,22 @@ export default class MAP {
   }
 
   /**
+   * Adds an array of corpus
+   * @param {string[][]} corpus
+   */
+  public appendCorpus(corpus: string[][]) {
+    for (const pair of corpus) {
+      this.appendCorpusString(pair[0], pair[1]);
+    }
+  }
+
+  /**
    * Add corpus to the MAP.
    * These may be single sentences or multiple sentence delimited by new lines.
    * @param {string} source
    * @param {string} target
    */
-  public appendCorpus(source: string, target: string) {
+  public appendCorpusString(source: string, target: string) {
     const sourceSentences = source.split("\n");
     const targetSentences = target.split("\n");
     const sourceTokens: Token[][] = [];

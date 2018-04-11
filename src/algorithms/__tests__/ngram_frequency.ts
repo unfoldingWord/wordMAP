@@ -5,7 +5,7 @@ import {
   makeUnalignedSentence,
   reverseSentenceWords,
   tokenizeMockSentence
-} from "../../__tests__/testUtils";
+} from "../../util/testUtils";
 import Engine from "../../Engine";
 import CorpusIndex from "../../index/CorpusIndex";
 import NumberObject from "../../index/NumberObject";

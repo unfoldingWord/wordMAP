@@ -14,7 +14,7 @@ import {
   MockAlgorithm,
   reverseSentenceWords,
   tokenizeMockSentence
-} from "./testUtils";
+} from "../util/testUtils";
 
 beforeAll(() => {
   jest.clearAllMocks();

@@ -1,4 +1,4 @@
-import {makeMockAlignment} from "../../__tests__/testUtils";
+import {makeMockAlignment} from "../../util/testUtils";
 import Prediction from "../Prediction";
 
 describe("prediction", () => {
