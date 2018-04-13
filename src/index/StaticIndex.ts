@@ -7,10 +7,12 @@ import NgramIndex from "./NgramIndex";
  */
 export default class StaticIndex {
   private srcNgramFreqIndex: NgramIndex;
+  // TODO: rename these. this is for the entire index not the sentence.
   private srcSentenceTokenLength: number;
   private srcSentenceCharLength: number;
 
   private tgtNgramFreqIndex: NgramIndex;
+  // TODO: rename these. this is for the entire index not the sentence.
   private tgtSentenceTokenLength: number;
   private tgtSentenceCharLength: number;
 
