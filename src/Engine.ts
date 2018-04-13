@@ -136,16 +136,32 @@ export default class Engine {
     const finalPredictions: Prediction[] = [];
 
     for (const p of predictions) {
-      // TODO: what scores do we weight? We have primary + secondary scores and corpus + saved alignment.
-      const weightedKeys = [
-        "alignmentPosition",
-        "alignmentFrequencyCorpus"
+      // confidence based on corpus
+      const corpusWeightedKeys = [
+        "frequencyRatioCorpusSource",
+        "frequencyRatioCorpusTarget",
+      ];
+      const corpusConfidence = Engine.calculateWeightedConfidence(
+        p,
+        corpusWeightedKeys,
+        {}
+      );
+
+      // confidence based on saved alignments
+      const savedAlignmentsWeightedKeys = [
+        "frequencyRatioSavedAlignmentsSource",
+        "frequencyRatioSavedAlignmentsTarget"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
-        weightedKeys,
+        savedAlignmentsWeightedKeys,
         {}
       );
+
+      // prefer to use the saved alignment confidence
+      if (!confidence) {
+        confidence = corpusConfidence;
+      }
 
       // boost confidence for saved alignments
       const isSavedAlignment = saIndex.alignmentFrequency.read(

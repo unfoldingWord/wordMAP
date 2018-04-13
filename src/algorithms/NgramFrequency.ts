@@ -135,6 +135,10 @@ export default class NgramFrequency implements Algorithm {
       const alignmentFrequencySavedAlignments = p.getScore(
         "alignmentFrequencySavedAlignments");
 
+      // TODO: instead of generating filters of alignmentFrequencyCorpus etc
+      // we want to generate filtered ngramFrequencyCorpusSource and ngramFrequencyCorpusTarget
+      // see notes in ngram_frequency line 160.
+
       // alignment frequency in the filtered corpus and saved alignments
       const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.key];
       const alignmentFrequencySavedAlignmentsFiltered = alignmentFrequencySavedAlignmentsSums[p.key];

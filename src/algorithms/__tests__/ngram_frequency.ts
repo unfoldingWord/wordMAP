@@ -60,7 +60,7 @@ describe("calculate frequency", () => {
 
     const engine = new NgramFrequency();
     const result = engine.execute(
-      predictions,
+      predictions, // the->eht, the->null
       new CorpusIndex(),
       saIndex
     );
@@ -81,6 +81,7 @@ describe("calculate frequency", () => {
       "frequencyRatioCorpusSourceFiltered": 0,
       "frequencyRatioSavedAlignmentsFiltered": 1
     });
+
     // aligned to nothing
     expect(result[1].getScores()).toEqual({
       "alignmentFrequencyCorpus": 0,
@@ -127,7 +128,7 @@ describe("calculate frequency", () => {
       "frequencyRatioSavedAlignmentsTarget": 0,
       "alignmentFrequencyCorpusFiltered": 1,
       "alignmentFrequencySavedAlignmentsFiltered": 0,
-      "frequencyRatioCorpusSourceFiltered": 1,
+      "frequencyRatioCorpusFiltered": 1,
       "frequencyRatioSavedAlignmentsFiltered": 0
     });
 
@@ -143,17 +144,24 @@ describe("calculate frequency", () => {
     expect(secondPredictions[0].getScores()).toEqual({
       "alignmentFrequencyCorpus": 2,
       "alignmentFrequencySavedAlignments": 0,
+
+      // from permutations in the entire corpus
       "ngramFrequencyCorpusSource": 17,
       "ngramFrequencyCorpusTarget": 15,
+
       "ngramFrequencySavedAlignmentsSource": 0,
       "ngramFrequencySavedAlignmentsTarget": 0,
       "frequencyRatioCorpusSource": 0.11764705882352941,
       "frequencyRatioCorpusTarget": 0.13333333333333333,
       "frequencyRatioSavedAlignmentsSource": 0,
       "frequencyRatioSavedAlignmentsTarget": 0,
-      "alignmentFrequencyCorpusFiltered": 2,
+
+      // we want permutations in the filtered corpus.
+      // A filtered corpus is the lines of corpus where the source n-gram and target n-gram both occur.
+      "alignmentFrequencyCorpusFiltered": 2, // TODO: this is not right. we'll fix this later. This should be some number between 2 and 15 or 17. we might need a source and target for this.
+
       "alignmentFrequencySavedAlignmentsFiltered": 0,
-      "frequencyRatioCorpusSourceFiltered": 1,
+      "frequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
       "frequencyRatioSavedAlignmentsFiltered": 0
     });
   });
