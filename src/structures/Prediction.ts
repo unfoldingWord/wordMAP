@@ -98,7 +98,7 @@ export default class Prediction {
 
     for (const t of tokens) {
       for (const pt of predictionTokens) {
-        if (t.toString() === pt.toString()) {
+        if (t.toString() === pt.toString() && t.position === pt.position) {
           return true;
         }
       }
