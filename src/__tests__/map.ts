@@ -81,7 +81,7 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 10);
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
 
     const stuff = [
       suggestions[0].toString(),
@@ -107,4 +107,6 @@ describe("MAP", () => {
 // 5. performance
 // 6. tc does not have an easy way to give us the corpus.
 // 7. improve filtered corpus metrics.
-//
+// to write tests we can get real alignments and develop metrics for how closely the alignment matches the real alignment.
+// this will allow us to set a bar for the minimum alignment ratio.
+// we have the book of titus already aligned so we can use this for the comparision.
