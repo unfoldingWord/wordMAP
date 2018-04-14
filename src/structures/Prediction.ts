@@ -93,12 +93,24 @@ export default class Prediction {
    * @return {boolean}
    */
   public intersects(prediction: Prediction): boolean {
-    const predictionTokens = prediction.alignment.source.getTokens();
-    const tokens = this.alignment.source.getTokens();
+    const predictionSourceTokens = prediction.alignment.source.getTokens();
+    const predictionTargetTokens = prediction.alignment.target.getTokens();
+    const sourceTokens = this.alignment.source.getTokens();
+    const targetTokens = this.alignment.target.getTokens();
 
-    for (const t of tokens) {
-      for (const pt of predictionTokens) {
-        if (t.toString() === pt.toString() && t.position === pt.position) {
+    // check source tokens
+    for (const t of sourceTokens) {
+      for (const pt of predictionSourceTokens) {
+        if (t.equals(pt)) {
+          return true;
+        }
+      }
+    }
+
+    // check target tokens
+    for (const t of targetTokens) {
+      for (const pt of predictionTargetTokens) {
+        if (t.equals(pt)) {
           return true;
         }
       }

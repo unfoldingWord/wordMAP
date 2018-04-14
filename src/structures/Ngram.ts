@@ -41,6 +41,18 @@ export default class Ngram {
   }
 
   /**
+   * Returns the length of the sentence (in units of {@link Token}) in which this n-gram occurs.
+   * @return {number}
+   */
+  get sentenceTokenLength() {
+    if (this.tokens.length) {
+      return this.tokens[0].sentenceTokenLength;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
    * Returns the position (in units of character) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */

@@ -1,6 +1,7 @@
 import * as fs from "fs-extra";
-import CorpusFaker from "../../dist/util/CorpusFaker";
+import * as path from "path";
 import MAP from "../index";
+import CorpusFaker from "../util/CorpusFaker";
 
 describe("MAP", () => {
   it("has no corpus", () => {
@@ -46,19 +47,64 @@ describe("MAP", () => {
   });
 
   it("reads in some real corpus", () => {
-    const sourceCorpus = fs.readFileSync("fixtures/corpus/greek.txt");
-    const targetCorpus = fs.readFileSync("fixtures/corpus/english.txt");
-
     const map = new MAP();
-    map.appendCorpusString(sourceCorpus.toString("utf-8"), targetCorpus.toString("utf-8"));
+
+    // append corpus
+    const sourceCorpus = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corpus/greek.txt"
+    ));
+    const targetCorpus = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corpus/english.txt"
+    ));
+    map.appendCorpusString(
+      sourceCorpus.toString("utf-8"),
+      targetCorpus.toString("utf-8")
+    );
+
+    // append saved alignments
+    const sourceSavedAlignments = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corrections/greek.txt"
+    ));
+    const targetSavedAlignments = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corrections/english.txt"
+    ));
+    // map.appendSavedAlignmentsString(
+    //   sourceSavedAlignments.toString("utf-8"),
+    //   targetSavedAlignments.toString("utf-8")
+    // );
 
     const unalignedPair = [
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1]);
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 10);
 
-    const s = suggestions[0].toString();
+    const stuff = [
+      suggestions[0].toString(),
+      suggestions[1].toString(),
+      suggestions[2].toString(),
+      suggestions[3].toString(),
+      suggestions[4].toString(),
+      suggestions[5].toString(),
+      suggestions[6].toString(),
+      suggestions[7].toString(),
+      suggestions[8].toString(),
+      suggestions[9].toString()
+    ];
     expect(suggestions[0]).toHaveLength(1);
   });
 });
+
+//
+// 1. is phrase, commonality
+// 2. lowercase the data keys
+// 3. focus on integration. I/O.
+// 4. lemma
+// 5. performance
+// 6. tc does not have an easy way to give us the corpus.
+// 7. improve filtered corpus metrics.
+//

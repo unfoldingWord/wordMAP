@@ -134,28 +134,33 @@ export default class Engine {
    */
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
+    const weights: NumberObject = {
+      "alignmentPosition": 0.5
+    };
 
     for (const p of predictions) {
       // confidence based on corpus
       const corpusWeightedKeys = [
         "frequencyRatioCorpusSource",
         "frequencyRatioCorpusTarget",
+        "alignmentPosition"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
         corpusWeightedKeys,
-        {}
+        weights
       );
 
       // confidence based on saved alignments
       const savedAlignmentsWeightedKeys = [
         "frequencyRatioSavedAlignmentsSource",
-        "frequencyRatioSavedAlignmentsTarget"
+        "frequencyRatioSavedAlignmentsTarget",
+        "alignmentPosition"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
         savedAlignmentsWeightedKeys,
-        {}
+        weights
       );
 
       // prefer to use the saved alignment confidence
@@ -216,10 +221,10 @@ export default class Engine {
       const aConfidence = a.compoundConfidence();
       const bConfidence = b.compoundConfidence();
       if (aConfidence < bConfidence) {
-        return -1;
+        return 1;
       }
       if (aConfidence > bConfidence) {
-        return 1;
+        return -1;
       }
       return 0;
     });
@@ -256,10 +261,10 @@ export default class Engine {
       const aConfidence = a.getScore("confidence");
       const bConfidence = b.getScore("confidence");
       if (aConfidence < bConfidence) {
-        return -1;
+        return 1;
       }
       if (aConfidence > bConfidence) {
-        return 1;
+        return -1;
       }
       return 0;
     });

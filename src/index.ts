@@ -3,6 +3,7 @@ import NgramFrequency from "./algorithms/NgramFrequency";
 import Engine from "./Engine";
 import Lexer from "./Lexer";
 import Alignment from "./structures/Alignment";
+import Ngram from "./structures/Ngram";
 import Suggestion from "./structures/Suggestion";
 import Token from "./structures/Token";
 
@@ -54,12 +55,43 @@ export default class MAP {
     this.engine.addSavedAlignments(alignments);
   }
 
-  public predict(sourceSentence: string, targetSentence: string): Suggestion[] {
+  /**
+   * Appends some saved alignments.
+   *
+   * @param {string} source - a string of source phrases separated by new lines
+   * @param {string} target - a string of target phrases separated by new lines
+   */
+  public appendSavedAlignmentsString(source: string, target: string) {
+    const alignments: Alignment[] = [];
+    const sourceLines = source.split("\n");
+    const targetLines = target.split("\n");
+    if (sourceLines.length !== targetLines.length) {
+      throw new Error("source and target lines must be the same length");
+    }
+    for (let i = 0; i < sourceLines.length; i++) {
+      const sourceTokens = Lexer.tokenize(sourceLines[i]);
+      const targetTokens = Lexer.tokenize(targetLines[i]);
+      alignments.push(new Alignment(
+        new Ngram(sourceTokens),
+        new Ngram(targetTokens)
+      ));
+    }
+    this.appendSavedAlignments(alignments);
+  }
+
+  /**
+   * Predicts the word alignments between the sentences
+   * @param {string} sourceSentence
+   * @param {string} targetSentence
+   * @param {number} maxSuggestions
+   * @return {Suggestion[]}
+   */
+  public predict(sourceSentence: string, targetSentence: string, maxSuggestions: number = 1): Suggestion[] {
     const sourceTokens = Lexer.tokenize(sourceSentence);
     const targetTokens = Lexer.tokenize(targetSentence);
 
     let predictions = this.engine.run(sourceTokens, targetTokens);
     predictions = this.engine.score(predictions);
-    return Engine.suggest(predictions);
+    return Engine.suggest(predictions, maxSuggestions);
   }
 }

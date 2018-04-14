@@ -44,7 +44,7 @@ export default class Suggestion {
     for (const p of this.predictions) {
       confidence += p.getScore("confidence");
     }
-    return confidence;
+    return confidence / this.predictions.length;
   }
 
   /**
@@ -53,8 +53,9 @@ export default class Suggestion {
   public toString() {
     const result: string[] = [];
     for (const p of this.predictions) {
-      result.push(`${p.alignment.key}|${p.getScore("confidence")}`);
+      const confidence = p.getScore("confidence").toString().substring(0, 4);
+      result.push(`[${confidence}|${p.alignment.key}]`);
     }
-    return `${this.compoundConfidence()} ${result.join(",")}`;
+    return `${this.compoundConfidence().toString().substring(0, 4)} ${result.join(" ")}`;
   }
 }

@@ -17,7 +17,7 @@ export default class Lexer {
     const tokens: Token[] = [];
     let charPos = 0;
     for (const word of words) {
-      tokens.push(new Token(word, tokens.length, charPos));
+      tokens.push(new Token(word, tokens.length, charPos, words.length, sentence.length));
       charPos += word.length;
     }
     return tokens;
