@@ -88,12 +88,7 @@ describe("MAP", () => {
       suggestions[1].toString(),
       suggestions[2].toString(),
       suggestions[3].toString(),
-      suggestions[4].toString(),
-      suggestions[5].toString(),
-      suggestions[6].toString(),
-      suggestions[7].toString(),
-      suggestions[8].toString(),
-      suggestions[9].toString()
+      suggestions[4].toString()
     ];
     expect(suggestions[0]).toHaveLength(1);
   });

@@ -56,6 +56,6 @@ export default class Suggestion {
       const confidence = p.getScore("confidence").toString().substring(0, 4);
       result.push(`[${confidence}|${p.alignment.key}]`);
     }
-    return `${this.compoundConfidence().toString().substring(0, 4)} ${result.join(" ")}`;
+    return `${this.compoundConfidence().toString().substring(0, 8)} ${result.join(" ")}`;
   }
 }
