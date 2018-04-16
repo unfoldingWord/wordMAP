@@ -217,9 +217,37 @@ export default class Engine {
       suggestions.push(suggestion);
     }
 
+    return Engine.sortSuggestions(suggestions);
+  }
+
+  /**
+   * Sorts an array of suggestions by compound confidence
+   * @param {Suggestion[]} suggestions - the suggestions to sort
+   * @return {Suggestion[]}
+   */
+  public static sortSuggestions(suggestions: Suggestion[]): Suggestion[] {
     return suggestions.sort((a, b) => {
       const aConfidence = a.compoundConfidence();
       const bConfidence = b.compoundConfidence();
+      if (aConfidence < bConfidence) {
+        return 1;
+      }
+      if (aConfidence > bConfidence) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
+  /**
+   * Sorts an array of predictions by confidence
+   * @param {Prediction[]} predictions - the predictions to sort
+   * @return {Prediction[]}
+   */
+  public static sortPredictions(predictions: Prediction[]): Prediction[] {
+    return predictions.sort((a, b) => {
+      const aConfidence = a.getScore("confidence");
+      const bConfidence = b.getScore("confidence");
       if (aConfidence < bConfidence) {
         return 1;
       }
@@ -257,17 +285,7 @@ export default class Engine {
       predictions,
       this.savedAlignmentsIndex
     );
-    return results.sort((a, b) => {
-      const aConfidence = a.getScore("confidence");
-      const bConfidence = b.getScore("confidence");
-      if (aConfidence < bConfidence) {
-        return 1;
-      }
-      if (aConfidence > bConfidence) {
-        return -1;
-      }
-      return 0;
-    });
+    return Engine.sortPredictions(results);
   }
 
   /**

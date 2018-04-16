@@ -4,6 +4,26 @@ import Prediction from "./Prediction";
  * A translation suggestion
  */
 export default class Suggestion {
+
+  /**
+   * Sorts predictions by token position
+   * @param {Prediction[]} predictions - the predictions to sort
+   * @return {Prediction[]}
+   */
+  public static sortPredictions(predictions: Prediction[]): Prediction[] {
+    return predictions.sort((a, b) => {
+      const aPos = a.alignment.source.tokenPosition;
+      const bPos = b.alignment.source.tokenPosition;
+      if (aPos < bPos) {
+        return -1;
+      }
+      if (aPos > bPos) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
   private predictions: Prediction[];
 
   constructor() {
@@ -16,19 +36,7 @@ export default class Suggestion {
    */
   public addPrediction(prediction: Prediction) {
     this.predictions.push(prediction);
-
-    // sort by token position
-    this.predictions = this.predictions.sort((a, b) => {
-      const aPos = a.alignment.source.tokenPosition;
-      const bPos = b.alignment.source.tokenPosition;
-      if (aPos < bPos) {
-        return -1;
-      }
-      if (aPos > bPos) {
-        return 1;
-      }
-      return 0;
-    });
+    this.predictions = Suggestion.sortPredictions(this.predictions);
   }
 
   public getPredictions() {
@@ -56,6 +64,9 @@ export default class Suggestion {
       const confidence = p.getScore("confidence").toString().substring(0, 4);
       result.push(`[${confidence}|${p.alignment.key}]`);
     }
-    return `${this.compoundConfidence().toString().substring(0, 8)} ${result.join(" ")}`;
+    return `${this.compoundConfidence().toString().substring(
+      0,
+      8
+    )} ${result.join(" ")}`;
   }
 }
