@@ -14,10 +14,11 @@ export default class Lexer {
    */
   public static tokenize(sentence: string): Token[] {
     const words = stringTokenizer.tokenize(sentence);
+    const sentenceLength = sentence.length;
     const tokens: Token[] = [];
     let charPos = 0;
     for (const word of words) {
-      tokens.push(new Token(word, tokens.length, charPos, words.length, sentence.length));
+      tokens.push(new Token(word, tokens.length, charPos, words.length, sentenceLength));
       charPos += word.length;
     }
     return tokens;

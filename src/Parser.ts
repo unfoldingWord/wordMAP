@@ -15,9 +15,10 @@ export default class Parser {
    */
   public static sizedNgrams(sentence: Token[], ngramLength: number): Ngram[] {
     const ngrams: Ngram[] = [];
-    for (let pos = 0; pos < sentence.length; pos++) {
+    const sentenceLength = sentence.length;
+    for (let pos = 0; pos < sentenceLength; pos++) {
       const end = pos + ngramLength;
-      if (end > sentence.length) {
+      if (end > sentenceLength) {
         break;
       }
       const ngram = new Ngram(sentence.slice(pos, end));

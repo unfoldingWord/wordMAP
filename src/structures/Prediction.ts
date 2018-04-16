@@ -59,10 +59,9 @@ export default class Prediction {
    * @param {NumberObject} scores - an object of scores
    */
   public setScores(scores: NumberObject) {
-    for (const key in scores) {
-      if (scores.hasOwnProperty(key)) {
-        this.setScore(key, scores[key]);
-      }
+    const keys = Object.keys(scores);
+    for (const key of keys) {
+      this.setScore(key, scores[key]);
     }
   }
 

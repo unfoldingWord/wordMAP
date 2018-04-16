@@ -37,10 +37,11 @@ export default class CorpusIndex {
    * @param {Token[][]} target
    */
   public append(source: Token[][], target: Token[][]) {
-    if (source.length !== target.length) {
+    const sourceLength = source.length;
+    if (sourceLength !== target.length) {
       throw Error("source and target corpus must be the same length");
     } else {
-      for (let i = 0; i < source.length; i++) {
+      for (let i = 0; i < sourceLength; i++) {
 
         const sourceNgrams = Parser.ngrams(source[i]);
         const targetNgrams = Parser.ngrams(target[i]);

@@ -65,10 +65,11 @@ export default class MAP {
     const alignments: Alignment[] = [];
     const sourceLines = source.split("\n");
     const targetLines = target.split("\n");
-    if (sourceLines.length !== targetLines.length) {
+    const sourceLinesLength = sourceLines.length;
+    if (sourceLinesLength !== targetLines.length) {
       throw new Error("source and target lines must be the same length");
     }
-    for (let i = 0; i < sourceLines.length; i++) {
+    for (let i = 0; i < sourceLinesLength; i++) {
       const sourceTokens = Lexer.tokenize(sourceLines[i]);
       const targetTokens = Lexer.tokenize(targetLines[i]);
       alignments.push(new Alignment(
