@@ -75,11 +75,10 @@ export default class NgramFrequency implements Algorithm {
         p.alignment.target);
 
       // n-gram static frequency
-      // TODO: we'll need this later
-      // const ngramStaticFrequencyCorpusSource: number = cIndex.static.sourceNgramFrequency.read(
-      //   p.alignment.source);
-      // const ngramStaticFrequencyCorpusTarget: number = cIndex.static.targetNgramFrequency.read(
-      //   p.alignment.target);
+      const ngramStaticFrequencyCorpusSource: number = cIndex.static.sourceNgramFrequency.read(
+        p.alignment.source);
+      const ngramStaticFrequencyCorpusTarget: number = cIndex.static.targetNgramFrequency.read(
+        p.alignment.target);
 
       // permutation frequency ratio
       const frequencyRatioCorpusSource: number = NgramFrequency.divideSafe(
@@ -113,7 +112,11 @@ export default class NgramFrequency implements Algorithm {
         frequencyRatioCorpusSource,
         frequencyRatioCorpusTarget,
         frequencyRatioSavedAlignmentsSource,
-        frequencyRatioSavedAlignmentsTarget
+        frequencyRatioSavedAlignmentsTarget,
+
+        // static scores
+        ngramStaticFrequencyCorpusSource,
+        ngramStaticFrequencyCorpusTarget
       });
 
       // sum alignment frequencies

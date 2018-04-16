@@ -7,6 +7,7 @@ import Prediction from "../structures/Prediction";
  * Determines the likely hood that an n-gram is a phrase.
  */
 export default class PhrasePlausibility implements Algorithm {
+
   /**
    * Calculates the n-gram commonality
    * @param {Prediction} prediction
@@ -14,9 +15,9 @@ export default class PhrasePlausibility implements Algorithm {
    */
   private static commonality(prediction: Prediction): number {
     const ngramFrequencyCorpusSource = prediction.getScore(
-      "ngramFrequencyCorpusSource");
+      "ngramStaticFrequencyCorpusSource");
     const ngramFrequencyCorpusTarget = prediction.getScore(
-      "ngramFrequencyCorpusTarget");
+      "ngramStaticFrequencyCorpusTarget");
 
     const x = 1 - 1 / ngramFrequencyCorpusSource;
     const y = 1 - 1 / ngramFrequencyCorpusTarget;
@@ -25,7 +26,9 @@ export default class PhrasePlausibility implements Algorithm {
 
   public name = "phrase plausibility";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
+  public execute(predictions: Prediction[]): Prediction[] {
+    // TODO: is is-phrase and commonality the same algorithm or are they separate?
+
     for (const p of predictions) {
       const commonality = PhrasePlausibility.commonality(p);
       p.setScore("phrasePlausibility", commonality);

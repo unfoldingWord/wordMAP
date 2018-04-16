@@ -144,7 +144,8 @@ export default class Engine {
       const corpusWeightedKeys = [
         "frequencyRatioCorpusSource",
         "frequencyRatioCorpusTarget",
-        "alignmentPosition"
+        "alignmentPosition",
+        "phrasePlausibility"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
@@ -156,7 +157,8 @@ export default class Engine {
       const savedAlignmentsWeightedKeys = [
         "frequencyRatioSavedAlignmentsSource",
         "frequencyRatioSavedAlignmentsTarget",
-        "alignmentPosition"
+        "alignmentPosition",
+        "phrasePlausibility"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
