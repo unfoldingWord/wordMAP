@@ -53,6 +53,19 @@ export default class Ngram {
   }
 
   /**
+   * Returns the length of the sentence (in units of character) in which this n-gram occurs.
+   * This includes whitespace in the sentence
+   * @return {number}
+   */
+  get sentenceCharacterLength() {
+    if (this.tokens.length) {
+      return this.tokens[0].sentenceCharacterLength;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
    * Returns the position (in units of character) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */

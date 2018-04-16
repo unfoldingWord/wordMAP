@@ -1,9 +1,9 @@
+import Lexer from "../../Lexer";
 import Ngram from "../../structures/Ngram";
-import Token from "../../structures/Token";
 import NgramIndex from "../NgramIndex";
 
 describe("NgramIndex", () => {
-  const ngram = new Ngram([new Token("hello")]);
+  const ngram = new Ngram(Lexer.tokenize("hello"));
 
   it("writes to the index", () => {
     const index = new NgramIndex();

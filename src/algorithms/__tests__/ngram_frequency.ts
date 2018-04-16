@@ -78,7 +78,7 @@ describe("calculate frequency", () => {
       "frequencyRatioSavedAlignmentsTarget": 1,
       "alignmentFrequencyCorpusFiltered": 0,
       "alignmentFrequencySavedAlignmentsFiltered": 2,
-      "frequencyRatioCorpusSourceFiltered": 0,
+      "frequencyRatioCorpusFiltered": 0,
       "frequencyRatioSavedAlignmentsFiltered": 1
     });
 
@@ -96,7 +96,7 @@ describe("calculate frequency", () => {
       "frequencyRatioSavedAlignmentsTarget": 0,
       "alignmentFrequencyCorpusFiltered": 0,
       "alignmentFrequencySavedAlignmentsFiltered": 0,
-      "frequencyRatioCorpusSourceFiltered": 0,
+      "frequencyRatioCorpusFiltered": 0,
       "frequencyRatioSavedAlignmentsFiltered": 0
     });
   });
@@ -200,7 +200,7 @@ describe("calculate frequency", () => {
         "frequencyRatioSavedAlignmentsTarget": 1,
         "alignmentFrequencyCorpusFiltered": 1,
         "alignmentFrequencySavedAlignmentsFiltered": 1,
-        "frequencyRatioCorpusSourceFiltered": 1,
+        "frequencyRatioCorpusFiltered": 1,
         "frequencyRatioSavedAlignmentsFiltered": 1
       });
     }

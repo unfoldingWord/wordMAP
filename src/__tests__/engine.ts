@@ -85,39 +85,136 @@ describe("process sentence n-grams", () => {
       {
         "tokens": [
           {
+            "text": "In",
+            "tokenPos": 0,
             "charPos": 0,
-            "pos": 0,
-            "text": "In"
-          }]
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
-      {"tokens": [{"charPos": 2, "pos": 1, "text": "the"}]},
-      {"tokens": [{"charPos": 5, "pos": 2, "text": "beginning"}]},
-      {"tokens": [{"charPos": 14, "pos": 3, "text": "God"}]},
-      {"tokens": [{"charPos": 17, "pos": 4, "text": "created"}]}]);
+      {
+        "tokens": [
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "created",
+            "tokenPos": 4,
+            "charPos": 17,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      }
+    ]);
   });
   it("reads bi-grams", () => {
     const bigrams = Engine.readSizedNgrams(sentence, 2);
     expect(bigrams).toEqual([
       {
         "tokens": [
-          {"charPos": 0, "pos": 0, "text": "In"},
-          {"charPos": 2, "pos": 1, "text": "the"}]
+          {
+            "text": "In",
+            "tokenPos": 0,
+            "charPos": 0,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 2, "pos": 1, "text": "the"},
-          {"charPos": 5, "pos": 2, "text": "beginning"}]
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 5, "pos": 2, "text": "beginning"},
-          {"charPos": 14, "pos": 3, "text": "God"}]
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 14, "pos": 3, "text": "God"},
-          {"charPos": 17, "pos": 4, "text": "created"}]
-      }]);
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "created",
+            "tokenPos": 4,
+            "charPos": 17,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      }
+    ]);
   });
   it("reads tri-grams", () => {
     const trigrams = Engine.readSizedNgrams(sentence, 3);
@@ -125,25 +222,79 @@ describe("process sentence n-grams", () => {
       {
         "tokens": [
           {
+            "text": "In",
+            "tokenPos": 0,
             "charPos": 0,
-            "pos": 0,
-            "text": "In"
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
           },
-          {"charPos": 2, "pos": 1, "text": "the"},
-          {"charPos": 5, "pos": 2, "text": "beginning"}]
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 2, "pos": 1, "text": "the"},
-          {"charPos": 5, "pos": 2, "text": "beginning"},
-          {"charPos": 14, "pos": 3, "text": "God"}]
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 5, "pos": 2, "text": "beginning"},
-          {"charPos": 14, "pos": 3, "text": "God"},
-          {"charPos": 17, "pos": 4, "text": "created"}]
-      }]);
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "created",
+            "tokenPos": 4,
+            "charPos": 17,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      }
+    ]);
   });
   it("generates all n-grams", () => {
     const ngrams = Engine.generateSentenceNgrams(sentence);
@@ -151,53 +302,206 @@ describe("process sentence n-grams", () => {
       {
         "tokens": [
           {
+            "text": "In",
+            "tokenPos": 0,
             "charPos": 0,
-            "pos": 0,
-            "text": "In"
-          }]
-      },
-      {"tokens": [{"charPos": 2, "pos": 1, "text": "the"}]},
-      {"tokens": [{"charPos": 5, "pos": 2, "text": "beginning"}]},
-      {"tokens": [{"charPos": 14, "pos": 3, "text": "God"}]},
-      {"tokens": [{"charPos": 17, "pos": 4, "text": "created"}]},
-      {
-        "tokens": [
-          {"charPos": 0, "pos": 0, "text": "In"},
-          {"charPos": 2, "pos": 1, "text": "the"}]
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 2, "pos": 1, "text": "the"},
-          {"charPos": 5, "pos": 2, "text": "beginning"}]
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 5, "pos": 2, "text": "beginning"},
-          {"charPos": 14, "pos": 3, "text": "God"}]
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 14, "pos": 3, "text": "God"},
-          {"charPos": 17, "pos": 4, "text": "created"}]
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 0, "pos": 0, "text": "In"},
-          {"charPos": 2, "pos": 1, "text": "the"},
-          {"charPos": 5, "pos": 2, "text": "beginning"}]
+          {
+            "text": "created",
+            "tokenPos": 4,
+            "charPos": 17,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 2, "pos": 1, "text": "the"},
-          {"charPos": 5, "pos": 2, "text": "beginning"},
-          {"charPos": 14, "pos": 3, "text": "God"}]
+          {
+            "text": "In",
+            "tokenPos": 0,
+            "charPos": 0,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
       },
       {
         "tokens": [
-          {"charPos": 5, "pos": 2, "text": "beginning"},
-          {"charPos": 14, "pos": 3, "text": "God"},
-          {"charPos": 17, "pos": 4, "text": "created"}]
-      }]);
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "created",
+            "tokenPos": 4,
+            "charPos": 17,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "In",
+            "tokenPos": 0,
+            "charPos": 0,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "the",
+            "tokenPos": 1,
+            "charPos": 2,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      },
+      {
+        "tokens": [
+          {
+            "text": "beginning",
+            "tokenPos": 2,
+            "charPos": 5,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "God",
+            "tokenPos": 3,
+            "charPos": 14,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          },
+          {
+            "text": "created",
+            "tokenPos": 4,
+            "charPos": 17,
+            "sentenceCharLen": 28,
+            "sentenceTokenLen": 5
+          }
+        ]
+      }
+    ]);
   });
 
   it("throws out of range error", () => {
@@ -228,170 +532,355 @@ describe("alignment permutations", () => {
     expect(predictions)
       .toEqual([
         {
+          "scores": {},
           "predictedAlignment": {
             "sourceNgram": {
               "tokens": [
                 {
+                  "text": "In",
+                  "tokenPos": 0,
                   "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }]
-            },
-            "targetNgram": {"tokens": [{"charPos": 0, "pos": 0, "text": "nI"}]}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }]
-            },
-            "targetNgram": {"tokens": [{"charPos": 0, "pos": 0, "text": "eht"}]}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }]
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
             },
             "targetNgram": {
               "tokens": [
-                {"charPos": 0, "pos": 0, "text": "nI"},
-                {"charPos": 2, "pos": 1, "text": "eht"}]
+                {
+                  "text": "nI",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
             }
-          }, "scores": {}
+          }
         },
         {
+          "scores": {},
           "predictedAlignment": {
             "sourceNgram": {
               "tokens": [
                 {
+                  "text": "In",
+                  "tokenPos": 0,
                   "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }]
-            }, "targetNgram": {"tokens": []}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "the"
-                }]
-            },
-            "targetNgram": {"tokens": [{"charPos": 0, "pos": 0, "text": "nI"}]}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "the"
-                }]
-            },
-            "targetNgram": {"tokens": [{"charPos": 0, "pos": 0, "text": "eht"}]}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "the"
-                }]
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
             },
             "targetNgram": {
               "tokens": [
-                {"charPos": 0, "pos": 0, "text": "nI"},
-                {"charPos": 2, "pos": 1, "text": "eht"}]
+                {
+                  "text": "eht",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
             }
-          }, "scores": {}
+          }
         },
         {
+          "scores": {},
           "predictedAlignment": {
             "sourceNgram": {
               "tokens": [
                 {
+                  "text": "In",
+                  "tokenPos": 0,
                   "charPos": 0,
-                  "pos": 0,
-                  "text": "the"
-                }]
-            }, "targetNgram": {"tokens": []}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }, {"charPos": 2, "pos": 1, "text": "the"}]
-            },
-            "targetNgram": {"tokens": [{"charPos": 0, "pos": 0, "text": "nI"}]}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }, {"charPos": 2, "pos": 1, "text": "the"}]
-            },
-            "targetNgram": {"tokens": [{"charPos": 0, "pos": 0, "text": "eht"}]}
-          }, "scores": {}
-        },
-        {
-          "predictedAlignment": {
-            "sourceNgram": {
-              "tokens": [
-                {
-                  "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }, {"charPos": 2, "pos": 1, "text": "the"}]
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
             },
             "targetNgram": {
               "tokens": [
-                {"charPos": 0, "pos": 0, "text": "nI"},
-                {"charPos": 2, "pos": 1, "text": "eht"}]
+                {
+                  "text": "nI",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "eht",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
             }
-          }, "scores": {}
+          }
         },
         {
+          "scores": {},
           "predictedAlignment": {
             "sourceNgram": {
               "tokens": [
                 {
+                  "text": "In",
+                  "tokenPos": 0,
                   "charPos": 0,
-                  "pos": 0,
-                  "text": "In"
-                }, {"charPos": 2, "pos": 1, "text": "the"}]
-            }, "targetNgram": {"tokens": []}
-          }, "scores": {}
-        }]);
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": []
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "the",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": [
+                {
+                  "text": "nI",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "the",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": [
+                {
+                  "text": "eht",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "the",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": [
+                {
+                  "text": "nI",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "eht",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "the",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": []
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "In",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "the",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": [
+                {
+                  "text": "nI",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 2,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "In",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "the",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": [
+                {
+                  "text": "eht",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 3,
+                  "sentenceTokenLen": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "In",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "the",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": [
+                {
+                  "text": "nI",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "eht",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scores": {},
+          "predictedAlignment": {
+            "sourceNgram": {
+              "tokens": [
+                {
+                  "text": "In",
+                  "tokenPos": 0,
+                  "charPos": 0,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                },
+                {
+                  "text": "the",
+                  "tokenPos": 1,
+                  "charPos": 2,
+                  "sentenceCharLen": 6,
+                  "sentenceTokenLen": 2
+                }
+              ]
+            },
+            "targetNgram": {
+              "tokens": []
+            }
+          }
+        }
+      ]);
   });
 });
 
@@ -454,6 +943,7 @@ describe("scoring", () => {
     jest.resetModules();
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({
+      alignmentPosition: 0,
       frequencyRatioSavedAlignmentsSource: 3,
       frequencyRatioCorpusSource: 5,
       frequencyRatioCorpusTarget: 2,
@@ -463,7 +953,7 @@ describe("scoring", () => {
       [prediction],
       new SavedAlignmentsIndex()
     );
-    expect(result[0].getScore("confidence")).toEqual(2);
+    expect(result[0].getScore("confidence")).toEqual(1.6);
   });
 });
 
@@ -503,16 +993,17 @@ describe("suggest", () => {
     const s1 = suggestions[0];
     expect(s1.getPredictions().length).toEqual(2);
     expect(s1.getPredictions()[0].alignment.key).toEqual(
-      "n:hello:world->n:olleh:dlrow");
+      "n:hello->n:olleh");
 
     const s2 = suggestions[1];
     expect(s2.getPredictions().length).toEqual(2);
-    expect(s2.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh");
-    expect(s2.getPredictions()[1].alignment.key).toEqual("n:world->n:dlrow");
+    expect(s2.getPredictions()[0].alignment.key).toEqual("n:world->n:dlrow");
+    expect(s2.getPredictions()[1].alignment.key).toEqual("n:hello->n:olleh");
 
     const s3 = suggestions[2];
     expect(s3.getPredictions().length).toEqual(2);
-    expect(s3.getPredictions()[0].alignment.key).toEqual("n:world->n:dlrow");
-    expect(s3.getPredictions()[1].alignment.key).toEqual("n:hello->n:olleh");
+    expect(s3.getPredictions()[0].alignment.key).toEqual(
+      "n:hello:world->n:olleh:dlrow");
+    expect(s3.getPredictions()[1].alignment.key).toEqual("n:world->n:dlrow");
   });
 });

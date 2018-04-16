@@ -1,11 +1,11 @@
+import Lexer from "../../Lexer";
 import Alignment from "../Alignment";
 import Ngram from "../Ngram";
-import Token from "../Token";
 
 describe("create alignment", () => {
   it("works", () => {
-    const source = new Ngram([new Token("hello"), new Token("world")]);
-    const target = new Ngram([new Token("hi")]);
+    const source = new Ngram(Lexer.tokenize("hello world"));
+    const target = new Ngram(Lexer.tokenize("hi"));
     const alignment = new Alignment(source, target);
 
     expect(alignment.source.key).toEqual("n:hello:world");

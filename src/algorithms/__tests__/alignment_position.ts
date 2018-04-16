@@ -1,5 +1,3 @@
-import CorpusIndex from "../../index/CorpusIndex";
-import SavedAlignmentsIndex from "../../index/SavedAlignmentsIndex";
 import Alignment from "../../structures/Alignment";
 import Ngram from "../../structures/Ngram";
 import Prediction from "../../structures/Prediction";
@@ -11,15 +9,11 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token("hello", 2, 5)]),
-        new Ngram([new Token("hallo", 2, 5)])
+        new Ngram([new Token("hello", 2, 5, 1, 5)]),
+        new Ngram([new Token("hallo", 2, 5, 1, 5)])
       ))
     ];
-    const result = engine.execute(
-      predictions,
-      new CorpusIndex(),
-      new SavedAlignmentsIndex()
-    );
+    const result = engine.execute(predictions);
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": 1
     });
@@ -29,15 +23,11 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token("hello", 2)]),
-        new Ngram([new Token("hallo", 3)])
+        new Ngram([new Token("hello", 2, 1, 1, 5)]),
+        new Ngram([new Token("hallo", 3, 1, 1, 5)])
       ))
     ];
-    const result = engine.execute(
-      predictions,
-      new CorpusIndex(),
-      new SavedAlignmentsIndex()
-    );
+    const result = engine.execute(predictions);
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": 0
     });
@@ -47,15 +37,11 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token("hello", 2)]),
-        new Ngram([new Token("hallo", 4)])
+        new Ngram([new Token("hello", 2, 1, 1, 5)]),
+        new Ngram([new Token("hallo", 4, 1, 1, 5)])
       ))
     ];
-    const result = engine.execute(
-      predictions,
-      new CorpusIndex(),
-      new SavedAlignmentsIndex()
-    );
+    const result = engine.execute(predictions);
     expect(result[0].getScores()).toEqual({
       "alignmentPosition": -1
     });

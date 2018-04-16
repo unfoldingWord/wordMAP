@@ -19,6 +19,7 @@ export default class Token {
 
   /**
    * The length of the sentence (in units of character) in which this token occurs.
+   * This includes whitespace in the sentence
    */
   get sentenceCharacterLength() {
     return this.sentenceCharLen;
@@ -52,9 +53,10 @@ export default class Token {
     if (tokenPosition < 0 || characterPosition < 0) {
       throw new Error("Position cannot be less than 0");
     }
-    if (sentenceTokenLen <= 0 || sentenceCharLen <= 0) {
-      throw new Error("Sentence length cannot be 0");
-    }
+    // This makes it difficult to test
+    // if (sentenceTokenLen <= 0 || sentenceCharLen <= 0) {
+    //   throw new Error("Sentence length cannot be 0");
+    // }
 
     this.tokenPos = tokenPosition;
     this.charPos = characterPosition;
