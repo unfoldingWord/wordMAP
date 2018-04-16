@@ -17,8 +17,9 @@ export default abstract class FrequencyIndex {
    * @param {string} key
    */
   protected readIndex(key: string): number {
-    if (key in this.index) {
-      return this.index[key];
+    const lowerKey = key.toLowerCase();
+    if (lowerKey in this.index) {
+      return this.index[lowerKey];
     } else {
       return 0;
     }
@@ -31,12 +32,14 @@ export default abstract class FrequencyIndex {
    * @param value - optional value to add
    */
   protected incrementIndex(key: string, value: number = 1) {
-    const originalValue = this.readIndex(key);
-    this.writeIndex(key, originalValue + value);
+    const lowerKey = key.toLowerCase();
+    const originalValue = this.readIndex(lowerKey);
+    this.writeIndex(lowerKey, originalValue + value);
   }
 
   /**
    * Manually writes a value to the index
+   * @deprecated use {@link incrementIndex} instead.
    * @param {string} key
    * @param {number} value
    */
