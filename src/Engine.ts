@@ -2,6 +2,7 @@ import Algorithm from "./Algorithm";
 import CorpusIndex from "./index/CorpusIndex";
 import NumberObject from "./index/NumberObject";
 import SavedAlignmentsIndex from "./index/SavedAlignmentsIndex";
+import UnalignedSentenceIndex from "./index/UnalignedSentenceIndex";
 import Parser from "./Parser";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
@@ -94,13 +95,15 @@ export default class Engine {
       targetNgrams
     );
 
+    const sentenceIndex: UnalignedSentenceIndex = new UnalignedSentenceIndex();
+    sentenceIndex.append([sourceSentence], [targetSentence]);
+
     for (const algorithm of algorithms) {
       predictions = algorithm.execute(
         predictions,
         cIndex,
         saIndex,
-        sourceSentence,
-        targetSentence
+        sentenceIndex
       );
     }
 
@@ -136,9 +139,14 @@ export default class Engine {
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
-      "alignmentPosition": 0.8,
-      "ngramLength": 0.6,
-      "characterLength": 0.2
+      "alignmentPosition": 0.4,
+      "ngramLength": 0.2,
+      "characterLength": 0.3,
+      "alignmentOccurrences": 0.5,
+      "sourceCorpusPermutationsFrequencyRatio": 0.7,
+      "targetCorpusPermutationsFrequencyRatio": 0.7,
+      "sourceSavedAlignmentsFrequencyRatio": 0.7,
+      "targetSavedAlignmentsFrequencyRatio": 0.7
     };
 
     for (const p of predictions) {
@@ -148,7 +156,8 @@ export default class Engine {
         "targetCorpusPermutationsFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
-        "characterLength"
+        "characterLength",
+        "alignmentOccurrences"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
@@ -162,7 +171,8 @@ export default class Engine {
         "targetSavedAlignmentsFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
-        "characterLength"
+        "characterLength",
+        "alignmentOccurrences"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
@@ -172,7 +182,8 @@ export default class Engine {
 
       // prefer to use the saved alignment confidence
       if (!confidence) {
-        confidence = corpusConfidence * p.getScore("phrasePlausibility");
+        confidence = corpusConfidence;
+        confidence *= p.getScore("phrasePlausibility");
       }
 
       // boost confidence for saved alignments

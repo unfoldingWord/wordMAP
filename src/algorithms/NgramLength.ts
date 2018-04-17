@@ -1,13 +1,10 @@
 import Algorithm from "../Algorithm";
-import CorpusIndex from "../index/CorpusIndex";
-import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
-import Token from "../structures/Token";
 
 export default class NgramLength implements Algorithm {
   public name = "n-gram length";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
+  public execute(predictions: Prediction[]): Prediction[] {
     for (const p of predictions) {
       let weight = 0;
       // TRICKY: do not score null alignments

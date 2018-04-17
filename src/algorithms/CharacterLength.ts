@@ -1,6 +1,4 @@
 import Algorithm from "../Algorithm";
-import CorpusIndex from "../index/CorpusIndex";
-import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -10,7 +8,7 @@ export default class CharacterLength implements Algorithm {
 
   public name = "character length";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
+  public execute(predictions: Prediction[]): Prediction[] {
     for (const p of predictions) {
       let weight = 0;
       // TRICKY: do not score null alignments

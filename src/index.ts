@@ -1,3 +1,4 @@
+import AlignmentOccurrences from "./algorithms/AlignmentOccurrences";
 import AlignmentPosition from "./algorithms/AlignmentPosition";
 import CharacterLength from "./algorithms/CharacterLength";
 import NgramFrequency from "./algorithms/NgramFrequency";
@@ -23,6 +24,7 @@ export default class MAP {
     this.engine.registerAlgorithm(new PhrasePlausibility());
     this.engine.registerAlgorithm(new NgramLength());
     this.engine.registerAlgorithm(new CharacterLength());
+    this.engine.registerAlgorithm(new AlignmentOccurrences());
   }
 
   /**

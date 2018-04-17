@@ -481,8 +481,8 @@ The alignment occurrences weight is inversely proportional to the difference of 
 > As this deviates the score will decrease.
 
 ```
-where x = primary n-gram occurrences count
-and y = secondary n-gram occurrences count
+where x = primary n-gram occurrences count in the unaligned sentence
+and y = secondary n-gram occurrences count in the unaligned sentence
 
 delta = abs(x - y)
 weight = 1 / ( delta + 1)

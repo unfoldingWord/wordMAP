@@ -1,7 +1,7 @@
 import CorpusIndex from "./index/CorpusIndex";
 import SavedAlignmentsIndex from "./index/SavedAlignmentsIndex";
+import UnalignedSentenceIndex from "./index/UnalignedSentenceIndex";
 import Prediction from "./structures/Prediction";
-import Token from "./structures/Token";
 
 export default interface Algorithm {
   /**
@@ -12,6 +12,6 @@ export default interface Algorithm {
   /**
    * Executes the algorithm
    */
-  execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, sourceSentence: Token[], targetSentence: Token[]): Prediction[];
+  execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, usIndex: UnalignedSentenceIndex): Prediction[];
 
 }
