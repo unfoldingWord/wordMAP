@@ -136,17 +136,17 @@ export default class Engine {
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
-      "alignmentPosition": 0.7,
+      "alignmentPosition": 0.8,
       "phrasePlausibility": 0.9,
       "ngramLength": 0.6,
-      "characterLength": 0
+      "characterLength": 0.2
     };
 
     for (const p of predictions) {
       // confidence based on corpus
       const corpusWeightedKeys = [
-        "frequencyRatioCorpusSource",
-        "frequencyRatioCorpusTarget",
+        "sourceCorpusPermutationsFrequencyRatio",
+        "targetCorpusPermutationsFrequencyRatio",
         "alignmentPosition",
         "phrasePlausibility",
         "ngramLength",
@@ -160,8 +160,8 @@ export default class Engine {
 
       // confidence based on saved alignments
       const savedAlignmentsWeightedKeys = [
-        "frequencyRatioSavedAlignmentsSource",
-        "frequencyRatioSavedAlignmentsTarget",
+        "sourceSavedAlignmentsFrequencyRatio",
+        "targetSavedAlignmentsFrequencyRatio",
         "alignmentPosition",
         "phrasePlausibility",
         "ngramLength",

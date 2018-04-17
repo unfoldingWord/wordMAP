@@ -13,21 +13,21 @@ describe("MAP", () => {
     expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
   });
 
-  it("has some corpus", () => {
-    const map = new MAP();
-    map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
-    map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
-    map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
-    map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
-    const suggestions = map.predict("hello world", "olleh dlrow nhoj");
-    expect(suggestions.length).toEqual(1);
-
-    const s1 = suggestions[0];
-    expect(s1.getPredictions().length).toEqual(2);
-    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
-    expect(s1.getPredictions()[1].alignment.key).toEqual(
-      "n:world->n:nhoj");
-  });
+  // it("has some corpus", () => {
+  //   const map = new MAP();
+  //   map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
+  //   map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
+  //   map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
+  //   map.appendCorpusString("once hello what", "ecno olleh dlrow tahw");
+  //   const suggestions = map.predict("hello world", "olleh dlrow nhoj");
+  //   expect(suggestions.length).toEqual(1);
+  //
+  //   const s1 = suggestions[0];
+  //   expect(s1.getPredictions().length).toEqual(2);
+  //   expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
+  //   expect(s1.getPredictions()[1].alignment.key).toEqual(
+  //     "n:world->n:nhoj");
+  // });
 
   it("predicts from saved alignments", () => {
     const map = new MAP();

@@ -81,19 +81,19 @@ export default class NgramFrequency implements Algorithm {
         p.alignment.target);
 
       // permutation frequency ratio
-      const frequencyRatioCorpusSource: number = NgramFrequency.divideSafe(
+      const sourceCorpusPermutationsFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencyCorpus,
         ngramFrequencyCorpusSource
       );
-      const frequencyRatioCorpusTarget: number = NgramFrequency.divideSafe(
+      const targetCorpusPermutationsFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencyCorpus,
         ngramFrequencyCorpusTarget
       );
-      const frequencyRatioSavedAlignmentsSource: number = NgramFrequency.divideSafe(
+      const sourceSavedAlignmentsFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencySavedAlignments,
         ngramFrequencySavedAlignmentsSource
       );
-      const frequencyRatioSavedAlignmentsTarget: number = NgramFrequency.divideSafe(
+      const targetSavedAlignmentsFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencySavedAlignments,
         ngramFrequencySavedAlignmentsTarget
       );
@@ -109,10 +109,10 @@ export default class NgramFrequency implements Algorithm {
         ngramFrequencySavedAlignmentsSource,
         ngramFrequencySavedAlignmentsTarget,
 
-        frequencyRatioCorpusSource,
-        frequencyRatioCorpusTarget,
-        frequencyRatioSavedAlignmentsSource,
-        frequencyRatioSavedAlignmentsTarget,
+        sourceCorpusPermutationsFrequencyRatio,
+        targetCorpusPermutationsFrequencyRatio,
+        sourceSavedAlignmentsFrequencyRatio,
+        targetSavedAlignmentsFrequencyRatio,
 
         // static scores
         ngramStaticFrequencyCorpusSource,

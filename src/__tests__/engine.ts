@@ -944,10 +944,10 @@ describe("scoring", () => {
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({
       alignmentPosition: 1,
-      frequencyRatioSavedAlignmentsSource: 3,
-      frequencyRatioCorpusSource: 5,
-      frequencyRatioCorpusTarget: 2,
-      frequencyRatioSavedAlignmentsTarget: 1,
+      sourceSavedAlignmentsFrequencyRatio: 3,
+      sourceCorpusPermutationsFrequencyRatio: 5,
+      targetCorpusPermutationsFrequencyRatio: 2,
+      targetSavedAlignmentsFrequencyRatio: 1,
       phrasePlausibility: 2,
       ngramLength: 1,
       characterLength: 3
@@ -956,7 +956,7 @@ describe("scoring", () => {
       [prediction],
       new SavedAlignmentsIndex()
     );
-    expect(result[0].getScore("confidence")).toEqual(1.6904761904761902);
+    expect(result[0].getScore("confidence")).toEqual(1.7333333333333332);
   });
 });
 
