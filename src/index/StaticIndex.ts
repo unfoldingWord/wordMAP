@@ -7,14 +7,12 @@ import NgramIndex from "./NgramIndex";
  */
 export default class StaticIndex {
   private srcNgramFreqIndex: NgramIndex;
-  // TODO: rename these. this is for the entire index not the sentence.
-  private srcSentenceTokenLength: number;
-  private srcSentenceCharLength: number;
+  private srcTokenLength: number;
+  private srcCharLength: number;
 
   private tgtNgramFreqIndex: NgramIndex;
-  // TODO: rename these. this is for the entire index not the sentence.
-  private tgtSentenceTokenLength: number;
-  private tgtSentenceCharLength: number;
+  private tgtTokenLength: number;
+  private tgtCharLength: number;
 
   /**
    * Returns an index of source n-gram frequencies in the corpus
@@ -37,7 +35,7 @@ export default class StaticIndex {
    * @return {number}
    */
   get sourceTokenLength() {
-    return this.srcSentenceTokenLength;
+    return this.srcTokenLength;
   }
 
   /**
@@ -45,7 +43,7 @@ export default class StaticIndex {
    * @return {number}
    */
   get targetTokenLength() {
-    return this.tgtSentenceTokenLength;
+    return this.tgtTokenLength;
   }
 
   /**
@@ -53,7 +51,7 @@ export default class StaticIndex {
    * @return {number}
    */
   get sourceCharacterLength() {
-    return this.srcSentenceCharLength;
+    return this.srcCharLength;
   }
 
   /**
@@ -61,16 +59,16 @@ export default class StaticIndex {
    * @return {number}
    */
   get targetCharLength() {
-    return this.tgtSentenceCharLength;
+    return this.tgtCharLength;
   }
 
   constructor() {
     this.srcNgramFreqIndex = new NgramIndex();
     this.tgtNgramFreqIndex = new NgramIndex();
-    this.srcSentenceTokenLength = 0;
-    this.tgtSentenceTokenLength = 0;
-    this.srcSentenceCharLength = 0;
-    this.tgtSentenceCharLength = 0;
+    this.srcTokenLength = 0;
+    this.tgtTokenLength = 0;
+    this.srcCharLength = 0;
+    this.tgtCharLength = 0;
   }
 
   /**
@@ -86,15 +84,15 @@ export default class StaticIndex {
    */
   public addSentence(sourceTokens: Token[], targetTokens: Token[], sourceNgrams: Ngram[], targetNgrams: Ngram[]) {
     // token length
-    this.srcSentenceTokenLength += sourceTokens.length;
-    this.tgtSentenceTokenLength += targetTokens.length;
+    this.srcTokenLength += sourceTokens.length;
+    this.tgtTokenLength += targetTokens.length;
 
     // character length
     for (const token of sourceTokens) {
-      this.srcSentenceCharLength += token.toString().length;
+      this.srcCharLength += token.toString().length;
     }
     for (const token of targetTokens) {
-      this.tgtSentenceCharLength += token.toString().length;
+      this.tgtCharLength += token.toString().length;
     }
 
     // n-gram frequency

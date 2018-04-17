@@ -97,11 +97,11 @@ describe("MAP", () => {
 //
 // 1. is phrase, commonality
 // 2. lowercase the data keys
-// 3. focus on integration. I/O.
-// 4. lemma
-// 5. performance
-// 6. tc does not have an easy way to give us the corpus.
-// 7. improve filtered corpus metrics.
+// TODO: 3. focus on integration. I/O.
+// TODO: 4. lemma
+// TODO: 5. performance
+// TODO: 6. tc does not have an easy way to give us the corpus.
+// TODO: 7. improve filtered corpus metrics.
 // to write tests we can get real alignments and develop metrics for how closely the alignment matches the real alignment.
 // this will allow us to set a bar for the minimum alignment ratio.
 // we have the book of titus already aligned so we can use this for the comparision.
