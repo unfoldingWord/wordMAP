@@ -136,8 +136,10 @@ export default class Engine {
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
-      "alignmentPosition": 0.6,
-      "phrasePlausibility": 0.9
+      "alignmentPosition": 0.7,
+      "phrasePlausibility": 0.9,
+      "ngramLength": 0.6,
+      "characterLength": 0
     };
 
     for (const p of predictions) {
