@@ -20,8 +20,17 @@ export default class PhrasePlausibility implements Algorithm {
     if (ngramFrequencyCorpusSource === 0 || ngramFrequencyCorpusTarget === 0) {
       return 0;
     } else {
-      const x = 1 - 1 / ngramFrequencyCorpusSource;
-      const y = 1 - 1 / ngramFrequencyCorpusTarget;
+      let x = 1 - 1 / ngramFrequencyCorpusSource;
+      let y = 1 - 1 / ngramFrequencyCorpusTarget;
+
+      // TRICKY: uni-grams are always phrases
+      if (prediction.alignment.source.isUnigram()) {
+        x = 1;
+      }
+      if (prediction.alignment.target.isUnigram()) {
+        y = 1;
+      }
+
       return Math.min(x, y);
     }
 

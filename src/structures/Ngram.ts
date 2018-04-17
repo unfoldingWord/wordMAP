@@ -16,6 +16,18 @@ export default class Ngram {
     return this.tokens.length;
   }
 
+  public isUnigram() {
+    return this.tokens.length === 1;
+  }
+
+  public isBigram() {
+    return this.tokens.length === 2;
+  }
+
+  public isTrigram() {
+    return this.tokens.length === 3;
+  }
+
   /**
    * Returns the length of the n-gram in characters.
    * This does not account for whitespace.

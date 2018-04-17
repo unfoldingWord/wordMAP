@@ -137,7 +137,6 @@ export default class Engine {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
       "alignmentPosition": 0.8,
-      "phrasePlausibility": 0.9,
       "ngramLength": 0.6,
       "characterLength": 0.2
     };
@@ -148,7 +147,6 @@ export default class Engine {
         "sourceCorpusPermutationsFrequencyRatio",
         "targetCorpusPermutationsFrequencyRatio",
         "alignmentPosition",
-        "phrasePlausibility",
         "ngramLength",
         "characterLength"
       ];
@@ -163,7 +161,6 @@ export default class Engine {
         "sourceSavedAlignmentsFrequencyRatio",
         "targetSavedAlignmentsFrequencyRatio",
         "alignmentPosition",
-        "phrasePlausibility",
         "ngramLength",
         "characterLength"
       ];
@@ -175,7 +172,7 @@ export default class Engine {
 
       // prefer to use the saved alignment confidence
       if (!confidence) {
-        confidence = corpusConfidence;
+        confidence = corpusConfidence * p.getScore("phrasePlausibility");
       }
 
       // boost confidence for saved alignments
