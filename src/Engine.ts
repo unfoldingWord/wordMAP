@@ -146,7 +146,8 @@ export default class Engine {
         "frequencyRatioCorpusSource",
         "frequencyRatioCorpusTarget",
         "alignmentPosition",
-        "phrasePlausibility"
+        "phrasePlausibility",
+        "ngramLength"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
@@ -159,7 +160,8 @@ export default class Engine {
         "frequencyRatioSavedAlignmentsSource",
         "frequencyRatioSavedAlignmentsTarget",
         "alignmentPosition",
-        "phrasePlausibility"
+        "phrasePlausibility",
+        "ngramLength"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,

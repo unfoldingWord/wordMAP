@@ -8,11 +8,12 @@ export default class NgramLength implements Algorithm {
   public name = "n-gram length";
 
   public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
-    const sourceSentenceLength = sourceSentence.length;
-    const targetSentenceLength = targetSentence.length;
-
     for (const p of predictions) {
-      // length ratios
+      // sentence lengths
+      const sourceSentenceLength = p.alignment.source.sentenceTokenLength;
+      const targetSentenceLength = p.alignment.target.sentenceTokenLength;
+
+      // token lengths
       const sourceLength = p.alignment.source.tokenLength;
       const targetLength = p.alignment.target.tokenLength;
 

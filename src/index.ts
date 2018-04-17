@@ -1,5 +1,6 @@
 import AlignmentPosition from "./algorithms/AlignmentPosition";
 import NgramFrequency from "./algorithms/NgramFrequency";
+import NgramLength from "./algorithms/NgramLength";
 import PhrasePlausibility from "./algorithms/PhrasePlausibility";
 import Engine from "./Engine";
 import Lexer from "./Lexer";
@@ -19,6 +20,7 @@ export default class MAP {
     this.engine.registerAlgorithm(new NgramFrequency());
     this.engine.registerAlgorithm(new AlignmentPosition());
     this.engine.registerAlgorithm(new PhrasePlausibility());
+    this.engine.registerAlgorithm(new NgramLength());
   }
 
   /**
