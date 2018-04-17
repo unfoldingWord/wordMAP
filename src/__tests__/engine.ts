@@ -943,17 +943,20 @@ describe("scoring", () => {
     jest.resetModules();
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({
-      alignmentPosition: 0,
+      alignmentPosition: 1,
       frequencyRatioSavedAlignmentsSource: 3,
       frequencyRatioCorpusSource: 5,
       frequencyRatioCorpusTarget: 2,
-      frequencyRatioSavedAlignmentsTarget: 1
+      frequencyRatioSavedAlignmentsTarget: 1,
+      phrasePlausibility: 2,
+      ngramLength: 1,
+      characterLength: 3
     });
     const result = Engine.calculateConfidence(
       [prediction],
       new SavedAlignmentsIndex()
     );
-    expect(result[0].getScore("confidence")).toEqual(1.6);
+    expect(result[0].getScore("confidence")).toEqual(1.6904761904761902);
   });
 });
 

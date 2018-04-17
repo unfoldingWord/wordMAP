@@ -1,6 +1,4 @@
 import Algorithm from "../Algorithm";
-import CorpusIndex from "../index/CorpusIndex";
-import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -19,9 +17,14 @@ export default class PhrasePlausibility implements Algorithm {
     const ngramFrequencyCorpusTarget = prediction.getScore(
       "ngramStaticFrequencyCorpusTarget");
 
-    const x = 1 - 1 / ngramFrequencyCorpusSource;
-    const y = 1 - 1 / ngramFrequencyCorpusTarget;
-    return Math.min(x, y);
+    if (ngramFrequencyCorpusSource === 0 || ngramFrequencyCorpusTarget === 0) {
+      return 0;
+    } else {
+      const x = 1 - 1 / ngramFrequencyCorpusSource;
+      const y = 1 - 1 / ngramFrequencyCorpusTarget;
+      return Math.min(x, y);
+    }
+
   }
 
   public name = "phrase plausibility";

@@ -79,7 +79,9 @@ describe("calculate frequency", () => {
       "alignmentFrequencyCorpusFiltered": 0,
       "alignmentFrequencySavedAlignmentsFiltered": 2,
       "frequencyRatioCorpusFiltered": 0,
-      "frequencyRatioSavedAlignmentsFiltered": 1
+      "frequencyRatioSavedAlignmentsFiltered": 1,
+      "ngramStaticFrequencyCorpusSource": 0,
+      "ngramStaticFrequencyCorpusTarget": 0
     });
 
     // aligned to nothing
@@ -97,7 +99,9 @@ describe("calculate frequency", () => {
       "alignmentFrequencyCorpusFiltered": 0,
       "alignmentFrequencySavedAlignmentsFiltered": 0,
       "frequencyRatioCorpusFiltered": 0,
-      "frequencyRatioSavedAlignmentsFiltered": 0
+      "frequencyRatioSavedAlignmentsFiltered": 0,
+      "ngramStaticFrequencyCorpusSource": 0,
+      "ngramStaticFrequencyCorpusTarget": 0
     });
   });
 
@@ -129,7 +133,9 @@ describe("calculate frequency", () => {
       "alignmentFrequencyCorpusFiltered": 1,
       "alignmentFrequencySavedAlignmentsFiltered": 0,
       "frequencyRatioCorpusFiltered": 1,
-      "frequencyRatioSavedAlignmentsFiltered": 0
+      "frequencyRatioSavedAlignmentsFiltered": 0,
+      "ngramStaticFrequencyCorpusSource": 1,
+      "ngramStaticFrequencyCorpusTarget": 1
     });
 
     // append new corpus
@@ -162,7 +168,9 @@ describe("calculate frequency", () => {
 
       "alignmentFrequencySavedAlignmentsFiltered": 0,
       "frequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
-      "frequencyRatioSavedAlignmentsFiltered": 0
+      "frequencyRatioSavedAlignmentsFiltered": 0,
+      "ngramStaticFrequencyCorpusSource": 2,
+      "ngramStaticFrequencyCorpusTarget": 2
     });
   });
 
@@ -201,7 +209,9 @@ describe("calculate frequency", () => {
         "alignmentFrequencyCorpusFiltered": 1,
         "alignmentFrequencySavedAlignmentsFiltered": 1,
         "frequencyRatioCorpusFiltered": 1,
-        "frequencyRatioSavedAlignmentsFiltered": 1
+        "frequencyRatioSavedAlignmentsFiltered": 1,
+        "ngramStaticFrequencyCorpusSource": 1,
+        "ngramStaticFrequencyCorpusTarget": 1
       });
     }
   );

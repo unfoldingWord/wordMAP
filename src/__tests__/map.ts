@@ -1,7 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 import MAP from "../index";
-import CorpusFaker from "../util/CorpusFaker";
 
 describe("MAP", () => {
   it("has no corpus", () => {
@@ -11,7 +10,7 @@ describe("MAP", () => {
 
     const s1 = suggestions[0];
     expect(s1.getPredictions().length).toEqual(1);
-    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:dlrow");
+    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
   });
 
   it("has some corpus", () => {
@@ -25,28 +24,80 @@ describe("MAP", () => {
 
     const s1 = suggestions[0];
     expect(s1.getPredictions().length).toEqual(2);
-    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:nhoj");
+    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
     expect(s1.getPredictions()[1].alignment.key).toEqual(
-      "n:world->n:olleh:dlrow");
+      "n:world->n:nhoj");
   });
 
-  it("reads in some fake corpus", () => {
-    const faker = new CorpusFaker();
-    const lexicon = faker.lexicon(10);
-    const corpus = faker.lexiconCorpusGenerate(10000, lexicon);
-    const unalignedPair = corpus.pop() || [];
-
+  it("predicts from saved alignments", () => {
     const map = new MAP();
-    map.appendCorpus(corpus);
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1]);
+    // append saved alignments
+    const sourceSavedAlignments = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corrections/greek.txt"
+    ));
+    const targetSavedAlignments = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corrections/english.txt"
+    ));
+    map.appendSavedAlignmentsString(
+      sourceSavedAlignments.toString("utf-8"),
+      targetSavedAlignments.toString("utf-8")
+    );
 
-    const s = suggestions[0].toString();
-    expect(suggestions[0]).toHaveLength(1);
+    const unalignedPair = [
+      "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
+      "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
+    ];
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
 
-    // 0 n:oqwbajt:kfjy->n:dcu|0,n:feid->n:dcu|0
+    const stuff = [
+      suggestions[0].toString(),
+      suggestions[1].toString(),
+      suggestions[2].toString(),
+      suggestions[3].toString(),
+      suggestions[4].toString()
+    ];
+
+    console.log("saved alignments\n", stuff);
   });
 
-  it("reads in some real corpus", () => {
+  it("predicts from corpus", () => {
+    const map = new MAP();
+
+    // append corpus
+    const sourceCorpus = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corpus/greek.txt"
+    ));
+    const targetCorpus = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corpus/english.txt"
+    ));
+    map.appendCorpusString(
+      sourceCorpus.toString("utf-8"),
+      targetCorpus.toString("utf-8")
+    );
+
+    const unalignedPair = [
+      "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
+      "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
+    ];
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+
+    const stuff = [
+      suggestions[0].toString(),
+      suggestions[1].toString(),
+      suggestions[2].toString(),
+      suggestions[3].toString(),
+      suggestions[4].toString()
+    ];
+
+    // noinspection TsLint
+    console.log("corpus\n", stuff);
+  });
+
+  it("predicts from corpus and saved alignments", () => {
     const map = new MAP();
 
     // append corpus
@@ -72,10 +123,10 @@ describe("MAP", () => {
       __dirname,
       "fixtures/corrections/english.txt"
     ));
-    // map.appendSavedAlignmentsString(
-    //   sourceSavedAlignments.toString("utf-8"),
-    //   targetSavedAlignments.toString("utf-8")
-    // );
+    map.appendSavedAlignmentsString(
+      sourceSavedAlignments.toString("utf-8"),
+      targetSavedAlignments.toString("utf-8")
+    );
 
     const unalignedPair = [
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
@@ -90,7 +141,9 @@ describe("MAP", () => {
       suggestions[3].toString(),
       suggestions[4].toString()
     ];
-    expect(suggestions[0]).toHaveLength(1);
+
+    // noinspection TsLint
+    console.log("corpus and saved alignments\n", stuff);
   });
 });
 
