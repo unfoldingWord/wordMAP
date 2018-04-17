@@ -97,6 +97,14 @@ export default class Ngram {
   }
 
   /**
+   * Checks if this n-grams is an empty placeholder
+   * @return {boolean}
+   */
+  public isNull() {
+    return this.tokens.length === 0;
+  }
+
+  /**
    * Returns the tokens in this n-gram
    * @return {Token[]}
    */

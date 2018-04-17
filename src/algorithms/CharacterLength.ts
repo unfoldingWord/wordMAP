@@ -12,13 +12,17 @@ export default class CharacterLength implements Algorithm {
 
   public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
     for (const p of predictions) {
-      // n-gram lengths
-      const sourceLength = 1 + p.alignment.source.characterLength;
-      const targetLength = 1 + p.alignment.target.characterLength;
+      let weight = 0;
+      // TRICKY: do not score null alignments
+      if (!p.alignment.target.isNull()) {
+        // n-gram lengths
+        const sourceLength = p.alignment.source.characterLength;
+        const targetLength = p.alignment.target.characterLength;
 
-      const delta = Math.abs(sourceLength - targetLength);
-      const longest = Math.max(sourceLength, targetLength);
-      const weight = (longest - delta) / longest;
+        const delta = Math.abs(sourceLength - targetLength);
+        const longest = Math.max(sourceLength, targetLength);
+        weight = (longest - delta) / longest;
+      }
       p.setScore("characterLength", weight);
     }
     return predictions;

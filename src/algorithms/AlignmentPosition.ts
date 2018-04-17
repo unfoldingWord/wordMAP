@@ -4,22 +4,32 @@ import Prediction from "../structures/Prediction";
 /**
  * This algorithm calculates the relative position of n-grams in a sentence.
  * Only literal translations are supported.
+ *
+ * A very high score indicates the aligned n-grams are in the same relative position.
+ * A very low score indicates the aligned n-grams occur on opposite sides of the sentence.
+ *
+ * Results range from near 0 to 1
  */
 export default class AlignmentPosition implements Algorithm {
   public name = "alignment position";
 
   public execute(predictions: Prediction[]): Prediction[] {
     for (const p of predictions) {
-      const sourcePosition = 1 + p.alignment.source.tokenPosition;
-      const targetPosition = 1 + p.alignment.target.tokenPosition;
-      const sourceSentenceLength = 1 + p.alignment.source.sentenceTokenLength;
-      const targetSentenceLength = 1 + p.alignment.target.sentenceTokenLength;
+      let weight = 0;
+      // TRICKY: do not score null alignments
+      if (!p.alignment.target.isNull()) {
+        // TRICKY: token positions are zero indexed
+        const sourcePosition = 1 + p.alignment.source.tokenPosition;
+        const targetPosition = 1 + p.alignment.target.tokenPosition;
 
-      const sourceRelativePosition = sourcePosition / sourceSentenceLength;
-      const targetRelativePosition = targetPosition / targetSentenceLength;
-      const delta = Math.abs(sourceRelativePosition - targetRelativePosition);
-      const weight = 1 - delta;
+        const sourceSentenceLength = p.alignment.source.sentenceTokenLength;
+        const targetSentenceLength = p.alignment.target.sentenceTokenLength;
 
+        const sourceRelativePosition = sourcePosition / sourceSentenceLength;
+        const targetRelativePosition = targetPosition / targetSentenceLength;
+        const delta = Math.abs(sourceRelativePosition - targetRelativePosition);
+        weight = 1 - delta;
+      }
       p.setScore("alignmentPosition", weight);
     }
     return predictions;
