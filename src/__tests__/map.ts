@@ -85,7 +85,7 @@ describe("MAP", () => {
     ];
     const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
 
-    const stuff = [
+    const stuff1 = [
       suggestions[0].toString(),
       suggestions[1].toString(),
       suggestions[2].toString(),
@@ -94,7 +94,39 @@ describe("MAP", () => {
     ];
 
     // noinspection TsLint
-    console.log("corpus\n", stuff);
+    console.log("corpus (1)\n", stuff1);
+
+    // run it again to make sure things work
+
+    const secondUnalignedPair = [
+      "Ἀβραὰμ ἐγέννησεν τὸν Ἰσαάκ, Ἰσαὰκ δὲ ἐγέννησεν τὸν Ἰακώβ, Ἰακὼβ δὲ ἐγέννησεν τὸν Ἰούδαν καὶ τοὺς ἀδελφοὺς αὐτοῦ,",
+      "Abraham begat Isaac, and Isaac begat Jacob, and Jacob begat Judah and his brothers."
+    ];
+
+    const secondSuggestions = map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 5);
+    const stuff2 = [
+      secondSuggestions[0].toString(),
+      secondSuggestions[1].toString(),
+      secondSuggestions[2].toString(),
+      secondSuggestions[3].toString(),
+      secondSuggestions[4].toString()
+    ];
+    console.log("corpus (2)\n", stuff2);
+
+    // make sure we get the same output as at first
+
+    const thirdSuggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+
+    const stuff3 = [
+      thirdSuggestions[0].toString(),
+      thirdSuggestions[1].toString(),
+      thirdSuggestions[2].toString(),
+      thirdSuggestions[3].toString(),
+      thirdSuggestions[4].toString()
+    ];
+
+    // noinspection TsLint
+    console.log("corpus (3)\n", stuff3);
   });
 
   it("predicts from corpus and saved alignments", () => {

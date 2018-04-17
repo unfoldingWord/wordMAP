@@ -143,13 +143,18 @@ export default class Engine {
       "ngramLength": 0.2,
       "characterLength": 0.3,
       "alignmentOccurrences": 0.5,
+      "uniqueness": 0.6,
+
       "sourceCorpusPermutationsFrequencyRatio": 0.7,
       "targetCorpusPermutationsFrequencyRatio": 0.7,
+
       "sourceSavedAlignmentsFrequencyRatio": 0.7,
       "targetSavedAlignmentsFrequencyRatio": 0.7
     };
 
     for (const p of predictions) {
+      const isSavedAlignment = saIndex.alignmentFrequency.read(p.alignment);
+
       // confidence based on corpus
       const corpusWeightedKeys = [
         "sourceCorpusPermutationsFrequencyRatio",
@@ -157,7 +162,8 @@ export default class Engine {
         "alignmentPosition",
         "ngramLength",
         "characterLength",
-        "alignmentOccurrences"
+        "alignmentOccurrences",
+        "uniqueness"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
@@ -172,7 +178,8 @@ export default class Engine {
         "alignmentPosition",
         "ngramLength",
         "characterLength",
-        "alignmentOccurrences"
+        "alignmentOccurrences",
+        "uniqueness"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
@@ -181,14 +188,15 @@ export default class Engine {
       );
 
       // prefer to use the saved alignment confidence
-      if (!confidence) {
+      if (!isSavedAlignment) {
         confidence = corpusConfidence;
         confidence *= p.getScore("phrasePlausibility");
+      } else {
+        // TODO: this is just for testing.
+        throw Error("WHAT!!!");
       }
 
       // boost confidence for saved alignments
-      const isSavedAlignment = saIndex.alignmentFrequency.read(
-        p.alignment);
       if (isSavedAlignment) {
         confidence++;
       }

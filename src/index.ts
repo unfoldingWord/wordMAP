@@ -4,6 +4,7 @@ import CharacterLength from "./algorithms/CharacterLength";
 import NgramFrequency from "./algorithms/NgramFrequency";
 import NgramLength from "./algorithms/NgramLength";
 import PhrasePlausibility from "./algorithms/PhrasePlausibility";
+import Uniqueness from "./algorithms/Uniqueness";
 import Engine from "./Engine";
 import Lexer from "./Lexer";
 import Alignment from "./structures/Alignment";
@@ -25,6 +26,7 @@ export default class MAP {
     this.engine.registerAlgorithm(new NgramLength());
     this.engine.registerAlgorithm(new CharacterLength());
     this.engine.registerAlgorithm(new AlignmentOccurrences());
+    this.engine.registerAlgorithm(new Uniqueness());
   }
 
   /**

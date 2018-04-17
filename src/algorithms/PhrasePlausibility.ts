@@ -39,8 +39,6 @@ export default class PhrasePlausibility implements Algorithm {
   public name = "phrase plausibility";
 
   public execute(predictions: Prediction[]): Prediction[] {
-    // TODO: is is-phrase and commonality the same algorithm or are they separate?
-
     for (const p of predictions) {
       const commonality = PhrasePlausibility.commonality(p);
       p.setScore("phrasePlausibility", commonality);
