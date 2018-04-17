@@ -6,6 +6,7 @@ import Token from "./Token";
 export default class Ngram {
 
   private tokens: Token[];
+  private cachedKey!: string; // TRICKY: definite assignment assertion
 
   /**
    * Returns the length of the n-gram in {@link Token}'s
@@ -78,15 +79,18 @@ export default class Ngram {
   }
 
   /**
-   * Returns a human readable form of the n-gram.
+   * Returns the n-gram key
    * @return {string}
    */
   public get key(): string {
-    const tokenValues = [];
-    for (const token of this.tokens) {
-      tokenValues.push(token.toString());
+    if (this.cachedKey === undefined) {
+      const tokenValues = [];
+      for (const token of this.tokens) {
+        tokenValues.push(token.toString());
+      }
+      this.cachedKey = "n:" + tokenValues.join(":").toLowerCase();
     }
-    return "n:" + tokenValues.join(":");
+    return this.cachedKey;
   }
 
   /**

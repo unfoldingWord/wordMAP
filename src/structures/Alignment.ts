@@ -8,6 +8,7 @@ export default class Alignment {
 
   private sourceNgram: Ngram;
   private targetNgram: Ngram;
+  private cachedKey!: string; // TRICKY: definite assignment assertion
 
   /**
    * Returns the n-gram from the source text
@@ -26,11 +27,14 @@ export default class Alignment {
   }
 
   /**
-   * Returns the alignment key
+   * Returns the alignment key.
    * @return {string}
    */
   public get key(): string {
-    return `${this.sourceNgram.key}->${this.targetNgram.key}`;
+    if (this.cachedKey === undefined) {
+      this.cachedKey = `${this.sourceNgram.key}->${this.targetNgram.key}`.toLowerCase();
+    }
+    return this.cachedKey;
   }
 
   /**

@@ -16,6 +16,7 @@ export default class NgramIndex extends FrequencyIndex {
 
   /**
    * Writes a value to the index
+   * @deprecated - use {@link increment} instead
    * @param {Ngram} ngram - the n-gram index to write
    * @param {number} value
    */
