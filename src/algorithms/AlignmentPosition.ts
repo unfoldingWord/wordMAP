@@ -12,11 +12,11 @@ export default class AlignmentPosition implements Algorithm {
     for (const p of predictions) {
       const sourcePosition = 1 + p.alignment.source.tokenPosition;
       const targetPosition = 1 + p.alignment.target.tokenPosition;
+      const sourceSentenceLength = 1 + p.alignment.source.sentenceTokenLength;
+      const targetSentenceLength = 1 + p.alignment.target.sentenceTokenLength;
 
-      const sourceRelativePosition = sourcePosition /
-        p.alignment.source.sentenceTokenLength;
-      const targetRelativePosition = targetPosition /
-        p.alignment.target.sentenceTokenLength;
+      const sourceRelativePosition = sourcePosition / sourceSentenceLength;
+      const targetRelativePosition = targetPosition / targetSentenceLength;
       const delta = Math.abs(sourceRelativePosition - targetRelativePosition);
       const weight = 1 - delta;
 

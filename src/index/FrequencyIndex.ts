@@ -32,9 +32,12 @@ export default abstract class FrequencyIndex {
    * @param value - optional value to add
    */
   protected incrementIndex(key: string, value: number = 1) {
+    if (isNaN(value)) {
+      throw new Error(`Invalid NaN frequency for "${key}"`);
+    }
     const lowerKey = key.toLowerCase();
     const originalValue = this.readIndex(lowerKey);
-    this.writeIndex(lowerKey, originalValue + value);
+    this.index[lowerKey] = originalValue + value;
   }
 
   /**
