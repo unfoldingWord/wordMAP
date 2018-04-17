@@ -139,7 +139,7 @@ export default class Engine {
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
-      "alignmentPosition": 0.4,
+      "alignmentPosition": 0.8,
       "ngramLength": 0.2,
       "characterLength": 0.3,
       "alignmentOccurrences": 0.5,

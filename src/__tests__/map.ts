@@ -83,15 +83,11 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 10);
 
-    const stuff1 = [
-      suggestions[0].toString(),
-      suggestions[1].toString(),
-      suggestions[2].toString(),
-      suggestions[3].toString(),
-      suggestions[4].toString()
-    ];
+    const stuff1 = suggestions.map((s) => {
+      return s.toString();
+    });
 
     // noinspection TsLint
     console.log("corpus (1)\n", stuff1);
@@ -103,7 +99,7 @@ describe("MAP", () => {
       "Abraham begat Isaac, and Isaac begat Jacob, and Jacob begat Judah and his brothers."
     ];
 
-    const secondSuggestions = map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 5);
+    const secondSuggestions = map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 10);
     const stuff2 = [
       secondSuggestions[0].toString(),
       secondSuggestions[1].toString(),
