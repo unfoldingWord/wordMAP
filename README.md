@@ -4,6 +4,12 @@
 
 # Multi-Lingual Word Alignment Prediction (Word MAP)
 
+# Installation
+
+```
+npm i word-map
+```
+
 # Introduction
 
 Word alignment prediction is the process of associating (mapping) words from some primary text with corresponding words in a secondary text. This tool uses statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.

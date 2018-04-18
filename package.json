@@ -1,8 +1,8 @@
 {
   "name": "word-map",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Multi-Lingual Word Alignment Prediction",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "tslint -c tslint.json src/**/*.ts",
     "docs": "typedoc --out docs --mode modules --target ES6",
