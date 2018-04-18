@@ -142,8 +142,8 @@ export default class Engine {
       "alignmentPosition": 0.7,
       "ngramLength": 0.2,
       "characterLength": 0.3,
-      "alignmentOccurrences": 0.5,
-      "uniqueness": 0.6,
+      "alignmentOccurrences": 0.4,
+      "uniqueness": 0.5,
 
       "sourceCorpusPermutationsFrequencyRatio": 0.7,
       "targetCorpusPermutationsFrequencyRatio": 0.7,

@@ -171,6 +171,18 @@ describe("MAP", () => {
 // 1. is phrase, commonality
 // 2. lowercase the data keys
 // TODO: 3. focus on integration. I/O.
+
+// TODO: add option to enter answer key (alignments) to return the suggestions that match the answer key.
+// This will be more powerful than a genetic algorithm because it will allow us to compare
+// the prediction output with our expected output and figure out what we did wrong.
+
+// TODO: 4.1. parse greek bible => resource/bibles/greek/ugnt
+// TODO: 4.2. parse english bible => https://git.door43.org/tc01/English_tit/src/branch/master/57-TIT.usfm
+// TODO: 4.3. parse alignment json from tC for consumption in MAP (https://git.door43.org/tc01/English_tit.git).
+// TODO: 4.4. score how closely the results match expected output (Titus).
+// TODO: 4.5. genetic algorithm to generate weights
+// TODO: 4.6. graph output.
+
 // TODO: 4. lemma
 // TODO: 5. performance
 // TODO: 6. tc does not have an easy way to give us the corpus.
