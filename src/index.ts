@@ -14,9 +14,9 @@ import Suggestion from "./structures/Suggestion";
 import Token from "./structures/Token";
 
 /**
- * Word Alignment Prediction
+ * Multi-Lingual Word Alignment Prediction
  */
-export default class MAP {
+export default class WordMap {
   private engine: Engine;
 
   constructor() {

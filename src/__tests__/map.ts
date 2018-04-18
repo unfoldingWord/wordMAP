@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import MAP from "../index";
+import WordMap from "../index";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
@@ -35,7 +35,7 @@ describe("MAP", () => {
   // });
 
   it("predicts from saved alignments", () => {
-    const map = new MAP();
+    const map = new WordMap();
     // append saved alignments
     const sourceSavedAlignments = fs.readFileSync(path.join(
       __dirname,
@@ -68,7 +68,7 @@ describe("MAP", () => {
   });
 
   it("predicts from corpus", () => {
-    const map = new MAP();
+    const map = new WordMap();
 
     // append corpus
     const sourceCorpus = fs.readFileSync(path.join(
@@ -132,7 +132,7 @@ describe("MAP", () => {
   });
 
   it("predicts from corpus and saved alignments", () => {
-    const map = new MAP();
+    const map = new WordMap();
 
     // append corpus
     const sourceCorpus = fs.readFileSync(path.join(

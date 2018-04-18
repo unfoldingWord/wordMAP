@@ -42,6 +42,14 @@ export default class Prediction {
   }
 
   /**
+   * Convenience method for retrieving the prediction confidence.
+   * @return {number}
+   */
+  get confidence(): number {
+    return this.getScore("confidence");
+  }
+
+  /**
    * Returns the prediction key
    * @return {string}
    */
