@@ -66,13 +66,13 @@ export default class NgramFrequency implements Algorithm {
       // TODO: rename to something like this.
       // const sourceNgramFrequencyInCorpusPermutations
       const ngramFrequencyCorpusSource: number = cIndex.permutations.sourceNgramFrequency.read(
-        p.alignment.source);
+        p.source);
       const ngramFrequencySavedAlignmentsSource: number = saIndex.sourceNgramFrequency.read(
-        p.alignment.source);
+        p.source);
       const ngramFrequencyCorpusTarget: number = cIndex.permutations.targetNgramFrequency.read(
-        p.alignment.target);
+        p.target);
       const ngramFrequencySavedAlignmentsTarget: number = saIndex.targetNgramFrequency.read(
-        p.alignment.target);
+        p.target);
 
       // permutation frequency ratio
       const sourceCorpusPermutationsFrequencyRatio: number = NgramFrequency.divideSafe(

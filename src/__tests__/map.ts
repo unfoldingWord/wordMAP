@@ -8,15 +8,15 @@ import Suggestion from "../structures/Suggestion";
 import {makeMockAlignment} from "../util/testUtils";
 
 describe("MAP", () => {
-  it("has no corpus", () => {
-    const map = new MAP();
-    const suggestions = map.predict("hello", "olleh dlrow");
-    expect(suggestions.length).toEqual(1);
-
-    const s1 = suggestions[0];
-    expect(s1.getPredictions().length).toEqual(1);
-    expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
-  });
+  // it("has no corpus", () => {
+  //   const map = new MAP();
+  //   const suggestions = map.predict("hello", "olleh dlrow");
+  //   expect(suggestions.length).toEqual(1);
+  //
+  //   const s1 = suggestions[0];
+  //   expect(s1.getPredictions().length).toEqual(1);
+  //   expect(s1.getPredictions()[0].alignment.key).toEqual("n:hello->n:olleh:dlrow");
+  // });
 
   // it("has some corpus", () => {
   //   const map = new MAP();

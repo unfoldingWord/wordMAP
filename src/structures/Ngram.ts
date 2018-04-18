@@ -16,18 +16,6 @@ export default class Ngram {
     return this.tokens.length;
   }
 
-  public isUnigram() {
-    return this.tokens.length === 1;
-  }
-
-  public isBigram() {
-    return this.tokens.length === 2;
-  }
-
-  public isTrigram() {
-    return this.tokens.length === 3;
-  }
-
   /**
    * Returns the length of the n-gram in characters.
    * This does not account for whitespace.
@@ -110,6 +98,30 @@ export default class Ngram {
    */
   constructor(tokens: Token[] = []) {
     this.tokens = tokens;
+  }
+
+  /**
+   * Checks if this n-gram contains one token
+   * @return {boolean}
+   */
+  public isUnigram() {
+    return this.tokens.length === 1;
+  }
+
+  /**
+   * Checks if this n-gram contains two tokens
+   * @return {boolean}
+   */
+  public isBigram() {
+    return this.tokens.length === 2;
+  }
+
+  /**
+   * Checks if this n-gram contains three tokens
+   * @return {boolean}
+   */
+  public isTrigram() {
+    return this.tokens.length === 3;
   }
 
   /**

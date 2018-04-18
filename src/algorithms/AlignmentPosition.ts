@@ -17,13 +17,13 @@ export default class AlignmentPosition implements Algorithm {
     for (const p of predictions) {
       let weight = 0;
       // TRICKY: do not score null alignments
-      if (!p.alignment.target.isNull()) {
+      if (!p.target.isNull()) {
         // TRICKY: token positions are zero indexed
-        const sourcePosition = 1 + p.alignment.source.tokenPosition;
-        const targetPosition = 1 + p.alignment.target.tokenPosition;
+        const sourcePosition = 1 + p.source.tokenPosition;
+        const targetPosition = 1 + p.target.tokenPosition;
 
-        const sourceSentenceLength = p.alignment.source.sentenceTokenLength;
-        const targetSentenceLength = p.alignment.target.sentenceTokenLength;
+        const sourceSentenceLength = p.source.sentenceTokenLength;
+        const targetSentenceLength = p.target.sentenceTokenLength;
 
         const sourceRelativePosition = sourcePosition / sourceSentenceLength;
         const targetRelativePosition = targetPosition / targetSentenceLength;

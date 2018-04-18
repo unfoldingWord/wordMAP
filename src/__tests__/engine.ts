@@ -950,13 +950,15 @@ describe("scoring", () => {
       targetSavedAlignmentsFrequencyRatio: 1,
       phrasePlausibility: 2,
       ngramLength: 1,
-      characterLength: 3
+      characterLength: 3,
+      alignmentOccurrences: 2,
+      uniqueness: 1
     });
     const result = Engine.calculateConfidence(
       [prediction],
       new SavedAlignmentsIndex()
     );
-    expect(result[0].getScore("confidence")).toEqual(1.7333333333333332);
+    expect(result[0].getScore("confidence")).toEqual(4.571428571428572);
   });
 });
 

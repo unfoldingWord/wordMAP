@@ -12,14 +12,14 @@ export default class CharacterLength implements Algorithm {
     for (const p of predictions) {
       let weight = 0;
       // TRICKY: do not score null alignments
-      if (!p.alignment.target.isNull()) {
+      if (!p.target.isNull()) {
         // sentence lengths
-        const sourceSentenceLength = p.alignment.source.sentenceCharacterLength;
-        const targetSentenceLength = p.alignment.target.sentenceCharacterLength;
+        const sourceSentenceLength = p.source.sentenceCharacterLength;
+        const targetSentenceLength = p.target.sentenceCharacterLength;
 
         // n-gram lengths
-        const sourceLength = p.alignment.source.characterLength;
-        const targetLength = p.alignment.target.characterLength;
+        const sourceLength = p.source.characterLength;
+        const targetLength = p.target.characterLength;
 
         const primaryLengthRatio = sourceLength / sourceSentenceLength;
         const secondaryLengthRatio = targetLength / targetSentenceLength;

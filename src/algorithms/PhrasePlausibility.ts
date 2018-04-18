@@ -12,11 +12,11 @@ export default class PhrasePlausibility implements Algorithm {
   public execute(predictions: Prediction[], cIndex: CorpusIndex): Prediction[] {
     for (const p of predictions) {
       const sourceNgramStaticCorpusFrequency: number = cIndex.static.sourceNgramFrequency.read(
-        p.alignment.source);
+        p.source);
       const targetNgramStaticCorpusFrequency: number = cIndex.static.targetNgramFrequency.read(
-        p.alignment.target);
+        p.target);
 
-      const isTargetNull = p.alignment.target.isNull();
+      const isTargetNull = p.target.isNull();
       let weight = 0;
       if (sourceNgramStaticCorpusFrequency === 0 ||
         targetNgramStaticCorpusFrequency === 0 ||
@@ -31,10 +31,10 @@ export default class PhrasePlausibility implements Algorithm {
         let y = 1 - 1 / targetNgramStaticCorpusFrequency;
 
         // TRICKY: uni-grams are always phrases
-        if (p.alignment.source.isUnigram()) {
+        if (p.source.isUnigram()) {
           x = 1;
         }
-        if (p.alignment.target.isUnigram()) {
+        if (p.target.isUnigram()) {
           y = 1;
         }
 

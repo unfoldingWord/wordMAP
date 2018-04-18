@@ -15,8 +15,8 @@ export default class AlignmentOccurrences implements Algorithm {
     for (const p of predictions) {
       let weight = 0;
 
-      const x = usIndex.static.sourceNgramFrequency.read(p.alignment.source);
-      const y = usIndex.static.targetNgramFrequency.read(p.alignment.target);
+      const x = usIndex.static.sourceNgramFrequency.read(p.source);
+      const y = usIndex.static.targetNgramFrequency.read(p.target);
       const delta = Math.abs(x - y);
       weight = 1 / (delta + 1);
       p.setScore("alignmentOccurrences", weight);

@@ -1,3 +1,8 @@
+import Engine from "../../Engine";
+import CorpusIndex from "../../index/CorpusIndex";
+import NumberObject from "../../index/NumberObject";
+import SavedAlignmentsIndex from "../../index/SavedAlignmentsIndex";
+import Prediction from "../../structures/Prediction";
 import {
   alignMockSentence,
   makeCorpus,
@@ -6,11 +11,6 @@ import {
   reverseSentenceWords,
   tokenizeMockSentence
 } from "../../util/testUtils";
-import Engine from "../../Engine";
-import CorpusIndex from "../../index/CorpusIndex";
-import NumberObject from "../../index/NumberObject";
-import SavedAlignmentsIndex from "../../index/SavedAlignmentsIndex";
-import Prediction from "../../structures/Prediction";
 import NgramFrequency from "../NgramFrequency";
 
 describe("calculate frequency", () => {
@@ -66,42 +66,22 @@ describe("calculate frequency", () => {
     );
     // aligned to something
     expect(result[0].getScores()).toEqual({
-      "alignmentFrequencyCorpus": 0,
-      "alignmentFrequencySavedAlignments": 2,
-      "ngramFrequencyCorpusSource": 0,
-      "ngramFrequencyCorpusTarget": 0,
-      "ngramFrequencySavedAlignmentsSource": 3,
-      "ngramFrequencySavedAlignmentsTarget": 2,
-      "sourceCorpusPermutationsFrequencyRatio": 0,
-      "targetCorpusPermutationsFrequencyRatio": 0,
-      "sourceSavedAlignmentsFrequencyRatio": 0.6666666666666666,
-      "targetSavedAlignmentsFrequencyRatio": 1,
-      "alignmentFrequencyCorpusFiltered": 0,
-      "alignmentFrequencySavedAlignmentsFiltered": 2,
       "frequencyRatioCorpusFiltered": 0,
       "frequencyRatioSavedAlignmentsFiltered": 1,
-      "ngramStaticFrequencyCorpusSource": 0,
-      "ngramStaticFrequencyCorpusTarget": 0
+      "sourceCorpusPermutationsFrequencyRatio": 0,
+      "sourceSavedAlignmentsFrequencyRatio": 0.6666666666666666,
+      "targetCorpusPermutationsFrequencyRatio": 0,
+      "targetSavedAlignmentsFrequencyRatio": 1
     });
 
     // aligned to nothing
     expect(result[1].getScores()).toEqual({
-      "alignmentFrequencyCorpus": 0,
-      "alignmentFrequencySavedAlignments": 0,
-      "ngramFrequencyCorpusSource": 0,
-      "ngramFrequencyCorpusTarget": 0,
-      "ngramFrequencySavedAlignmentsSource": 3,
-      "ngramFrequencySavedAlignmentsTarget": 0,
-      "sourceCorpusPermutationsFrequencyRatio": 0,
-      "targetCorpusPermutationsFrequencyRatio": 0,
-      "sourceSavedAlignmentsFrequencyRatio": 0,
-      "targetSavedAlignmentsFrequencyRatio": 0,
-      "alignmentFrequencyCorpusFiltered": 0,
-      "alignmentFrequencySavedAlignmentsFiltered": 0,
       "frequencyRatioCorpusFiltered": 0,
       "frequencyRatioSavedAlignmentsFiltered": 0,
-      "ngramStaticFrequencyCorpusSource": 0,
-      "ngramStaticFrequencyCorpusTarget": 0
+      "sourceCorpusPermutationsFrequencyRatio": 0,
+      "sourceSavedAlignmentsFrequencyRatio": 0,
+      "targetCorpusPermutationsFrequencyRatio": 0,
+      "targetSavedAlignmentsFrequencyRatio": 0
     });
   });
 
@@ -118,25 +98,19 @@ describe("calculate frequency", () => {
     engine.addCorpus(initialCorpus[0], initialCorpus[1]);
 
     // first prediction
-    const firstPredictions = engine.run(unalignedSentence[0], unalignedSentence[1]);
-    expect(firstPredictions[0].getScores()).toEqual({
-      "alignmentFrequencyCorpus": 1,
-      "alignmentFrequencySavedAlignments": 0,
-      "ngramFrequencyCorpusSource": 7,
-      "ngramFrequencyCorpusTarget": 6,
-      "ngramFrequencySavedAlignmentsSource": 0,
-      "ngramFrequencySavedAlignmentsTarget": 0,
-      "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
-      "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
-      "sourceSavedAlignmentsFrequencyRatio": 0,
-      "targetSavedAlignmentsFrequencyRatio": 0,
-      "alignmentFrequencyCorpusFiltered": 1,
-      "alignmentFrequencySavedAlignmentsFiltered": 0,
-      "frequencyRatioCorpusFiltered": 1,
-      "frequencyRatioSavedAlignmentsFiltered": 0,
-      "ngramStaticFrequencyCorpusSource": 1,
-      "ngramStaticFrequencyCorpusTarget": 1
-    });
+    const firstPredictions = engine.run(
+      unalignedSentence[0],
+      unalignedSentence[1]
+    );
+    expect(firstPredictions[0].getScores())
+      .toEqual({
+        "frequencyRatioCorpusFiltered": 1,
+        "frequencyRatioSavedAlignmentsFiltered": 0,
+        "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
+        "sourceSavedAlignmentsFrequencyRatio": 0,
+        "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
+        "targetSavedAlignmentsFrequencyRatio": 0
+      });
 
     // append new corpus
     const secondCorpus = makeCorpus(
@@ -146,32 +120,20 @@ describe("calculate frequency", () => {
     engine.addCorpus(secondCorpus[0], secondCorpus[1]);
 
     // second prediction
-    const secondPredictions = engine.run(unalignedSentence[0], unalignedSentence[1]);
-    expect(secondPredictions[0].getScores()).toEqual({
-      "alignmentFrequencyCorpus": 2,
-      "alignmentFrequencySavedAlignments": 0,
-
-      // from permutations in the entire corpus
-      "ngramFrequencyCorpusSource": 17,
-      "ngramFrequencyCorpusTarget": 15,
-
-      "ngramFrequencySavedAlignmentsSource": 0,
-      "ngramFrequencySavedAlignmentsTarget": 0,
-      "sourceCorpusPermutationsFrequencyRatio": 0.11764705882352941,
-      "targetCorpusPermutationsFrequencyRatio": 0.13333333333333333,
-      "sourceSavedAlignmentsFrequencyRatio": 0,
-      "targetSavedAlignmentsFrequencyRatio": 0,
-
-      // we want permutations in the filtered corpus.
-      // A filtered corpus is the lines of corpus where the source n-gram and target n-gram both occur.
-      "alignmentFrequencyCorpusFiltered": 2, // TODO: this is not right. we'll fix this later. This should be some number between 2 and 15 or 17. we might need a source and target for this.
-
-      "alignmentFrequencySavedAlignmentsFiltered": 0,
-      "frequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
-      "frequencyRatioSavedAlignmentsFiltered": 0,
-      "ngramStaticFrequencyCorpusSource": 2,
-      "ngramStaticFrequencyCorpusTarget": 2
-    });
+    const secondPredictions = engine.run(
+      unalignedSentence[0],
+      unalignedSentence[1]
+    );
+    expect(secondPredictions[0].getScores())
+      .toEqual({
+          "frequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
+          "frequencyRatioSavedAlignmentsFiltered": 0,
+          "sourceCorpusPermutationsFrequencyRatio": 0.11764705882352941,
+          "sourceSavedAlignmentsFrequencyRatio": 0,
+          "targetCorpusPermutationsFrequencyRatio": 0.13333333333333333,
+          "targetSavedAlignmentsFrequencyRatio": 0
+        }
+      );
   });
 
   it(
@@ -195,24 +157,15 @@ describe("calculate frequency", () => {
       const targetTokens = tokenizeMockSentence(targetSentence);
       const predictions = engine.run(sourceTokens, targetTokens);
 
-      expect(predictions[0].getScores()).toEqual({
-        "alignmentFrequencyCorpus": 1,
-        "alignmentFrequencySavedAlignments": 1,
-        "ngramFrequencyCorpusSource": 7,
-        "ngramFrequencyCorpusTarget": 6,
-        "ngramFrequencySavedAlignmentsSource": 1,
-        "ngramFrequencySavedAlignmentsTarget": 1,
-        "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
-        "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
-        "sourceSavedAlignmentsFrequencyRatio": 1,
-        "targetSavedAlignmentsFrequencyRatio": 1,
-        "alignmentFrequencyCorpusFiltered": 1,
-        "alignmentFrequencySavedAlignmentsFiltered": 1,
-        "frequencyRatioCorpusFiltered": 1,
-        "frequencyRatioSavedAlignmentsFiltered": 1,
-        "ngramStaticFrequencyCorpusSource": 1,
-        "ngramStaticFrequencyCorpusTarget": 1
-      });
+      expect(predictions[0].getScores())
+        .toEqual({
+          "frequencyRatioCorpusFiltered": 1,
+          "frequencyRatioSavedAlignmentsFiltered": 1,
+          "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
+          "sourceSavedAlignmentsFrequencyRatio": 1,
+          "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
+          "targetSavedAlignmentsFrequencyRatio": 1
+        });
     }
   );
 });

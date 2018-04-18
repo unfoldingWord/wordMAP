@@ -16,9 +16,9 @@ export default class Uniqueness implements Algorithm {
       let weight = 0;
 
       const sourceNgramStaticCorpusFrequency = cIndex.static.sourceNgramFrequency.read(
-        p.alignment.source);
+        p.source);
       const targetNgramStaticCorpusFrequency = cIndex.static.targetNgramFrequency.read(
-        p.alignment.target);
+        p.target);
 
       if (sourceNgramStaticCorpusFrequency !== 0 &&
         targetNgramStaticCorpusFrequency !==

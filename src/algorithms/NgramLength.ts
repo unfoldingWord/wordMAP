@@ -8,14 +8,14 @@ export default class NgramLength implements Algorithm {
     for (const p of predictions) {
       let weight = 0;
       // TRICKY: do not score null alignments
-      if (!p.alignment.target.isNull()) {
+      if (!p.target.isNull()) {
         // sentence lengths
-        const sourceSentenceLength = p.alignment.source.sentenceTokenLength;
-        const targetSentenceLength = p.alignment.target.sentenceTokenLength;
+        const sourceSentenceLength = p.source.sentenceTokenLength;
+        const targetSentenceLength = p.target.sentenceTokenLength;
 
         // n-gram lengths
-        const sourceLength = p.alignment.source.tokenLength;
-        const targetLength = p.alignment.target.tokenLength;
+        const sourceLength = p.source.tokenLength;
+        const targetLength = p.target.tokenLength;
 
         const primaryLengthRatio = sourceLength / sourceSentenceLength;
         const secondaryLengthRatio = targetLength / targetSentenceLength;

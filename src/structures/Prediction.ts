@@ -1,5 +1,6 @@
 import NumberObject from "../index/NumberObject";
 import Alignment from "./Alignment";
+import Ngram from "./Ngram";
 
 /**
  * Represents a single alignment prediction
@@ -20,8 +21,24 @@ export default class Prediction {
    * Returns the alignment represented by this prediction
    * @return {Alignment}
    */
-  get alignment() {
+  get alignment(): Alignment {
     return this.predictedAlignment;
+  }
+
+  /**
+   * Convenience method to access the source n-gram of the alignment
+   * @return {Ngram}
+   */
+  get source(): Ngram {
+    return this.predictedAlignment.source;
+  }
+
+  /**
+   * Convenience method to access the target n-gram of the alignment.
+   * @return {Ngram}
+   */
+  get target(): Ngram {
+    return this.predictedAlignment.target;
   }
 
   /**
@@ -92,10 +109,10 @@ export default class Prediction {
    * @return {boolean}
    */
   public intersects(prediction: Prediction): boolean {
-    const predictionSourceTokens = prediction.alignment.source.getTokens();
-    const predictionTargetTokens = prediction.alignment.target.getTokens();
-    const sourceTokens = this.alignment.source.getTokens();
-    const targetTokens = this.alignment.target.getTokens();
+    const predictionSourceTokens = prediction.source.getTokens();
+    const predictionTargetTokens = prediction.target.getTokens();
+    const sourceTokens = this.source.getTokens();
+    const targetTokens = this.target.getTokens();
 
     // check source tokens
     for (const t of sourceTokens) {

@@ -12,8 +12,8 @@ export default class Suggestion {
    */
   public static sortPredictions(predictions: Prediction[]): Prediction[] {
     return predictions.sort((a, b) => {
-      const aPos = a.alignment.source.tokenPosition;
-      const bPos = b.alignment.source.tokenPosition;
+      const aPos = a.source.tokenPosition;
+      const bPos = b.source.tokenPosition;
       if (aPos < bPos) {
         return -1;
       }
