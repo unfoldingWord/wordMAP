@@ -74,12 +74,6 @@ export default class NgramFrequency implements Algorithm {
       const ngramFrequencySavedAlignmentsTarget: number = saIndex.targetNgramFrequency.read(
         p.alignment.target);
 
-      // n-gram static frequency
-      const ngramStaticFrequencyCorpusSource: number = cIndex.static.sourceNgramFrequency.read(
-        p.alignment.source);
-      const ngramStaticFrequencyCorpusTarget: number = cIndex.static.targetNgramFrequency.read(
-        p.alignment.target);
-
       // permutation frequency ratio
       const sourceCorpusPermutationsFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencyCorpus,
@@ -100,23 +94,10 @@ export default class NgramFrequency implements Algorithm {
 
       // store scores
       p.setScores({
-        // permutation scores
-        alignmentFrequencyCorpus,
-        alignmentFrequencySavedAlignments,
-
-        ngramFrequencyCorpusSource,
-        ngramFrequencyCorpusTarget,
-        ngramFrequencySavedAlignmentsSource,
-        ngramFrequencySavedAlignmentsTarget,
-
         sourceCorpusPermutationsFrequencyRatio,
         targetCorpusPermutationsFrequencyRatio,
         sourceSavedAlignmentsFrequencyRatio,
         targetSavedAlignmentsFrequencyRatio,
-
-        // static scores
-        ngramStaticFrequencyCorpusSource,
-        ngramStaticFrequencyCorpusTarget
       });
 
       // sum alignment frequencies
@@ -134,9 +115,10 @@ export default class NgramFrequency implements Algorithm {
 
     // calculate filtered frequency ratios
     for (const p of predictions) {
-      const alignmentFrequencyCorpus = p.getScore("alignmentFrequencyCorpus");
-      const alignmentFrequencySavedAlignments = p.getScore(
-        "alignmentFrequencySavedAlignments");
+      const alignmentFrequencyCorpus: number = cIndex.permutations.alignmentFrequency.read(
+        p.alignment);
+      const alignmentFrequencySavedAlignments: number = saIndex.alignmentFrequency.read(
+        p.alignment);
 
       // TODO: instead of generating filters of alignmentFrequencyCorpus etc
       // we want to generate filtered ngramFrequencyCorpusSource and ngramFrequencyCorpusTarget
@@ -158,8 +140,8 @@ export default class NgramFrequency implements Algorithm {
 
       // store scores
       p.setScores({
-        alignmentFrequencyCorpusFiltered,
-        alignmentFrequencySavedAlignmentsFiltered,
+        // alignmentFrequencyCorpusFiltered,
+        // alignmentFrequencySavedAlignmentsFiltered,
 
         frequencyRatioCorpusFiltered,
         frequencyRatioSavedAlignmentsFiltered

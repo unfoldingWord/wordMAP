@@ -15,15 +15,18 @@ export default class Uniqueness implements Algorithm {
 
       let weight = 0;
 
-      const ngramFrequencyCorpusSource = p.getScore(
-        "ngramStaticFrequencyCorpusSource");
-      const ngramFrequencyCorpusTarget = p.getScore(
-        "ngramStaticFrequencyCorpusTarget");
+      const sourceNgramStaticCorpusFrequency = cIndex.static.sourceNgramFrequency.read(
+        p.alignment.source);
+      const targetNgramStaticCorpusFrequency = cIndex.static.targetNgramFrequency.read(
+        p.alignment.target);
 
-      if (ngramFrequencyCorpusSource !== 0 && ngramFrequencyCorpusTarget !==
+      if (sourceNgramStaticCorpusFrequency !== 0 &&
+        targetNgramStaticCorpusFrequency !==
         0) {
-        const x = ngramFrequencyCorpusSource / cIndex.static.sourceTokenLength;
-        const y = ngramFrequencyCorpusTarget / cIndex.static.targetTokenLength;
+        const x = sourceNgramStaticCorpusFrequency /
+          cIndex.static.sourceTokenLength;
+        const y = targetNgramStaticCorpusFrequency /
+          cIndex.static.targetTokenLength;
         weight = Math.min(x, y) / Math.max(x, y);
       }
 
