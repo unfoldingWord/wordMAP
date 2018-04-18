@@ -83,7 +83,7 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 10);
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 2);
 
     const stuff1 = suggestions.map((s) => {
       return s.toString();
@@ -99,27 +99,19 @@ describe("MAP", () => {
       "Abraham begat Isaac, and Isaac begat Jacob, and Jacob begat Judah and his brothers."
     ];
 
-    const secondSuggestions = map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 10);
-    const stuff2 = [
-      secondSuggestions[0].toString(),
-      secondSuggestions[1].toString(),
-      secondSuggestions[2].toString(),
-      secondSuggestions[3].toString(),
-      secondSuggestions[4].toString()
-    ];
+    const secondSuggestions = map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2);
+    const stuff2 = secondSuggestions.map((s) => {
+      return s.toString();
+    });
     console.log("corpus (2)\n", stuff2);
 
     // make sure we get the same output as at first
 
     const thirdSuggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
 
-    const stuff3 = [
-      thirdSuggestions[0].toString(),
-      thirdSuggestions[1].toString(),
-      thirdSuggestions[2].toString(),
-      thirdSuggestions[3].toString(),
-      thirdSuggestions[4].toString()
-    ];
+    const stuff3 = thirdSuggestions.map((s) => {
+      return s.toString();
+    });
 
     // noinspection TsLint
     console.log("corpus (3)\n", stuff3);

@@ -17,7 +17,13 @@ export default class PhrasePlausibility implements Algorithm {
     const ngramFrequencyCorpusTarget = prediction.getScore(
       "ngramStaticFrequencyCorpusTarget");
 
-    if (ngramFrequencyCorpusSource === 0 || ngramFrequencyCorpusTarget === 0) {
+    const isTargetNull = prediction.alignment.target.isNull();
+    if (ngramFrequencyCorpusSource === 0 || ngramFrequencyCorpusTarget === 0 ||
+      isTargetNull) {
+      // TRICKY: let null n-grams be common
+      if (isTargetNull) {
+        return 1;
+      }
       return 0;
     } else {
       let x = 1 - 1 / ngramFrequencyCorpusSource;

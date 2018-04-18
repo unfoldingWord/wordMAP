@@ -139,7 +139,7 @@ export default class Engine {
   public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
-      "alignmentPosition": 0.8,
+      "alignmentPosition": 0.7,
       "ngramLength": 0.2,
       "characterLength": 0.3,
       "alignmentOccurrences": 0.5,
@@ -191,9 +191,6 @@ export default class Engine {
       if (!isSavedAlignment) {
         confidence = corpusConfidence;
         confidence *= p.getScore("phrasePlausibility");
-      } else {
-        // TODO: this is just for testing.
-        throw Error("WHAT!!!");
       }
 
       // boost confidence for saved alignments
