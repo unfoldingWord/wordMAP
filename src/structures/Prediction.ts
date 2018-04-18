@@ -142,4 +142,13 @@ export default class Prediction {
 
     return false;
   }
+
+  /**
+   * Prints a user friendly form of the prediction
+   * @return {string}
+   */
+  public toString(): string {
+    const confidence = this.confidence.toString().substring(0, 4);
+    return `${confidence}|${this.alignment.key}`;
+  }
 }

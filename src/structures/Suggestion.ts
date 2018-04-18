@@ -56,17 +56,14 @@ export default class Suggestion {
   }
 
   /**
-   * Prints a user friendly form of the alignment suggestion
+   * Prints a user friendly form of the suggestion
    */
-  public toString() {
+  public toString(): string {
     const result: string[] = [];
     for (const p of this.predictions) {
-      const confidence = p.getScore("confidence").toString().substring(0, 4);
-      result.push(`[${confidence}|${p.alignment.key}]`);
+      result.push(`[${p.toString()}]`);
     }
-    return `${this.compoundConfidence().toString().substring(
-      0,
-      8
-    )} ${result.join(" ")}`;
+    const confidence = this.compoundConfidence().toString().substring(0, 8);
+    return `${confidence} ${result.join(" ")}`;
   }
 }
