@@ -9,6 +9,7 @@ import Engine from "./Engine";
 import Lexer from "./Lexer";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
+import Prediction from "./structures/Prediction";
 import Suggestion from "./structures/Suggestion";
 import Token from "./structures/Token";
 
@@ -104,5 +105,33 @@ export default class MAP {
     let predictions = this.engine.run(sourceTokens, targetTokens);
     predictions = this.engine.score(predictions);
     return Engine.suggest(predictions, maxSuggestions);
+  }
+
+  /**
+   * Predicts word alignments between the sentences.
+   * Returns an array of suggestions that match the benchmark.
+   *
+   * @param {string} sourceSentence
+   * @param {string} targetSentence
+   * @param {Suggestion} benchmark
+   * @param {number} maxSuggestions
+   * @return {Suggestion[]}
+   */
+  public predictWithBenchmark(sourceSentence: string, targetSentence: string, benchmark: Alignment[], maxSuggestions: number = 1): Suggestion[] {
+    const sourceTokens = Lexer.tokenize(sourceSentence);
+    const targetTokens = Lexer.tokenize(targetSentence);
+
+    let predictions = this.engine.run(sourceTokens, targetTokens);
+    predictions = this.engine.score(predictions);
+
+    const validPredictions: Prediction[] = [];
+    for (const p of predictions) {
+      for (const a of benchmark) {
+        if (a.key === p.alignment.key) {
+          validPredictions.push(p);
+        }
+      }
+    }
+    return Engine.suggest(validPredictions, maxSuggestions);
   }
 }

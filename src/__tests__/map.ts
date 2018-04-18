@@ -1,6 +1,11 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 import MAP from "../index";
+import Alignment from "../structures/Alignment";
+import Ngram from "../structures/Ngram";
+import Prediction from "../structures/Prediction";
+import Suggestion from "../structures/Suggestion";
+import {makeMockAlignment} from "../util/testUtils";
 
 describe("MAP", () => {
   it("has no corpus", () => {
@@ -83,27 +88,36 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 2);
-
-    const stuff1 = suggestions.map((s) => {
+    console.log("corpus (1)\n", map.predict(unalignedPair[0], unalignedPair[1], 2).map((s) => {
       return s.toString();
-    });
-
-    // noinspection TsLint
-    console.log("corpus (1)\n", stuff1);
+    }));
 
     // run it again to make sure things work
 
     const secondUnalignedPair = [
-      "Ἀβραὰμ ἐγέννησεν τὸν Ἰσαάκ, Ἰσαὰκ δὲ ἐγέννησεν τὸν Ἰακώβ, Ἰακὼβ δὲ ἐγέννησεν τὸν Ἰούδαν καὶ τοὺς ἀδελφοὺς αὐτοῦ,",
+      "Ἀβραὰμ ἐγέννησεν τὸν Ἰσαὰκ, Ἰσαὰκ δὲ ἐγέννησεν τὸν Ἰακὼβ, Ἰακὼβ δὲ ἐγέννησεν τὸν Ἰούδαν καὶ τοὺς ἀδελφοὺς αὐτοῦ,",
       "Abraham begat Isaac, and Isaac begat Jacob, and Jacob begat Judah and his brothers."
     ];
+    const benchmark: Alignment[] = [];
+    benchmark.push(makeMockAlignment("Ἀβραὰμ", "Abraham"));
+    benchmark.push(makeMockAlignment("ἐγέννησεν", "begat"));
+    benchmark.push(makeMockAlignment("Ἰσαὰκ", "Isaac"));
+    benchmark.push(makeMockAlignment("δὲ", ""));
+    benchmark.push(makeMockAlignment("τὸν", "and"));
+    benchmark.push(makeMockAlignment("Ἰακὼβ", "Jacob"));
+    benchmark.push(makeMockAlignment("δὲ", ""));
+    benchmark.push(makeMockAlignment("Ἰούδαν", "Judah"));
+    benchmark.push(makeMockAlignment("καὶ", "and"));
+    benchmark.push(makeMockAlignment("τοὺς", ""));
+    benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
+    benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
 
-    const secondSuggestions = map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2);
-    const stuff2 = secondSuggestions.map((s) => {
+    console.log("corpus (2)\n", map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
       return s.toString();
-    });
-    console.log("corpus (2)\n", stuff2);
+    }));
+    console.log("corpus (2): benchmark\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
+      return s.toString();
+    }));
 
     // make sure we get the same output as at first
 
@@ -114,7 +128,7 @@ describe("MAP", () => {
     });
 
     // noinspection TsLint
-    console.log("corpus (3)\n", stuff3);
+    // console.log("corpus (3)\n", stuff3);
   });
 
   it("predicts from corpus and saved alignments", () => {
@@ -172,7 +186,7 @@ describe("MAP", () => {
 // 2. lowercase the data keys
 // TODO: 3. focus on integration. I/O.
 
-// TODO: add option to enter answer key (alignments) to return the suggestions that match the answer key.
+// TODO: 4.0. add option to enter answer key (alignments) to return the suggestions that match the answer key.
 // This will be more powerful than a genetic algorithm because it will allow us to compare
 // the prediction output with our expected output and figure out what we did wrong.
 

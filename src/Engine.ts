@@ -206,7 +206,7 @@ export default class Engine {
   }
 
   /**
-   *
+   * Returns an array of alignment suggestions
    * @param predictions - the predictions from which to base the suggestion
    * @param maxSuggestions - the maximum number of suggestions to return
    * @return {Suggestion}
