@@ -88,7 +88,7 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    console.log("corpus (1)\n", map.predict(unalignedPair[0], unalignedPair[1], 2).map((s) => {
+    console.log("corpus (1)\n", map.predict(unalignedPair[0], unalignedPair[1], 20).map((s) => {
       return s.toString();
     }));
 
@@ -186,13 +186,13 @@ describe("MAP", () => {
 // 2. lowercase the data keys
 // TODO: 3. focus on integration. I/O.
 
-// TODO: 4.0. add option to enter answer key (alignments) to return the suggestions that match the answer key.
+// add option to enter answer key (alignments) to return the suggestions that match the answer key.
 // This will be more powerful than a genetic algorithm because it will allow us to compare
 // the prediction output with our expected output and figure out what we did wrong.
 
-// TODO: 4.1. parse greek bible => resource/bibles/greek/ugnt
-// TODO: 4.2. parse english bible => https://git.door43.org/tc01/English_tit/src/branch/master/57-TIT.usfm
-// TODO: 4.3. parse alignment json from tC for consumption in MAP (https://git.door43.org/tc01/English_tit.git).
+// 4.1. parse greek bible => resource/bibles/greek/ugnt
+// parse english bible => https://git.door43.org/tc01/English_tit/src/branch/master/57-TIT.usfm
+// parse alignment json from tC for consumption in MAP (https://git.door43.org/tc01/English_tit.git).
 // TODO: 4.4. score how closely the results match expected output (Titus).
 // TODO: 4.5. genetic algorithm to generate weights
 // TODO: 4.6. graph output.

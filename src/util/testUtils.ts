@@ -5,7 +5,18 @@ import Lexer from "../Lexer";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
+import Suggestion from "../structures/Suggestion";
 import Token from "../structures/Token";
+
+/**
+ * Generates a score for how closely the suggestion matches the answer key
+ * @param {Suggestion} suggestion
+ * @param {object} answerKey
+ * @return {number}
+ */
+export function scoreSuggestion(suggestion: Suggestion, answerKey: object): number {
+  return 0;
+}
 
 /**
  * converts some strings into corpus.

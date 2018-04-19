@@ -16,6 +16,9 @@
     "type": "git",
     "url": "git+https://github.com/translationCoreApps/word-map.git"
   },
+  "bin": {
+    "wordmap": "dist/cli.js"
+  },
   "jest": {
     "moduleFileExtensions": [
       "ts",
@@ -73,6 +76,8 @@
     "typescript": "^2.8.1"
   },
   "dependencies": {
-    "string-punctuation-tokenizer": "^0.8.0"
+    "@types/yargs": "^11.0.0",
+    "string-punctuation-tokenizer": "^0.8.0",
+    "yargs": "^11.0.0"
   }
 }
