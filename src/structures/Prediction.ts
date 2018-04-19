@@ -151,4 +151,16 @@ export default class Prediction {
     const confidence = this.confidence.toString().substring(0, 4);
     return `${confidence}|${this.alignment.key}`;
   }
+
+  /**
+   * Outputs the prediction to json
+   * @return {object}
+   */
+  public toJSON(): object {
+    return {
+      confidence: this.confidence,
+      sourceNgram: this.source.toJSON(),
+      targetNgram: this.target.toJSON()
+    };
+  }
 }

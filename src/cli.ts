@@ -20,7 +20,7 @@ const args = yargs.usage(
   .array("s")
   .alias("o", "out")
   .describe("o", "Output file path")
-  .default("o", "./alignments.json")
+  .default("o", "./alignment_predictions.json")
   .alias("p", "predictions")
   .describe("p", "The number of alignment predictions to generate")
   .default("p", 1)
@@ -47,7 +47,11 @@ console.log("Predicting alignments...");
 const suggestions = map.predict(args.s[0], args.s[1], args.p);
 
 console.log("Writing predictions to output...");
-console.log(suggestions);
 
-// TODO: write to json
+const alignmentData = [];
+for (const s of suggestions) {
+  alignmentData.push(s.toJSON());
+}
+fs.writeFileSync(args.o, JSON.stringify(alignmentData));
+
 console.log("Finished!");

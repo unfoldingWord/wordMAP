@@ -139,4 +139,16 @@ export default class Ngram {
   public getTokens() {
     return this.tokens;
   }
+
+  /**
+   * Outputs the n-gram to json
+   * @return {object}
+   */
+  public toJSON(): object {
+    const json = [];
+    for (const t of this.tokens) {
+      json.push(t.toJSON());
+    }
+    return json;
+  }
 }

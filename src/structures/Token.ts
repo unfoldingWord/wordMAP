@@ -81,4 +81,17 @@ export default class Token {
     return this.toString() === token.toString()
       && this.position === token.position;
   }
+
+  /**
+   * Outputs the token to json
+   * @return {object}
+   */
+  public toJSON(): object {
+    return {
+      text: this.text,
+      tokenPosition: this.tokenPos,
+      sentenceTokenLength: this.sentenceTokenLen
+      // TODO: place occurrence here
+    };
+  }
 }

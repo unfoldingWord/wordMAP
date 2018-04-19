@@ -66,4 +66,19 @@ export default class Suggestion {
     const confidence = this.compoundConfidence().toString().substring(0, 8);
     return `${confidence} ${result.join(" ")}`;
   }
+
+  /**
+   * Outputs the alignment predictions to json
+   * @return {object}
+   */
+  public toJSON(): object {
+    const json = [];
+    for (const p of this.predictions) {
+      json.push(p.toJSON());
+    }
+    return {
+      compoundConfidence: this.compoundConfidence(),
+      alignments: json
+    };
+  }
 }
