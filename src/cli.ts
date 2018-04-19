@@ -4,6 +4,10 @@ import * as fs from "fs-extra";
 import * as yargs from "yargs";
 import WordMap from "./index";
 
+console.log("******************************************************");
+console.log("* Multi-Lingual Word Alignment Prediction (Word MAP) *");
+console.log("******************************************************\n");
+
 const args = yargs.usage(
   "Usage: wordmap -c [source corpus path] [target corpus path] -s [source sentence] [target sentence]")
   .help("help")
