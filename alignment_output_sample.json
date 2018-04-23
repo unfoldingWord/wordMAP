@@ -1,0 +1,132 @@
+{
+  "_comments": [
+    "Tokens in alignment sourceNgram and targetNgram may be represented as an integer instead of an object if no metadata is needed/provided.",
+    "All metadata fields are optional."
+    "Metadata in the alignment tokens may be used in generating the usfm output."
+  ],
+  "metadata": {
+    "source": {
+      "languageCode": "grc",
+      "tokenizerRegexp": {
+        "word": null,
+        "punctuation": null,
+        "whitespace": null
+      },
+      "version": "UGNT"
+    },
+    "target": {
+      "languageCode": "eng",
+      "tokenizerRegexp": {
+        "word": null,
+        "punctuation": null,
+        "whitespace": null
+      },
+      "version": "ULT"
+    },
+    "timestamp": "1524293704"
+  },
+  "sentences": [
+    {
+      "compoundConfidence": 0.4990773709816275,
+      "source": {
+        "text": "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
+        "tokens": [
+          {
+            "text": "Βίβλος",
+            "lemma": "βίβλος",
+            "strong": "G09760",
+            "morph": "Gr,N,,,,,NFS,"
+          },
+          "γενέσεως", "Ἰησοῦ", "Χριστοῦ", "υἱοῦ", "Δαυὶδ", "υἱοῦ", "Ἀβραάμ"
+        ],
+        "metadata": {
+          "contextId": "MAT001001"
+        }
+      },
+      "target": {
+        "text": "The book of the genealogy of Jesus Christ, son of David, son of Abraham:",
+        "tokens": ["The", "book", "of", "the", "genealogy", "of", "Jesus", "Christ", "son", "of", "David", "son", "of", "Abraham"],
+        "metadata": {
+          "contextId": "MAT001001"
+        }
+      },
+      "alignments": [
+        {
+          "confidence": 0.516905944153279,
+          "sourceNgram": [
+            {
+              "index": 0,
+              "occurrence": 1,
+              "occurrences": 1,
+              "metadata": {
+                "lemma": "βίβλος",
+                "strong": "G09760",
+                "morph": "Gr,N,,,,,NFS,",
+                "contextId": "MAT001001"
+              }
+            }
+          ],
+          "targetNgram": [
+            {
+              "index": 1,
+              "occurrence": 1,
+              "occurrences": 1
+            }
+          ]
+        },
+        {
+          "confidence": 0.5363691430931895,
+          "sourceNgram": [1],
+          "targetNgram": [4]
+        },
+        {
+          "confidence": 0.5372550334365089,
+          "sourceNgram": [2],
+          "targetNgram": [6]
+        },
+        {
+          "confidence": 0.4762634342491979,
+          "sourceNgram": [3],
+          "targetNgram": [7]
+        },
+        {
+          "confidence": 0.46762244230161903,
+          "sourceNgram": [
+            {
+              "index": 4,
+              "occurrence": 1,
+              "occurrences": 2
+            }
+          ],
+          "targetNgram": [
+            {
+              "index": 8,
+              "occurrence": 1,
+              "occurrences": 2
+            },
+            {
+              "index": 9,
+              "occurrence": 3,
+              "occurrences": 4
+            }
+          ]
+        },
+        {
+          "confidence": 0.5253404588058129,
+          "sourceNgram": [5],
+          "targetNgram": [10]
+        },
+        {
+          "confidence": 0.46762244230161903,
+          "sourceNgram": [6],
+          "targetNgram": [11, 12]
+        },
+        {
+          "confidence": 0.46524006951179425,
+          "sourceNgram": [7],
+          "targetNgram": [13]
+        }
+      ]
+    }
+  ]
+}
