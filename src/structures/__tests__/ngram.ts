@@ -36,9 +36,9 @@ describe("creates an n-gram", () => {
   it("has some empty tokens", () => {
     const tokens = Lexer.tokenize("hello world");
     const ngram = new Ngram([
-      new Token(),
+      new Token({}),
       tokens[0],
-      new Token(),
+      new Token({}),
       tokens[1]]);
     expect(ngram.key).toEqual("n::hello::world");
     expect(ngram.tokenLength).toEqual(4);

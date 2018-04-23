@@ -141,13 +141,22 @@ export default class Ngram {
   }
 
   /**
+   * Returns a human readable form of the n-gram
+   * @return {string}
+   */
+  public toString(): string {
+    return this.key;
+  }
+
+  /**
    * Outputs the n-gram to json
+   * @param verbose - print full metadata
    * @return {object}
    */
-  public toJSON(): object {
+  public toJSON(verbose: boolean = false): object {
     const json = [];
     for (const t of this.tokens) {
-      json.push(t.toJSON());
+      json.push(t.toJSON(verbose));
     }
     return json;
   }

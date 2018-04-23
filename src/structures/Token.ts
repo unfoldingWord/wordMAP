@@ -8,6 +8,8 @@ export default class Token {
   private charPos: number;
   private sentenceCharLen: number;
   private sentenceTokenLen: number;
+  private tokenOccurrence: number;
+  private tokenOccurrences: number;
 
   /**
    * Returns the position (in units of {@link Token}) of the token within the sentence.
@@ -15,6 +17,22 @@ export default class Token {
    */
   get position() {
     return this.tokenPos;
+  }
+
+  /**
+   * Returns the occurrence index of this token
+   * @return {number}
+   */
+  get occurrence() {
+    return this.tokenOccurrence;
+  }
+
+  /**
+   * Returns the number of times this token occurs in the sentence
+   * @return {number}
+   */
+  get occurrences() {
+    return this.tokenOccurrences;
   }
 
   /**
@@ -45,10 +63,12 @@ export default class Token {
    * @param {string} text - The text of the token.
    * @param {number} [tokenPosition = 0] - the position of the n-gram within the sentence measured in {$link Token}'s
    * @param {number} [characterPosition = 0] - The token's position within the sentence measured in characters.
-   * @param sentenceTokenLen - the length of the sentence measured in {@link Token}'s
-   * @param sentenceCharLen - the length of the sentence measured in characters.
+   * @param {number} sentenceTokenLen - the length of the sentence measured in {@link Token}'s
+   * @param {number} sentenceCharLen - the length of the sentence measured in characters.
+   * @param {number} occurrence - the index of occurrence (indexed by 1). e.g. how many times have we seen this token so far.
+   * @param {number} occurrences - how many times this token appears in the sentence.
    */
-  constructor(text: string = "", tokenPosition = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0) {
+  constructor({text = "", tokenPosition = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1}) {
     this.text = text;
     if (tokenPosition < 0 || characterPosition < 0) {
       throw new Error("Position cannot be less than 0");
@@ -62,6 +82,8 @@ export default class Token {
     this.charPos = characterPosition;
     this.sentenceCharLen = sentenceCharLen;
     this.sentenceTokenLen = sentenceTokenLen;
+    this.tokenOccurrence = occurrence;
+    this.tokenOccurrences = occurrences;
   }
 
   /**
@@ -84,14 +106,23 @@ export default class Token {
 
   /**
    * Outputs the token to json
+   * @param verbose - print full metadata.
    * @return {object}
    */
-  public toJSON(): object {
-    return {
-      text: this.text,
-      tokenPosition: this.tokenPos,
-      sentenceTokenLength: this.sentenceTokenLen
-      // TODO: place occurrence here
-    };
+  public toJSON(verbose: boolean = false): object {
+    if (verbose) {
+      return {
+        text: this.text,
+        index: this.tokenPos,
+        occurrence: this.tokenOccurrence,
+        occurrences: this.tokenOccurrences
+      };
+    } else {
+      return {
+        index: this.tokenPos,
+        occurrence: this.tokenOccurrence,
+        occurrences: this.tokenOccurrences
+      };
+    }
   }
 }

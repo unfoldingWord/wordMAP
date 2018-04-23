@@ -9,8 +9,19 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token("hello", 2, 5, 1, 5)]),
-        new Ngram([new Token("hallo", 2, 5, 1, 5)])
+        new Ngram([new Token({
+          text: "hello",
+          tokenPosition: 2,
+          characterPosition: 5,
+          sentenceTokenLen: 1,
+          sentenceCharLen: 5})]),
+        new Ngram([new Token({
+          text: "hallo",
+          tokenPosition: 2,
+          characterPosition: 5,
+          sentenceTokenLen: 1,
+          sentenceCharLen: 5
+        })])
       ))
     ];
     const result = engine.execute(predictions);
@@ -23,8 +34,20 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token("hello", 2, 1, 1, 5)]),
-        new Ngram([new Token("hallo", 3, 1, 1, 5)])
+        new Ngram([new Token({
+          text: "hello",
+          tokenPosition: 2,
+          characterPosition: 1,
+          sentenceTokenLen: 1,
+          sentenceCharLen: 5
+        })]),
+        new Ngram([new Token({
+          text: "hallo",
+          tokenPosition: 3,
+          characterPosition: 1,
+          sentenceTokenLen: 1,
+          sentenceCharLen: 5
+        })])
       ))
     ];
     const result = engine.execute(predictions);
@@ -37,8 +60,20 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token("hello", 2, 1, 1, 5)]),
-        new Ngram([new Token("hallo", 4, 1, 1, 5)])
+        new Ngram([new Token({
+          text: "hello",
+          tokenPosition: 2,
+          characterPosition: 1,
+          sentenceTokenLen: 1,
+          sentenceCharLen: 5
+        })]),
+        new Ngram([new Token({
+          text: "hallo",
+          tokenPosition: 4,
+          characterPosition: 1,
+          sentenceTokenLen: 1,
+          sentenceCharLen: 5
+        })])
       ))
     ];
     const result = engine.execute(predictions);

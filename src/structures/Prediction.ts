@@ -154,13 +154,14 @@ export default class Prediction {
 
   /**
    * Outputs the prediction to json
+   * @param verbose - print full metadata.
    * @return {object}
    */
-  public toJSON(): object {
+  public toJSON(verbose: boolean = false): object {
     return {
       confidence: this.confidence,
-      sourceNgram: this.source.toJSON(),
-      targetNgram: this.target.toJSON()
+      sourceNgram: this.source.toJSON(verbose),
+      targetNgram: this.target.toJSON(verbose)
     };
   }
 }

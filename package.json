@@ -29,9 +29,6 @@
     },
     "testMatch": [
       "**/__tests__/*.+(ts|js)"
-    ],
-    "testPathIgnorePatterns": [
-      "testUtils.ts"
     ]
   },
   "keywords": [

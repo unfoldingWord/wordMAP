@@ -69,15 +69,26 @@ export default class Suggestion {
 
   /**
    * Outputs the alignment predictions to json
+   * @param verbose - print full metadata
    * @return {object}
    */
-  public toJSON(): object {
+  public toJSON(verbose: boolean = false): object {
     const json = [];
     for (const p of this.predictions) {
-      json.push(p.toJSON());
+      json.push(p.toJSON(verbose));
     }
     return {
       compoundConfidence: this.compoundConfidence(),
+      source: {
+        text: "",
+        tokens: [],
+        contextId: ""
+      },
+      target: {
+        text: "",
+        tokens: [],
+        contextId: ""
+      },
       alignments: json
     };
   }

@@ -102,7 +102,13 @@ function alignMockTokens(tokens: Token[]): Alignment {
   const flippedTokens: Token[] = [];
   for (const token of tokens) {
     flippedTokens.push(
-      new Token(token.toString().split("").reverse().join(""), token.position, token.charPosition, token.sentenceTokenLength, token.sentenceCharacterLength)
+      new Token({
+        text: token.toString().split("").reverse().join(""),
+        tokenPosition: token.position,
+        characterPosition: token.charPosition,
+        sentenceTokenLen: token.sentenceTokenLength,
+        sentenceCharLen: token.sentenceCharacterLength
+      })
     );
   }
   const target = new Ngram(flippedTokens);
