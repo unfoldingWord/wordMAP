@@ -216,6 +216,9 @@ export default class Engine {
 
     // build suggestions
     for (let i = 0; i < maxSuggestions; i++) {
+      if (i >= predictions.length) {
+        break;
+      }
       const suggestion = new Suggestion();
       let filtered = [...predictions];
 

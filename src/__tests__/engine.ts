@@ -2,10 +2,7 @@ jest.mock("../index/PermutationIndex");
 import Engine from "../Engine";
 import CorpusIndex from "../index/CorpusIndex";
 // @ts-ignore
-import {
-  mockAddAlignments,
-  mockAddSentencePair
-} from "../index/PermutationIndex";
+import {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
 import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
@@ -84,19 +81,23 @@ describe("process sentence n-grams", () => {
   });
   it("reads uni-grams", () => {
     const unigrams = Engine.readSizedNgrams(sentence, 1);
-    expect(unigrams.toString()).toEqual("n:in,n:the,n:beginning,n:god,n:created");
+    expect(unigrams.toString())
+      .toEqual("n:in,n:the,n:beginning,n:god,n:created");
   });
   it("reads bi-grams", () => {
     const bigrams = Engine.readSizedNgrams(sentence, 2);
-    expect(bigrams.toString()).toEqual("n:in:the,n:the:beginning,n:beginning:god,n:god:created");
+    expect(bigrams.toString()).toEqual(
+      "n:in:the,n:the:beginning,n:beginning:god,n:god:created");
   });
   it("reads tri-grams", () => {
     const trigrams = Engine.readSizedNgrams(sentence, 3);
-    expect(trigrams.toString()).toEqual("n:in:the:beginning,n:the:beginning:god,n:beginning:god:created");
+    expect(trigrams.toString()).toEqual(
+      "n:in:the:beginning,n:the:beginning:god,n:beginning:god:created");
   });
   it("generates all n-grams", () => {
     const ngrams = Engine.generateSentenceNgrams(sentence);
-    expect(ngrams.toString()).toEqual("n:in,n:the,n:beginning,n:god,n:created,n:in:the,n:the:beginning,n:beginning:god,n:god:created,n:in:the:beginning,n:the:beginning:god,n:beginning:god:created");
+    expect(ngrams.toString()).toEqual(
+      "n:in,n:the,n:beginning,n:god,n:created,n:in:the,n:the:beginning,n:beginning:god,n:god:created,n:in:the:beginning,n:the:beginning:god,n:beginning:god:created");
   });
 
   it("throws out of range error", () => {
@@ -130,7 +131,8 @@ describe("alignment permutations", () => {
     }
 
     expect(predictions.toString())
-      .toEqual("0|n:in->n:ni,0|n:in->n:eht,0|n:in->n:ni:eht,0|n:in->n:,0|n:the->n:ni,0|n:the->n:eht,0|n:the->n:ni:eht,0|n:the->n:,0|n:in:the->n:ni,0|n:in:the->n:eht,0|n:in:the->n:ni:eht,0|n:in:the->n:");
+      .toEqual(
+        "0|n:in->n:ni,0|n:in->n:eht,0|n:in->n:ni:eht,0|n:in->n:,0|n:the->n:ni,0|n:the->n:eht,0|n:the->n:ni:eht,0|n:the->n:,0|n:in:the->n:ni,0|n:in:the->n:eht,0|n:in:the->n:ni:eht,0|n:in:the->n:");
   });
 });
 

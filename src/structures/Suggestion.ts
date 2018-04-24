@@ -1,3 +1,4 @@
+import {median} from "../util/math";
 import Prediction from "./Prediction";
 
 /**
@@ -48,11 +49,12 @@ export default class Suggestion {
    * @return {number}
    */
   public compoundConfidence() {
-    let confidence = 0;
+    const confidenceNumbers = [];
     for (const p of this.predictions) {
-      confidence += p.getScore("confidence");
+      const c = p.getScore("confidence");
+      confidenceNumbers.push(c);
     }
-    return confidence / this.predictions.length;
+    return median(confidenceNumbers);
   }
 
   /**
