@@ -1,6 +1,6 @@
 {
   "name": "word-map",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "scripts": {
@@ -11,8 +11,7 @@
     "build": "tsc",
     "postbuild": "cp -rf package.json dist && cp -rf README.md dist",
     "buildold": "babel src --out-dir dist --ignore '**/__tests__,**/__mocks__'",
-    "prepublishOnly": "npm test && npm run build && npm run dist",
-    "dist": "cd dist && npm publish"
+    "dist": "npm test && npm run build && cd dist && npm publish"
   },
   "repository": {
     "type": "git",
