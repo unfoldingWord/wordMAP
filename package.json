@@ -1,6 +1,6 @@
 {
   "name": "word-map",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "scripts": {
@@ -9,15 +9,17 @@
     "test": "npm run lint && jest",
     "prebuild": "rm -rf dist",
     "build": "tsc",
+    "postbuild": "cp -rf package.json dist && cp -rf README.md dist",
     "buildold": "babel src --out-dir dist --ignore '**/__tests__,**/__mocks__'",
-    "prepublishOnly": "npm test && npm run build"
+    "prepublishOnly": "npm test && npm run build && npm run dist",
+    "dist": "cd dist && npm publish"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/translationCoreApps/word-map.git"
   },
   "bin": {
-    "wordmap": "dist/cli.js"
+    "wordmap": "cli.js"
   },
   "jest": {
     "moduleFileExtensions": [
