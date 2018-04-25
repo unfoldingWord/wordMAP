@@ -35,10 +35,7 @@ export default class Lexer {
       charPos += word.length;
     }
 
-    /**
-     * Finish adding occurrence information
-     * @type {any[]}
-     */
+    // Finish adding occurrence information
     const occurrenceTokens: Token[] = [];
     for (const t of tokens) {
       occurrenceTokens.push(new Token({
