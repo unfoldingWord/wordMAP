@@ -1,6 +1,6 @@
 {
   "name": "word-map",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "scripts": {
