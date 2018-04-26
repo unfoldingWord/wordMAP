@@ -88,7 +88,7 @@ export default class Token {
   /**
    *
    * @param {string} text - The text of the token.
-   * @param {number} [tokenPosition = 0] - the position of the n-gram within the sentence measured in {$link Token}'s
+   * @param {number} [position = 0] - the position of the n-gram within the sentence measured in {$link Token}'s
    * @param {number} [characterPosition = 0] - The token's position within the sentence measured in characters.
    * @param {number} sentenceTokenLen - the length of the sentence measured in {@link Token}'s
    * @param {number} sentenceCharLen - the length of the sentence measured in characters.
@@ -98,9 +98,9 @@ export default class Token {
    * @param {string} lemma
    * @param {string} morph
    */
-  constructor({text = "", tokenPosition = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1, strong = "", lemma = "", morph = ""}) {
+  constructor({text = "", position = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1, strong = "", lemma = "", morph = ""}) {
     this.text = text;
-    if (tokenPosition < 0 || characterPosition < 0) {
+    if (position < 0 || characterPosition < 0) {
       throw new Error("Position cannot be less than 0");
     }
     // This makes it difficult to test
@@ -108,7 +108,7 @@ export default class Token {
     //   throw new Error("Sentence length cannot be 0");
     // }
 
-    this.tokenPos = tokenPosition;
+    this.tokenPos = position;
     this.charPos = characterPosition;
     this.sentenceCharLen = sentenceCharLen;
     this.sentenceTokenLen = sentenceTokenLen;

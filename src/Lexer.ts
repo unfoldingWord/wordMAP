@@ -26,7 +26,7 @@ export default class Lexer {
       occurrenceIndex[word] += 1;
       tokens.push(new Token({
         text: word,
-        tokenPosition: tokens.length,
+        position: tokens.length,
         characterPosition: charPos,
         sentenceTokenLen: words.length,
         sentenceCharLen: sentenceLength,
@@ -40,7 +40,7 @@ export default class Lexer {
     for (const t of tokens) {
       occurrenceTokens.push(new Token({
         text: t.toString(),
-        tokenPosition: t.position,
+        position: t.position,
         characterPosition: t.charPosition,
         sentenceTokenLen: t.sentenceTokenLength,
         sentenceCharLen: t.sentenceCharacterLength,

@@ -104,7 +104,7 @@ function alignMockTokens(tokens: Token[]): Alignment {
     flippedTokens.push(
       new Token({
         text: token.toString().split("").reverse().join(""),
-        tokenPosition: token.position,
+        position: token.position,
         characterPosition: token.charPosition,
         sentenceTokenLen: token.sentenceTokenLength,
         sentenceCharLen: token.sentenceCharacterLength

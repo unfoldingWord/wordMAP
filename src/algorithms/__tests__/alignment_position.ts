@@ -11,13 +11,13 @@ describe("AlignmentPosition", () => {
       new Prediction(new Alignment(
         new Ngram([new Token({
           text: "hello",
-          tokenPosition: 2,
+          position: 2,
           characterPosition: 5,
           sentenceTokenLen: 1,
           sentenceCharLen: 5})]),
         new Ngram([new Token({
           text: "hallo",
-          tokenPosition: 2,
+          position: 2,
           characterPosition: 5,
           sentenceTokenLen: 1,
           sentenceCharLen: 5
@@ -36,14 +36,14 @@ describe("AlignmentPosition", () => {
       new Prediction(new Alignment(
         new Ngram([new Token({
           text: "hello",
-          tokenPosition: 2,
+          position: 2,
           characterPosition: 1,
           sentenceTokenLen: 1,
           sentenceCharLen: 5
         })]),
         new Ngram([new Token({
           text: "hallo",
-          tokenPosition: 3,
+          position: 3,
           characterPosition: 1,
           sentenceTokenLen: 1,
           sentenceCharLen: 5
@@ -62,14 +62,14 @@ describe("AlignmentPosition", () => {
       new Prediction(new Alignment(
         new Ngram([new Token({
           text: "hello",
-          tokenPosition: 2,
+          position: 2,
           characterPosition: 1,
           sentenceTokenLen: 1,
           sentenceCharLen: 5
         })]),
         new Ngram([new Token({
           text: "hallo",
-          tokenPosition: 4,
+          position: 4,
           characterPosition: 1,
           sentenceTokenLen: 1,
           sentenceCharLen: 5
