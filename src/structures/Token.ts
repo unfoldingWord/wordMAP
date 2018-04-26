@@ -10,6 +10,33 @@ export default class Token {
   private sentenceTokenLen: number;
   private tokenOccurrence: number;
   private tokenOccurrences: number;
+  private strongNumber: string;
+  private lemmaString: string;
+  private morphString: string;
+
+  /**
+   * Returns the strong's number
+   * @return {string}
+   */
+  get strong() {
+    return this.strongNumber;
+  }
+
+  /**
+   * Returns the lemma
+   * @return {string}
+   */
+  get lemma() {
+    return this.lemmaString;
+  }
+
+  /**
+   * Returns the morphology
+   * @return {string}
+   */
+  get morph() {
+    return this.morphString;
+  }
 
   /**
    * Returns the position (in units of {@link Token}) of the token within the sentence.
@@ -67,8 +94,11 @@ export default class Token {
    * @param {number} sentenceCharLen - the length of the sentence measured in characters.
    * @param {number} occurrence - the index of occurrence (indexed by 1). e.g. how many times have we seen this token so far.
    * @param {number} occurrences - how many times this token appears in the sentence.
+   * @param {string} strong
+   * @param {string} lemma
+   * @param {string} morph
    */
-  constructor({text = "", tokenPosition = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1}) {
+  constructor({text = "", tokenPosition = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1, strong = "", lemma = "", morph = ""}) {
     this.text = text;
     if (tokenPosition < 0 || characterPosition < 0) {
       throw new Error("Position cannot be less than 0");
@@ -84,6 +114,9 @@ export default class Token {
     this.sentenceTokenLen = sentenceTokenLen;
     this.tokenOccurrence = occurrence;
     this.tokenOccurrences = occurrences;
+    this.strongNumber = strong;
+    this.lemmaString = lemma;
+    this.morphString = morph;
   }
 
   /**
