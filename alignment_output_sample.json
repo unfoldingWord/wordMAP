@@ -1,8 +1,9 @@
 {
   "_comments": [
     "Tokens in alignment sourceNgram and targetNgram may be represented as an integer instead of an object if no metadata is needed/provided.",
-    "All metadata fields are optional."
-    "Metadata in the alignment tokens may be used in generating the usfm output."
+    "All metadata fields are optional.",
+    "Metadata in the alignment tokens may be used in generating the usfm output.",
+    "Cross verse alignment are indicated like 10001. That is chapter 10 verse 1."
   ],
   "metadata": {
     "source": {
@@ -25,6 +26,7 @@
     },
     "timestamp": "1524293704"
   },
+  "format_version": 1,
   "sentences": [
     {
       "compoundConfidence": 0.4990773709816275,
@@ -56,26 +58,8 @@
       "alignments": [
         {
           "confidence": 0.516905944153279,
-          "sourceNgram": [
-            {
-              "index": 0,
-              "occurrence": 1,
-              "occurrences": 1,
-              "metadata": {
-                "lemma": "βίβλος",
-                "strong": "G09760",
-                "morph": "Gr,N,,,,,NFS,",
-                "contextId": "MAT001001"
-              }
-            }
-          ],
-          "targetNgram": [
-            {
-              "index": 1,
-              "occurrence": 1,
-              "occurrences": 1
-            }
-          ]
+          "sourceNgram": [0],
+          "targetNgram": [0, 1, 10001]
         },
         {
           "confidence": 0.5363691430931895,
@@ -94,25 +78,8 @@
         },
         {
           "confidence": 0.46762244230161903,
-          "sourceNgram": [
-            {
-              "index": 4,
-              "occurrence": 1,
-              "occurrences": 2
-            }
-          ],
-          "targetNgram": [
-            {
-              "index": 8,
-              "occurrence": 1,
-              "occurrences": 2
-            },
-            {
-              "index": 9,
-              "occurrence": 3,
-              "occurrences": 4
-            }
-          ]
+          "sourceNgram": [4],
+          "targetNgram": [8, 9]
         },
         {
           "confidence": 0.5253404588058129,
