@@ -13,6 +13,10 @@ import Prediction from "./structures/Prediction";
 import Suggestion from "./structures/Suggestion";
 import Token from "./structures/Token";
 
+export interface PredictionTable {
+  [key: string]: Prediction[];
+}
+
 /**
  * Multi-Lingual Word Alignment Prediction
  */
@@ -126,14 +130,28 @@ export default class WordMap {
    * @param {string} sourceSentence
    * @param {number} maxPredictions
    */
-  public translateVerbose(sourceSentence: string, maxPredictions: number = 1) {
+  public translateVerbose(sourceSentence: string, maxPredictions: number = 1): PredictionTable {
     const sourceTokens = Lexer.tokenize(sourceSentence);
 
     const targetTokens = this.engine.intersectTargetCorpus(sourceTokens);
-    const predictions = this.engine.run(sourceTokens, targetTokens);
-    // TODO: format the output as a dictionary of source ngrams with an array of possible
-    // target ngrams  (of maxPredictions length)
-    return this.engine.score(predictions);
+    let predictions = this.engine.run(sourceTokens, targetTokens);
+    predictions = this.engine.score(predictions);
+
+    // structure output
+    const output: PredictionTable = {};
+    for (const p of predictions) {
+      if (!(p.source.key in output)) {
+        output[p.source.key] = [];
+      }
+      if (output[p.source.key].length >= maxPredictions) {
+        continue;
+      }
+      output[p.source.key].push(p);
+    }
+    for (const key of Object.keys(output)) {
+      output[key] = Engine.sortPredictions(output[key]).slice(0, maxPredictions);
+    }
+    return output;
   }
 
   /**
@@ -146,7 +164,7 @@ export default class WordMap {
    * @param {number} maxSuggestions
    * @return {Suggestion[]}
    */
-  public predictWithBenchmark(sourceSentence: string, targetSentence: string, benchmark: Alignment[], maxSuggestions: number = 1): Suggestion[] {
+  public alignWithBenchmark(sourceSentence: string, targetSentence: string, benchmark: Alignment[], maxSuggestions: number = 1): Suggestion[] {
     const sourceTokens = Lexer.tokenize(sourceSentence);
     const targetTokens = Lexer.tokenize(targetSentence);
 

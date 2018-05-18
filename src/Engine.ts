@@ -347,8 +347,7 @@ export default class Engine {
    * @return {Token[]}
    */
   public intersectTargetCorpus(sourceTokens: Token[]): Token[] {
-    
-    return [];
+    return this.corpusIndex.static.getTargetTokenIntersection(sourceTokens);
   }
 
   /**

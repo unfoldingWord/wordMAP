@@ -115,7 +115,7 @@ describe("MAP", () => {
     console.log("corpus (2)\n", map.align(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
       return s.toString();
     }));
-    console.log("corpus (2): benchmark\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
+    console.log("corpus (2): benchmark\n", map.alignWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
       return s.toString();
     }));
 

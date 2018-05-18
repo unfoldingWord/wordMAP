@@ -45,7 +45,7 @@ describe("MAP predictions in Titus", () => {
     console.log("suggestions\n", map.align(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
       return s.toString();
     }).join("\n"));
-    console.log("benchmarks\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
+    console.log("benchmarks\n", map.alignWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
       return s.toString();
     }).join("\n"));
   });
