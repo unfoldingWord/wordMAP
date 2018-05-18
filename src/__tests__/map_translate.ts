@@ -10,11 +10,11 @@ describe("MAP", () => {
     // append corpus
     const sourceCorpus = fs.readFileSync(path.join(
       __dirname,
-      "fixtures/corpus/greek.txt"
+      "fixtures/small_corpus/greek.txt"
     ));
     const targetCorpus = fs.readFileSync(path.join(
       __dirname,
-      "fixtures/corpus/english.txt"
+      "fixtures/small_corpus/english.txt"
     ));
     map.appendCorpusString(
       sourceCorpus.toString("utf-8"),
@@ -36,11 +36,11 @@ describe("MAP", () => {
     // append corpus
     const sourceCorpus = fs.readFileSync(path.join(
       __dirname,
-      "fixtures/corpus/greek.txt"
+      "fixtures/small_corpus/greek.txt"
     ));
     const targetCorpus = fs.readFileSync(path.join(
       __dirname,
-      "fixtures/corpus/english.txt"
+      "fixtures/small_corpus/english.txt"
     ));
     map.appendCorpusString(
       sourceCorpus.toString("utf-8"),
