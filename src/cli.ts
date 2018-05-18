@@ -44,7 +44,7 @@ map.appendCorpusString(
 );
 
 console.log("Predicting alignments...");
-const suggestions = map.predict(args.s[0], args.s[1], args.p);
+const suggestions = map.align(args.s[0], args.s[1], args.p);
 
 console.log("Writing predictions to output...");
 

@@ -341,6 +341,17 @@ export default class Engine {
   }
 
   /**
+   * Returns an array of target tokens from the corpus that intersect with the
+   * source tokens
+   * @param {Token[]} sourceTokens
+   * @return {Token[]}
+   */
+  public intersectTargetCorpus(sourceTokens: Token[]): Token[] {
+    
+    return [];
+  }
+
+  /**
    * Performs the prediction calculations
    * @param {Token[]} sourceSentence
    * @param {Token[]} targetSentence

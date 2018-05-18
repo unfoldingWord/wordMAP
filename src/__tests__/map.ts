@@ -54,7 +54,7 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+    const suggestions = map.align(unalignedPair[0], unalignedPair[1], 5);
 
     const stuff = [
       suggestions[0].toString(),
@@ -88,7 +88,7 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    console.log("corpus (1)\n", map.predict(unalignedPair[0], unalignedPair[1], 20).map((s) => {
+    console.log("corpus (1)\n", map.align(unalignedPair[0], unalignedPair[1], 20).map((s) => {
       return s.toString();
     }));
 
@@ -112,7 +112,7 @@ describe("MAP", () => {
     benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
     benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
 
-    console.log("corpus (2)\n", map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
+    console.log("corpus (2)\n", map.align(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
       return s.toString();
     }));
     console.log("corpus (2): benchmark\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
@@ -121,7 +121,7 @@ describe("MAP", () => {
 
     // make sure we get the same output as at first
 
-    const thirdSuggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+    const thirdSuggestions = map.align(unalignedPair[0], unalignedPair[1], 5);
 
     const stuff3 = thirdSuggestions.map((s) => {
       return s.toString();
@@ -166,7 +166,7 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+    const suggestions = map.align(unalignedPair[0], unalignedPair[1], 5);
 
     const stuff = [
       suggestions[0].toString(),

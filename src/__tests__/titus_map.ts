@@ -15,7 +15,7 @@ describe("MAP predictions in Titus", () => {
       "Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν",
       "Paul a servant of God and an apostle of Jesus Christ for the faith of God s chosen people and the knowledge of the truth that agrees with godliness"
     ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 2);
+    const suggestions = map.align(unalignedPair[0], unalignedPair[1], 2);
     const chapterOneAlignmentPath = path.join(__dirname, "fixtures/corpus/tit/alignmentData/1.json");
     scoreSuggestion(suggestions[0], getAlignments(chapterOneAlignmentPath, 1));
     console.log("suggestions\n", suggestions.map((s) => {
@@ -42,7 +42,7 @@ describe("MAP predictions in Titus", () => {
     benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
     benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
 
-    console.log("suggestions\n", map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
+    console.log("suggestions\n", map.align(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
       return s.toString();
     }).join("\n"));
     console.log("benchmarks\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {

@@ -98,13 +98,42 @@ export default class WordMap {
    * @param {number} maxSuggestions
    * @return {Suggestion[]}
    */
-  public predict(sourceSentence: string, targetSentence: string, maxSuggestions: number = 1): Suggestion[] {
+  public align(sourceSentence: string, targetSentence: string, maxSuggestions: number = 1): Suggestion[] {
     const sourceTokens = Lexer.tokenize(sourceSentence);
     const targetTokens = Lexer.tokenize(targetSentence);
 
     let predictions = this.engine.run(sourceTokens, targetTokens);
     predictions = this.engine.score(predictions);
     return Engine.suggest(predictions, maxSuggestions);
+  }
+
+  /**
+   * Predicts the translation of a sentence given the available corpus
+   * @param {string} sourceSentence
+   * @param {number} maxSuggestions
+   */
+  public translate(sourceSentence: string, maxSuggestions: number = 1) {
+    const sourceTokens = Lexer.tokenize(sourceSentence);
+
+    const targetTokens = this.engine.intersectTargetCorpus(sourceTokens);
+    let predictions = this.engine.run(sourceTokens, targetTokens);
+    predictions = this.engine.score(predictions);
+    return Engine.suggest(predictions, maxSuggestions);
+  }
+
+  /**
+   * Predicts the translation of a sentence given the available corpus
+   * @param {string} sourceSentence
+   * @param {number} maxPredictions
+   */
+  public translateVerbose(sourceSentence: string, maxPredictions: number = 1) {
+    const sourceTokens = Lexer.tokenize(sourceSentence);
+
+    const targetTokens = this.engine.intersectTargetCorpus(sourceTokens);
+    const predictions = this.engine.run(sourceTokens, targetTokens);
+    // TODO: format the output as a dictionary of source ngrams with an array of possible
+    // target ngrams  (of maxPredictions length)
+    return this.engine.score(predictions);
   }
 
   /**
