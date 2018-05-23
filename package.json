@@ -10,7 +10,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "postbuild": "cp -rf package.json dist && cp -rf README.md dist",
-    "prepare": "if [ -d './src/' ]; then npm run build && cp -r ./dist/* .; fi",
+    "prepare": "if [ -d './src/' ]; then npm run build && cp -r ./dist/* . && rm -rf ./dist; fi",
     "buildold": "babel src --out-dir . --ignore '**/__tests__,**/__mocks__'",
     "dist": "npm test && npm run build && cd dist && npm publish"
   },
