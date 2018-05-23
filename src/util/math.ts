@@ -23,7 +23,9 @@ export function median(numbers: number[]): number {
   const numsLen = numbers.length;
   numbers.sort();
 
-  if (numsLen % 2 === 0) {
+  if (numsLen === 0) {
+    medianVal = 0;
+  } else if (numsLen % 2 === 0) {
     // average of two middle numbers
     medianVal = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2;
   } else {

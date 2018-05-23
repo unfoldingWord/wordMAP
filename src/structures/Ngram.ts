@@ -160,4 +160,40 @@ export default class Ngram {
     }
     return json;
   }
+
+  /**
+   * Checks if two n-grams are equal
+   * @param {Ngram} ngram
+   * @return {boolean}
+   */
+  public equals(ngram: Ngram): boolean {
+    if (this.tokens.length === ngram.tokens.length) {
+      // check if tokens are equal
+      for (let i = 0; i < this.tokens.length; i++) {
+        if (!this.tokens[i].equals(ngram.tokens[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks if two n-grams look the same
+   * @param {Ngram} ngram
+   * @return {boolean}
+   */
+  public looksLike(ngram: Ngram): boolean {
+    if (this.tokens.length === ngram.tokens.length) {
+      // check if tokens are equal
+      for (let i = 0; i < this.tokens.length; i++) {
+        if (!this.tokens[i].looksLike(ngram.tokens[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
 }

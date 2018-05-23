@@ -138,6 +138,16 @@ export default class Token {
   }
 
   /**
+   * Checks if two tokens look the same.
+   * Just because a token looks the same doesn't mean it's the same token.
+   * @param {Token} token - the token to compare
+   * @return {boolean}
+   */
+  public looksLike(token: Token): boolean {
+    return this.toString() === token.toString();
+  }
+
+  /**
    * Outputs the token to json
    * @param verbose - print full metadata.
    * @return {object}

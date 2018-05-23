@@ -65,8 +65,12 @@ export default class Suggestion {
     for (const p of this.predictions) {
       result.push(`[${p.toString()}]`);
     }
-    const confidence = this.compoundConfidence().toString().substring(0, 8);
-    return `${confidence} ${result.join(" ")}`;
+    if (result.length) {
+      const confidence = this.compoundConfidence().toString().substring(0, 8);
+      return `${confidence} ${result.join(" ")}`;
+    } else {
+      return "0 []";
+    }
   }
 
   /**

@@ -45,3 +45,45 @@ describe("creates an n-gram", () => {
     expect(ngram.characterLength).toEqual(10);
   });
 });
+
+describe("equals", () => {
+  it("identical", () => {
+    const ngram1 = new Ngram(Lexer.tokenize("hello"));
+    const ngram2 = new Ngram(Lexer.tokenize("hello"));
+    expect(ngram1.equals(ngram2)).toEqual(true);
+  });
+
+  it("different", () => {
+    const ngram1 = new Ngram(Lexer.tokenize("hello"));
+    const ngram2 = new Ngram(Lexer.tokenize("hi"));
+    expect(ngram1.equals(ngram2)).toEqual(false);
+  });
+
+  it("looks similar", () => {
+    const ngram1 = new Ngram(Lexer.tokenize("world"));
+    // TRICKY: the position is different
+    const ngram2 = new Ngram([Lexer.tokenize("hello world")[0]]);
+    expect(ngram1.equals(ngram2)).toEqual(false);
+  });
+});
+
+describe("looksLike", () => {
+  it("identical", () => {
+    const ngram1 = new Ngram(Lexer.tokenize("hello"));
+    const ngram2 = new Ngram(Lexer.tokenize("hello"));
+    expect(ngram1.looksLike(ngram2)).toEqual(true);
+  });
+
+  it("different", () => {
+    const ngram1 = new Ngram(Lexer.tokenize("hello"));
+    const ngram2 = new Ngram(Lexer.tokenize("hi"));
+    expect(ngram1.looksLike(ngram2)).toEqual(false);
+  });
+
+  it("looks similar", () => {
+    const ngram1 = new Ngram(Lexer.tokenize("world"));
+    // TRICKY: the position is different
+    const ngram2 = new Ngram([Lexer.tokenize("hello world")[1]]);
+    expect(ngram1.looksLike(ngram2)).toEqual(true);
+  });
+});

@@ -2,12 +2,24 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import WordMap from "../index";
 import Alignment from "../structures/Alignment";
-import Ngram from "../structures/Ngram";
-import Prediction from "../structures/Prediction";
-import Suggestion from "../structures/Suggestion";
 import {makeMockAlignment} from "../util/testUtils";
 
 describe("MAP", () => {
+
+  it("predicts alignments with the sentence pair the same as corpus", () => {
+      const map = new WordMap();
+      const source = "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.";
+      const target = "The book of the genealogy of Jesus Christ, son of David, son of Abraham:";
+
+      map.appendCorpusString(source, target);
+      const suggestions = map.predict(source, target, 5);
+      console.log("input as corpus\n", suggestions.map((s) => {
+          return s.toString();
+        })
+      );
+    }
+  );
+
   // it("has no corpus", () => {
   //   const map = new MAP();
   //   const suggestions = map.predict("hello", "olleh dlrow");
@@ -88,9 +100,12 @@ describe("MAP", () => {
       "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
-    console.log("corpus (1)\n", map.predict(unalignedPair[0], unalignedPair[1], 20).map((s) => {
-      return s.toString();
-    }));
+    console.log(
+      "corpus (1)\n",
+      map.predict(unalignedPair[0], unalignedPair[1], 20).map((s) => {
+        return s.toString();
+      })
+    );
 
     // run it again to make sure things work
 
@@ -112,12 +127,24 @@ describe("MAP", () => {
     benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
     benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
 
-    console.log("corpus (2)\n", map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
-      return s.toString();
-    }));
-    console.log("corpus (2): benchmark\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
-      return s.toString();
-    }));
+    console.log(
+      "corpus (2)\n",
+      map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2)
+        .map((s) => {
+          return s.toString();
+        })
+    );
+    console.log(
+      "corpus (2): benchmark\n",
+      map.predictWithBenchmark(
+        secondUnalignedPair[0],
+        secondUnalignedPair[1],
+        benchmark,
+        2
+      ).map((s) => {
+        return s.toString();
+      })
+    );
 
     // make sure we get the same output as at first
 
