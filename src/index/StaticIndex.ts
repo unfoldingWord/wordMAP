@@ -4,6 +4,9 @@ import NgramIndex from "./NgramIndex";
 
 /**
  * A collection of indexes on the static content.
+ * TODO: maybe I should split this into sentences as well.
+ * e.g. a source SentenceIndex and a target Sentenceindex
+ * Then we could reuse it in other places such as word-mt.
  */
 export default class StaticIndex {
   private srcNgramFreqIndex: NgramIndex;

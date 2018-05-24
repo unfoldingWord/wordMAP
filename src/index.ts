@@ -71,8 +71,9 @@ export default class WordMap {
    *
    * @param {string} source - a string of source phrases separated by new lines
    * @param {string} target - a string of target phrases separated by new lines
+   * @return {Alignment[]} an array of alignment objects (as a convenience)
    */
-  public appendSavedAlignmentsString(source: string, target: string) {
+  public appendSavedAlignmentsString(source: string, target: string): Alignment[] {
     const alignments: Alignment[] = [];
     const sourceLines = source.split("\n");
     const targetLines = target.split("\n");
@@ -89,6 +90,7 @@ export default class WordMap {
       ));
     }
     this.appendSavedAlignments(alignments);
+    return alignments;
   }
 
   /**
