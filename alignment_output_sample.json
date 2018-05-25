@@ -1,5 +1,5 @@
 {
-  "_comments": [
+  "comments - !!not part of the specification!!": [
     "Tokens in alignment sourceNgram and targetNgram may be represented as an integer instead of an object if no metadata is needed/provided.",
     "All metadata fields are optional.",
     "Metadata in the alignment tokens may be used in generating the usfm output.",
@@ -26,7 +26,7 @@
     },
     "timestamp": "1524293704"
   },
-  "format_version": 1,
+  "formatVersion": "1.0",
   "sentences": [
     {
       "compoundConfidence": 0.4990773709816275,
