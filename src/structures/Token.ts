@@ -130,7 +130,7 @@ export default class Token {
     this.strongNumber = strong;
     this.lemmaString = lemma;
     this.morphString = morph;
-    this.metadata = arguments[0];
+    this.metadata = Object.assign({}, arguments[0]);
   }
 
   /**

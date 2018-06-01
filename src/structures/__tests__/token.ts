@@ -12,7 +12,12 @@ describe("creates a token", () => {
   });
 
   it("passes through metadata", () => {
-    const token = new Token({text: "hello", extra: "value"});
+    const args = {text: "hello", extra: "value"};
+    const token = new Token(args);
+    expect(token.meta.extra).toEqual("value");
+
+    // ensure we cannot modify the args
+    args.extra = "hello";
     expect(token.meta.extra).toEqual("value");
   });
 });
