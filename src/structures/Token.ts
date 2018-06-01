@@ -1,3 +1,7 @@
+export interface Metadata {
+  [key: string]: any;
+}
+
 /**
  * Represents a single token from a text.
  */
@@ -13,7 +17,7 @@ export default class Token {
   private strongNumber: string;
   private lemmaString: string;
   private morphString: string;
-  private metadata: object;
+  private metadata: Metadata;
 
   /**
    * Returns the metadata stored on the token
@@ -106,9 +110,8 @@ export default class Token {
    * @param {string} strong
    * @param {string} lemma
    * @param {string} morph
-   * @param {object} [meta] - optionally pass through metadata to the token. This data will be ignored for all intents and purposes.
    */
-  constructor({text = "", position = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1, strong = "", lemma = "", morph = ""}, meta = {}) {
+  constructor({text = "", position = 0, characterPosition = 0, sentenceTokenLen = 0, sentenceCharLen = 0, occurrence = 1, occurrences = 1, strong = "", lemma = "", morph = ""}: Metadata) {
     this.text = text;
     if (position < 0 || characterPosition < 0) {
       throw new Error("Position cannot be less than 0");
@@ -127,7 +130,7 @@ export default class Token {
     this.strongNumber = strong;
     this.lemmaString = lemma;
     this.morphString = morph;
-    this.metadata = meta;
+    this.metadata = arguments[0];
   }
 
   /**
