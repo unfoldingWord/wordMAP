@@ -3,7 +3,7 @@
     "Tokens in alignment sourceNgram and targetNgram may be represented as an integer instead of an object if no metadata is needed/provided.",
     "All metadata fields are optional.",
     "Metadata in the alignment tokens may be used in generating the usfm output.",
-    "Cross verse alignment are indicated like 10001. That is chapter 10 verse 1."
+    "Cross verse alignment are indicated like 10001. That is verse 10 token 1."
   ],
   "metadata": {
     "source": {
