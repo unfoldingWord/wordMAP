@@ -45,11 +45,10 @@ export default class Engine {
       throw new RangeError(
         `Maximum n-gram size cannot be less than 0. Received ${maxNgramLength}`);
     }
-    let ngrams: Ngram[] = [];
+    const ngrams: Ngram[] = [];
     const maxLength = Math.min(maxNgramLength, sentence.length);
     for (let ngramLength = 1; ngramLength <= maxLength; ngramLength++) {
-      ngrams = ngrams.concat(
-        Engine.readSizedNgrams(sentence, ngramLength));
+      ngrams.push.apply(ngrams, Engine.readSizedNgrams(sentence, ngramLength));
     }
     return ngrams;
   }

@@ -38,11 +38,10 @@ export default class Parser {
       throw new RangeError(
         `Maximum n-gram size cannot be less than 0. Received ${maxNgramLength}`);
     }
-    let ngrams: Ngram[] = [];
+    const ngrams: Ngram[] = [];
     const maxLength = Math.min(maxNgramLength, sentence.length);
     for (let ngramLength = 1; ngramLength <= maxLength; ngramLength++) {
-      ngrams = ngrams.concat(
-        Parser.sizedNgrams(sentence, ngramLength));
+      ngrams.push.apply(ngrams, Parser.sizedNgrams(sentence, ngramLength));
     }
     return ngrams;
   }
