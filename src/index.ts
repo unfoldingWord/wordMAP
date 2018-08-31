@@ -68,6 +68,7 @@ export default class WordMap {
 
   /**
    * Appends some saved alignments.
+   * This may be multiple lines of text or a single line.
    *
    * @param {string} source - a string of source phrases separated by new lines
    * @param {string} target - a string of target phrases separated by new lines

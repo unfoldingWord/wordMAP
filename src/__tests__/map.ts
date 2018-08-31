@@ -158,6 +158,18 @@ describe("MAP", () => {
     // console.log("corpus (3)\n", stuff3);
   });
 
+  it("predicts from long alignment memory", () => {
+    const map = new WordMap();
+
+    map.appendSavedAlignmentsString("φιλοτέκνους", "and children");
+    map.appendSavedAlignmentsString("φιλάνδρους", "love their own husbands");
+    const suggestions = map.predict(
+      "ἵνα σωφρονίζωσι τὰς νέας, φιλάνδρους εἶναι, φιλοτέκνους",
+      "In this way they may train the younger women to love their own husbands and children"
+    );
+    expect(suggestions[0]).toEqual({});
+  });
+
   it("predicts from corpus and saved alignments", () => {
     const map = new WordMap();
 
