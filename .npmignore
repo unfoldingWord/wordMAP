@@ -1,7 +1,6 @@
 node_modules
 src
 .idea
-.babelrc
 .travis.yml
 tsconfig.json
 tslint.json
