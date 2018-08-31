@@ -158,16 +158,36 @@ describe("MAP", () => {
     // console.log("corpus (3)\n", stuff3);
   });
 
-  it("predicts from long alignment memory", () => {
-    const map = new WordMap();
+  describe("ngram length", () => {
+    it("excludes alignment memory that exceeds the max ngram length", () => {
+      const map = new WordMap({targetNgramLength: 3});
 
-    map.appendSavedAlignmentsString("φιλοτέκνους", "and children");
-    map.appendSavedAlignmentsString("φιλάνδρους", "love their own husbands");
-    const suggestions = map.predict(
-      "ἵνα σωφρονίζωσι τὰς νέας, φιλάνδρους εἶναι, φιλοτέκνους",
-      "In this way they may train the younger women to love their own husbands and children"
-    );
-    expect(suggestions[0]).toEqual({});
+      map.appendSavedAlignmentsString("φιλοτέκνους", "and children");
+      map.appendSavedAlignmentsString("φιλάνδρους", "love their own husbands");
+      const suggestions = map.predict(
+        "ἵνα σωφρονίζωσι τὰς νέας, φιλάνδρους εἶναι, φιλοτέκνους",
+        "In this way they may train the younger women to love their own husbands and children"
+      );
+      const predictions = suggestions[0].getPredictions();
+      expect(predictions).toHaveLength(6);
+      expect(predictions[4].key).not.toEqual("n:φιλάνδρους->n:love:their:own:husbands");
+      expect(predictions[5].key).toEqual("n:φιλοτέκνους->n:and:children");
+    });
+
+    it("uses alignment memory that falls within expanded ngram length", () => {
+      const map = new WordMap({targetNgramLength: 4});
+
+      map.appendSavedAlignmentsString("φιλοτέκνους", "and children");
+      map.appendSavedAlignmentsString("φιλάνδρους", "love their own husbands");
+      const suggestions = map.predict(
+        "ἵνα σωφρονίζωσι τὰς νέας, φιλάνδρους εἶναι, φιλοτέκνους",
+        "In this way they may train the younger women to love their own husbands and children"
+      );
+      const predictions = suggestions[0].getPredictions();
+      expect(predictions).toHaveLength(7);
+      expect(predictions[4].key).toEqual("n:φιλάνδρους->n:love:their:own:husbands");
+      expect(predictions[6].key).toEqual("n:φιλοτέκνους->n:and:children");
+    });
   });
 
   it("predicts from corpus and saved alignments", () => {

@@ -14,7 +14,6 @@ import Token from "./structures/Token";
  * Represents a multi-lingual word alignment prediction engine.
  */
 export default class Engine {
-
   /**
    * Generates an array of all possible alignment predictions
    * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
@@ -74,42 +73,6 @@ export default class Engine {
   }
 
   /**
-   * Executes prediction algorithms on the unaligned sentence pair.
-   * The sentence tokens should contain positional metrics for better accuracy.
-   *
-   * @param {Token[]} sourceSentence - the source sentence tokens.
-   * @param {Token[]} targetSentence - the target sentence tokens.
-   * @param {CorpusIndex} cIndex
-   * @param {SavedAlignmentsIndex} saIndex
-   * @param {Algorithm[]} algorithms
-   * @return {Prediction[]}
-   */
-  public static performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, algorithms: Algorithm[]) {
-    const sourceNgrams = Parser.ngrams(sourceSentence);
-    const targetNgrams = Parser.ngrams(targetSentence);
-
-    // generate alignment permutations
-    let predictions = Engine.generatePredictions(
-      sourceNgrams,
-      targetNgrams
-    );
-
-    const sentenceIndex: UnalignedSentenceIndex = new UnalignedSentenceIndex();
-    sentenceIndex.append([sourceSentence], [targetSentence]);
-
-    for (const algorithm of algorithms) {
-      predictions = algorithm.execute(
-        predictions,
-        cIndex,
-        saIndex,
-        sentenceIndex
-      );
-    }
-
-    return predictions;
-  }
-
-  /**
    * Calculates the weighted confidence score of a prediction
    * @param {Prediction} prediction - the prediction to score
    * @param {string[]} scoreKeys - the score keys to include in the calculation
@@ -139,7 +102,7 @@ export default class Engine {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
       "alignmentPosition": 0.7,
-      "ngramLength": 0.2,
+      "sourceNgramLength": 0.2,
       "characterLength": 0.3,
       "alignmentOccurrences": 0.4,
       "uniqueness": 0.5,
@@ -283,6 +246,8 @@ export default class Engine {
     });
   }
 
+  private maxTargetNgramLength: number;
+  private maxSourceNgramLength: number;
   private registeredAlgorithms: Algorithm[] = [];
   private corpusIndex: CorpusIndex;
   private savedAlignmentsIndex: SavedAlignmentsIndex;
@@ -295,9 +260,56 @@ export default class Engine {
     return this.registeredAlgorithms;
   }
 
-  constructor() {
+  constructor({sourceNgramLength = 3, targetNgramLength = 3} = {
+    sourceNgramLength: 3,
+    targetNgramLength: 3
+  }) {
+    this.maxSourceNgramLength = sourceNgramLength;
+    this.maxTargetNgramLength = targetNgramLength;
     this.corpusIndex = new CorpusIndex();
     this.savedAlignmentsIndex = new SavedAlignmentsIndex();
+  }
+
+  /**
+   * Executes prediction algorithms on the unaligned sentence pair.
+   * The sentence tokens should contain positional metrics for better accuracy.
+   *
+   * @param {Token[]} sourceSentence - the source sentence tokens.
+   * @param {Token[]} targetSentence - the target sentence tokens.
+   * @param {CorpusIndex} cIndex
+   * @param {SavedAlignmentsIndex} saIndex
+   * @param {Algorithm[]} algorithms
+   * @return {Prediction[]}
+   */
+  public performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, algorithms: Algorithm[]) {
+    const sourceNgrams = Parser.ngrams(
+      sourceSentence,
+      this.maxSourceNgramLength
+    );
+    const targetNgrams = Parser.ngrams(
+      targetSentence,
+      this.maxTargetNgramLength
+    );
+
+    // generate alignment permutations
+    let predictions = Engine.generatePredictions(
+      sourceNgrams,
+      targetNgrams
+    );
+
+    const sentenceIndex: UnalignedSentenceIndex = new UnalignedSentenceIndex();
+    sentenceIndex.append([sourceSentence], [targetSentence]);
+
+    for (const algorithm of algorithms) {
+      predictions = algorithm.execute(
+        predictions,
+        cIndex,
+        saIndex,
+        sentenceIndex
+      );
+    }
+
+    return predictions;
   }
 
   /**
@@ -346,7 +358,7 @@ export default class Engine {
    * @return {Prediction[]}
    */
   public run(sourceSentence: Token[], targetSentence: Token[]): Prediction[] {
-    return Engine.performPrediction(
+    return this.performPrediction(
       sourceSentence,
       targetSentence,
       this.corpusIndex,

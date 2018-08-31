@@ -149,7 +149,7 @@ it("runs all the algorithms", () => {
   }
   const source = tokenizeMockSentence("Hello World");
   const target = tokenizeMockSentence("olleH dlroW");
-  Engine.performPrediction(
+  engine.performPrediction(
     source,
     target,
     new CorpusIndex(),
@@ -201,7 +201,7 @@ describe("scoring", () => {
       targetCorpusPermutationsFrequencyRatio: 2,
       targetSavedAlignmentsFrequencyRatio: 1,
       phrasePlausibility: 2,
-      ngramLength: 1,
+      sourceNgramLength: 1,
       characterLength: 3,
       alignmentOccurrences: 2,
       uniqueness: 1

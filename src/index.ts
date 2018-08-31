@@ -19,8 +19,9 @@ import Token from "./structures/Token";
 export default class WordMap {
   private engine: Engine;
 
-  constructor() {
-    this.engine = new Engine();
+  constructor(opts = {}) {
+
+    this.engine = new Engine(opts);
     this.engine.registerAlgorithm(new NgramFrequency());
     this.engine.registerAlgorithm(new AlignmentPosition());
     this.engine.registerAlgorithm(new PhrasePlausibility());
