@@ -1,6 +1,6 @@
+import {Token} from "wordmap-lexer";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
-import Token from "./structures/Token";
 
 /**
  * A collection of parsing functions

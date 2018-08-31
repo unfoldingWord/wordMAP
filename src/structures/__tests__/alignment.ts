@@ -1,4 +1,4 @@
-import Lexer from "../../Lexer";
+import Lexer from "wordmap-lexer";
 import Alignment from "../Alignment";
 import Ngram from "../Ngram";
 

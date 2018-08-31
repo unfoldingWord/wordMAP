@@ -1,12 +1,11 @@
+import Lexer, {Token} from "wordmap-lexer";
 import Algorithm from "../Algorithm";
 import CorpusIndex from "../index/CorpusIndex";
 import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
-import Lexer from "../Lexer";
 import Alignment from "../structures/Alignment";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
 import Suggestion from "../structures/Suggestion";
-import Token from "../structures/Token";
 
 /**
  * Generates a score for how closely the suggestion matches the answer key

@@ -1,11 +1,11 @@
+import {Token} from "wordmap-lexer";
 import Ngram from "../structures/Ngram";
-import Token from "../structures/Token";
 import NgramIndex from "./NgramIndex";
 
 /**
  * A collection of indexes on the static content.
  * TODO: maybe I should split this into sentences as well.
- * e.g. a source SentenceIndex and a target Sentenceindex
+ * e.g. a source SentenceIndex and a target SentenceIndex
  * Then we could reuse it in other places such as word-mt.
  */
 export default class StaticIndex {

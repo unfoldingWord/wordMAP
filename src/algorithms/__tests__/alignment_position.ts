@@ -1,7 +1,7 @@
+import {Token} from "wordmap-lexer";
 import Alignment from "../../structures/Alignment";
 import Ngram from "../../structures/Ngram";
 import Prediction from "../../structures/Prediction";
-import Token from "../../structures/Token";
 import AlignmentPosition from "../AlignmentPosition";
 
 describe("AlignmentPosition", () => {
@@ -9,19 +9,22 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token({
-          text: "hello",
-          position: 2,
-          characterPosition: 5,
-          sentenceTokenLen: 1,
-          sentenceCharLen: 5})]),
-        new Ngram([new Token({
-          text: "hallo",
-          position: 2,
-          characterPosition: 5,
-          sentenceTokenLen: 1,
-          sentenceCharLen: 5
-        })])
+        new Ngram([
+          new Token({
+            text: "hello",
+            position: 2,
+            characterPosition: 5,
+            sentenceTokenLen: 1,
+            sentenceCharLen: 5
+          })]),
+        new Ngram([
+          new Token({
+            text: "hallo",
+            position: 2,
+            characterPosition: 5,
+            sentenceTokenLen: 1,
+            sentenceCharLen: 5
+          })])
       ))
     ];
     const result = engine.execute(predictions);
@@ -34,20 +37,22 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token({
-          text: "hello",
-          position: 2,
-          characterPosition: 1,
-          sentenceTokenLen: 1,
-          sentenceCharLen: 5
-        })]),
-        new Ngram([new Token({
-          text: "hallo",
-          position: 3,
-          characterPosition: 1,
-          sentenceTokenLen: 1,
-          sentenceCharLen: 5
-        })])
+        new Ngram([
+          new Token({
+            text: "hello",
+            position: 2,
+            characterPosition: 1,
+            sentenceTokenLen: 1,
+            sentenceCharLen: 5
+          })]),
+        new Ngram([
+          new Token({
+            text: "hallo",
+            position: 3,
+            characterPosition: 1,
+            sentenceTokenLen: 1,
+            sentenceCharLen: 5
+          })])
       ))
     ];
     const result = engine.execute(predictions);
@@ -60,20 +65,22 @@ describe("AlignmentPosition", () => {
     const engine = new AlignmentPosition();
     const predictions: Prediction[] = [
       new Prediction(new Alignment(
-        new Ngram([new Token({
-          text: "hello",
-          position: 2,
-          characterPosition: 1,
-          sentenceTokenLen: 1,
-          sentenceCharLen: 5
-        })]),
-        new Ngram([new Token({
-          text: "hallo",
-          position: 4,
-          characterPosition: 1,
-          sentenceTokenLen: 1,
-          sentenceCharLen: 5
-        })])
+        new Ngram([
+          new Token({
+            text: "hello",
+            position: 2,
+            characterPosition: 1,
+            sentenceTokenLen: 1,
+            sentenceCharLen: 5
+          })]),
+        new Ngram([
+          new Token({
+            text: "hallo",
+            position: 4,
+            characterPosition: 1,
+            sentenceTokenLen: 1,
+            sentenceCharLen: 5
+          })])
       ))
     ];
     const result = engine.execute(predictions);

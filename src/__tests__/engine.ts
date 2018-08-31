@@ -1,4 +1,5 @@
 jest.mock("../index/PermutationIndex");
+import {Token} from "wordmap-lexer";
 import Engine from "../Engine";
 import CorpusIndex from "../index/CorpusIndex";
 // @ts-ignore
@@ -6,7 +7,6 @@ import {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex"
 import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
-import Token from "../structures/Token";
 import {
   alignMockSentence,
   makeMockAlignment,

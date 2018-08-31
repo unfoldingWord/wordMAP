@@ -6,12 +6,11 @@ import NgramLength from "./algorithms/NgramLength";
 import PhrasePlausibility from "./algorithms/PhrasePlausibility";
 import Uniqueness from "./algorithms/Uniqueness";
 import Engine from "./Engine";
-import Lexer from "./Lexer";
+import Lexer, {Token} from "wordmap-lexer";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 import Prediction from "./structures/Prediction";
 import Suggestion from "./structures/Suggestion";
-import Token from "./structures/Token";
 
 /**
  * Multi-Lingual Word Alignment Prediction

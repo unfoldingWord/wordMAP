@@ -1,4 +1,4 @@
-import Token from "../Token";
+import {Token} from "wordmap-lexer";
 
 describe("creates a token", () => {
   it("is empty", () => {

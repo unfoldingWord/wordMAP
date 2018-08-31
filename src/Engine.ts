@@ -1,3 +1,4 @@
+import {Token} from "wordmap-lexer";
 import Algorithm from "./Algorithm";
 import CorpusIndex from "./index/CorpusIndex";
 import NumberObject from "./index/NumberObject";
@@ -8,7 +9,6 @@ import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 import Prediction from "./structures/Prediction";
 import Suggestion from "./structures/Suggestion";
-import Token from "./structures/Token";
 
 /**
  * Represents a multi-lingual word alignment prediction engine.

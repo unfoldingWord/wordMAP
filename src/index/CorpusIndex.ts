@@ -1,5 +1,5 @@
+import {Token} from "wordmap-lexer";
 import Parser from "../Parser";
-import Token from "../structures/Token";
 import PermutationIndex from "./PermutationIndex";
 import StaticIndex from "./StaticIndex";
 
@@ -47,7 +47,12 @@ export default class CorpusIndex {
         const targetNgrams = Parser.ngrams(target[i]);
 
         // index static metrics
-        this.staticIndex.addSentence(source[i], target[i], sourceNgrams, targetNgrams);
+        this.staticIndex.addSentence(
+          source[i],
+          target[i],
+          sourceNgrams,
+          targetNgrams
+        );
 
         // index permutation metrics
         const alignments = Parser.alignments(sourceNgrams, targetNgrams);
