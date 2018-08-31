@@ -345,10 +345,21 @@ export default class Engine {
   /**
    * Appends new saved alignments to the engine.
    * Adding saved alignments improves the quality of predictions.
-   * @param {Array<Alignment>} savedAlignments - a list of alignments
+   * @param {Array<Alignment>} alignmentMemory - a list of alignments
    */
-  public addSavedAlignments(savedAlignments: Alignment[]) {
-    this.savedAlignmentsIndex.append(savedAlignments);
+  public addSavedAlignments(alignmentMemory: Alignment[]) {
+    for (let i = alignmentMemory.length - 1; i >= 0; i--) {
+      const target = alignmentMemory[i].target;
+      if (target.tokenLength > this.maxTargetNgramLength) {
+        console.warn(`Alignment memory "${target.key}" exceeds maximum n-gram length of ${this.maxTargetNgramLength} and may be ignored.`);
+      }
+      const source = alignmentMemory[i].source;
+      if (source.tokenLength > this.maxSourceNgramLength) {
+        console.warn(`Alignment memory "${source.key}" exceeds maximum n-gram length of ${this.maxSourceNgramLength} and may be ignored.`);
+      }
+    }
+
+    this.savedAlignmentsIndex.append(alignmentMemory);
   }
 
   /**
