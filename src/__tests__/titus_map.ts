@@ -1,14 +1,14 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import WordMap from "../index";
 import Alignment from "../structures/Alignment";
 import {makeMockAlignment, scoreSuggestion} from "../util/testUtils";
+import WordMap from "../WordMap";
 
 describe("MAP predictions in Titus", () => {
   const greek = path.join(__dirname, "fixtures/corpus/tit/greek.txt");
   const english = path.join(__dirname, "fixtures/corpus/tit/english.txt");
   const map = new WordMap();
-  loadCorpus(map, greek,  english);
+  loadCorpus(map, greek, english);
 
   it("predicts the first verse", () => {
     const unalignedPair = [
@@ -16,7 +16,10 @@ describe("MAP predictions in Titus", () => {
       "Paul a servant of God and an apostle of Jesus Christ for the faith of God s chosen people and the knowledge of the truth that agrees with godliness"
     ];
     const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 2);
-    const chapterOneAlignmentPath = path.join(__dirname, "fixtures/corpus/tit/alignmentData/1.json");
+    const chapterOneAlignmentPath = path.join(
+      __dirname,
+      "fixtures/corpus/tit/alignmentData/1.json"
+    );
     scoreSuggestion(suggestions[0], getAlignments(chapterOneAlignmentPath, 1));
     console.log("suggestions\n", suggestions.map((s) => {
       return s.toString();
@@ -42,12 +45,24 @@ describe("MAP predictions in Titus", () => {
     benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
     benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
 
-    console.log("suggestions\n", map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2).map((s) => {
-      return s.toString();
-    }).join("\n"));
-    console.log("benchmarks\n", map.predictWithBenchmark(secondUnalignedPair[0], secondUnalignedPair[1], benchmark, 2).map((s) => {
-      return s.toString();
-    }).join("\n"));
+    console.log(
+      "suggestions\n",
+      map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2)
+        .map((s) => {
+          return s.toString();
+        })
+        .join("\n")
+    );
+    console.log(
+      "benchmarks\n",
+      map.predictWithBenchmark(secondUnalignedPair[0],
+        secondUnalignedPair[1],
+        benchmark,
+        2
+      ).map((s) => {
+        return s.toString();
+      }).join("\n")
+    );
   });
 });
 
@@ -73,6 +88,7 @@ function loadCorpus(map: WordMap, sourcePath: string, targetPath: string) {
  * @return {object}
  */
 function getAlignments(filePath: string, verse: number): object {
-  const verseAlignments = JSON.parse(fs.readFileSync(filePath).toString("utf-8"));
+  const verseAlignments = JSON.parse(fs.readFileSync(filePath)
+    .toString("utf-8"));
   return verseAlignments[verse.toString()].alignments;
 }

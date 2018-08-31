@@ -1,8 +1,8 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import WordMap from "../index";
 import Alignment from "../structures/Alignment";
 import {makeMockAlignment} from "../util/testUtils";
+import WordMap from "../WordMap";
 
 describe("MAP", () => {
 
@@ -170,7 +170,8 @@ describe("MAP", () => {
       );
       const predictions = suggestions[0].getPredictions();
       expect(predictions).toHaveLength(6);
-      expect(predictions[4].key).not.toEqual("n:φιλάνδρους->n:love:their:own:husbands");
+      expect(predictions[4].key).not.toEqual(
+        "n:φιλάνδρους->n:love:their:own:husbands");
       expect(predictions[5].key).toEqual("n:φιλοτέκνους->n:and:children");
     });
 
@@ -185,7 +186,8 @@ describe("MAP", () => {
       );
       const predictions = suggestions[0].getPredictions();
       expect(predictions).toHaveLength(7);
-      expect(predictions[4].key).toEqual("n:φιλάνδρους->n:love:their:own:husbands");
+      expect(predictions[4].key).toEqual(
+        "n:φιλάνδρους->n:love:their:own:husbands");
       expect(predictions[6].key).toEqual("n:φιλοτέκνους->n:and:children");
     });
   });
