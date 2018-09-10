@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/translationCoreApps/word-map.svg?branch=master)](https://travis-ci.org/translationCoreApps/word-map)
-[![codecov](https://codecov.io/gh/translationCoreApps/word-map/branch/master/graph/badge.svg)](https://codecov.io/gh/translationCoreApps/word-map)
+[![Build Status](https://travis-ci.org/translationCoreApps/wordmap.svg?branch=master)](https://travis-ci.org/translationCoreApps/wordmap)
+[![codecov](https://codecov.io/gh/translationCoreApps/wordmap/branch/master/graph/badge.svg)](https://codecov.io/gh/translationCoreApps/wordmap)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 # Multi-Lingual Word Alignment Prediction (Word MAP)
@@ -7,7 +7,7 @@
 # Installation
 
 ```
-npm i word-map
+npm i wordmap
 ```
 
 # Introduction
@@ -661,11 +661,11 @@ Algorithms/steps needed to implement saved alignments:
 
 # Language Configuration Settings API
 
-Word-MAP will be extended to support the storing and retrieving of language specific configuration values via an API. This may also include saved alignment data.
+WordMAP will be extended to support the storing and retrieving of language specific configuration values via an API. This may also include saved alignment data.
 
 ## Potential API Implementation in DCS
 
-Using [DCS](https://git.door43.org/) we could define a repository naming convention and repository structure that would allow the optimal storage of Word-MAP configuration variables and alignment data.  For an example:
+Using [DCS](https://git.door43.org/) we could define a repository naming convention and repository structure that would allow the optimal storage of WordMAP configuration variables and alignment data.  For an example:
 
 Repository: `jag3773/word-map_en-hbo`
 
@@ -677,7 +677,7 @@ Repository Contents:
 - saved_alignments.json
 ```
 
-The `config.json` file would be a small JSON array that could hold the configurable values for the [Prediction Algorithms](https://github.com/translationCoreApps/word-map/blob/master/README.md#prediction-algorithms).  A provisonal example:
+The `config.json` file would be a small JSON array that could hold the configurable values for the [Prediction Algorithms](https://github.com/translationCoreApps/wordmap/blob/master/README.md#prediction-algorithms).  A provisonal example:
 
 ```
 {
@@ -704,7 +704,7 @@ The `config.json` file would be a small JSON array that could hold the configura
       "option2": 5
     }
   ],
-  "word-map_version": "1"
+  "wordmap_version": "1"
 }
 ```
 
@@ -712,8 +712,8 @@ The `saved_alignments.json` would be a JSON array of saved alignment pairs.
 
 ### Benefits
 
-A benefit of this approach is that it allows users to backup their configuration and reload it on another system, using the existing account. A second advantage is that user's would be able to share configuration and saved alignments with one another, in the same manner in which they share projects. A third benefit is that it allows Word-MAP to define a cascading list of defaults, possibly looking at the [Door43-Catalog](https://git.door43.org/Door43-Catalog) organization first, then checking a user's repo for overrides.
+A benefit of this approach is that it allows users to backup their configuration and reload it on another system, using the existing account. A second advantage is that user's would be able to share configuration and saved alignments with one another, in the same manner in which they share projects. A third benefit is that it allows WordMAP to define a cascading list of defaults, possibly looking at the [Door43-Catalog](https://git.door43.org/Door43-Catalog) organization first, then checking a user's repo for overrides.
 
 ### Limitations
 
-This approach requires a DCS account. This is not a problem for tC but other software using Word-MAP may not have support for DCS accounts. Such software would still be able to read configuration data but could not write it unless they add support for DCS user authentication.
+This approach requires a DCS account. This is not a problem for tC but other software using WordMAP may not have support for DCS accounts. Such software would still be able to read configuration data but could not write it unless they add support for DCS user authentication.
