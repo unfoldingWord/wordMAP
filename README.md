@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/translationCoreApps/wordmap.svg?branch=master)](https://travis-ci.org/translationCoreApps/wordmap)
+[![Build Status](https://travis-ci.org/translationCoreApps/wordMAP.svg?branch=master)](https://travis-ci.org/translationCoreApps/wordMAP)
 [![codecov](https://codecov.io/gh/translationCoreApps/wordmap/branch/master/graph/badge.svg)](https://codecov.io/gh/translationCoreApps/wordmap)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
