@@ -68,7 +68,6 @@
   },
   "dependencies": {
     "@types/yargs": "^11.0.0",
-    "string-punctuation-tokenizer": "^0.8.0",
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
