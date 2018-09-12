@@ -1,6 +1,6 @@
 import Algorithm from "../Algorithm";
+import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
 import CorpusIndex from "../index/CorpusIndex";
-import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import UnalignedSentenceIndex from "../index/UnalignedSentenceIndex";
 import Prediction from "../structures/Prediction";
 
@@ -11,7 +11,7 @@ import Prediction from "../structures/Prediction";
 export default class AlignmentOccurrences implements Algorithm {
   public name = "alignment occurrences";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, usIndex: UnalignedSentenceIndex): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: UnalignedSentenceIndex): Prediction[] {
     for (const p of predictions) {
       let weight = 0;
 
