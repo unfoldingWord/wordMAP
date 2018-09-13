@@ -52,11 +52,11 @@ export default class WordMap {
     const sourceTokens: Token[][] = [];
     const targetTokens: Token[][] = [];
 
-    for (const s of sourceSentences) {
-      sourceTokens.push(Lexer.tokenize(s));
+    for (let i = 0, len = sourceSentences.length; i < len; i ++) {
+      sourceTokens.push(Lexer.tokenize(sourceSentences[i]));
     }
-    for (const s of targetSentences) {
-      targetTokens.push(Lexer.tokenize(s));
+    for (let i = 0, len = targetSentences.length; i < len; i ++) {
+      targetTokens.push(Lexer.tokenize(targetSentences[i]));
     }
 
     this.appendCorpusTokens(sourceTokens, targetTokens);
