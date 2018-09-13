@@ -5,7 +5,7 @@ node_js:
 os:
   - linux
 before_install:
-  - npm i -g npm@5.7.1
+  - npm i -g npm@5.7.1 codecov
   - npm --version
 install:
   - npm ci
