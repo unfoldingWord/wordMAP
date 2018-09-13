@@ -91,19 +91,19 @@ export default class StaticIndex {
     this.tgtTokenLength += targetTokens.length;
 
     // character length
-    for (const token of sourceTokens) {
-      this.srcCharLength += token.toString().length;
+    for (let i = 0, len = sourceTokens.length; i < len; i ++) {
+      this.srcCharLength += sourceTokens[i].toString().length;
     }
-    for (const token of targetTokens) {
-      this.tgtCharLength += token.toString().length;
+    for (let i = 0, len = targetTokens.length; i < len; i ++) {
+      this.tgtCharLength += targetTokens[i].toString().length;
     }
 
     // n-gram frequency
-    for (const ngram of sourceNgrams) {
-      this.srcNgramFreqIndex.increment(ngram);
+    for (let i = 0, len = sourceNgrams.length; i < len; i ++) {
+      this.srcNgramFreqIndex.increment(sourceNgrams[i]);
     }
-    for (const ngram of targetNgrams) {
-      this.tgtNgramFreqIndex.increment(ngram);
+    for (let i = 0, len = targetNgrams.length; i < len; i ++) {
+      this.tgtNgramFreqIndex.increment(targetNgrams[i]);
     }
   }
 }

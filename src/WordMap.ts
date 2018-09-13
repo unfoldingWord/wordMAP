@@ -49,13 +49,19 @@ export default class WordMap {
   public appendCorpusString(source: string, target: string) {
     const sourceSentences = source.split("\n");
     const targetSentences = target.split("\n");
+
     const sourceTokens: Token[][] = [];
     const targetTokens: Token[][] = [];
 
-    for (let i = 0, len = sourceSentences.length; i < len; i ++) {
-      sourceTokens.push(Lexer.tokenize(sourceSentences[i]));
+    const sourceLength = sourceSentences.length;
+    const targetLength = targetSentences.length;
+
+    if (sourceLength !== targetLength) {
+      throw Error("source and target corpus must be the same length");
     }
-    for (let i = 0, len = targetSentences.length; i < len; i ++) {
+
+    for (let i = 0; i < sourceLength; i++) {
+      sourceTokens.push(Lexer.tokenize(sourceSentences[i]));
       targetTokens.push(Lexer.tokenize(targetSentences[i]));
     }
 
@@ -68,6 +74,10 @@ export default class WordMap {
    * @param targetTokens
    */
   public appendCorpusTokens(sourceTokens: Token[][], targetTokens: Token[][]) {
+    if (sourceTokens.length !== targetTokens.length) {
+      throw Error("source and target corpus must be the same length");
+    }
+
     this.engine.addCorpus(sourceTokens, targetTokens);
   }
 
