@@ -59,6 +59,15 @@ export default class WordMap {
       targetTokens.push(Lexer.tokenize(s));
     }
 
+    this.appendCorpusTokens(sourceTokens, targetTokens);
+  }
+
+  /**
+   * Adds tokenized corpus to map
+   * @param sourceTokens
+   * @param targetTokens
+   */
+  public appendCorpusTokens(sourceTokens: Token[][], targetTokens: Token[][]) {
     this.engine.addCorpus(sourceTokens, targetTokens);
   }
 
