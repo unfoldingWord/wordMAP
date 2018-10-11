@@ -64,13 +64,13 @@
     "tslint": "^5.9.1",
     "typedoc": "^0.11.1",
     "typescript": "^2.8.1",
-    "wordmap-lexer": "^0.3.1"
+    "wordmap-lexer": "0.3.3"
   },
   "dependencies": {
     "@types/yargs": "^11.0.0",
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
-    "wordmap-lexer": "^0.3.1"
+    "wordmap-lexer": "0.3.3"
   }
 }
