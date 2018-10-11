@@ -1,6 +1,6 @@
 {
   "name": "wordmap",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
