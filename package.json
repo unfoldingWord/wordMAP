@@ -1,6 +1,6 @@
 {
   "name": "wordmap",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -63,13 +63,13 @@
     "tslint": "^5.11.0",
     "typedoc": "^0.12.0",
     "typescript": "^3.0.3",
-    "wordmap-lexer": "^0.3.1"
+    "wordmap-lexer": "^0.3.3"
   },
   "dependencies": {
     "@types/yargs": "^11.0.0",
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
-    "wordmap-lexer": "^0.3.1"
+    "wordmap-lexer": "0.3.3"
   }
 }
