@@ -28,3 +28,7 @@ function profilerStub() {
 
 // run so we can profile it
 profilerStub();
+
+it('lets this file pass as a test', () => {
+
+});

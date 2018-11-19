@@ -7,10 +7,14 @@ import FrequencyIndex from "./FrequencyIndex";
 export default class AlignmentIndex extends FrequencyIndex {
   /**
    * Reads a value from the index
-   * @param alignment
+   * @param alignment - the alignment index to read. This may be a specific key, or the alignment object to read the default key.
    */
-  public read(alignment: Alignment): number {
-    return this.readIndex(alignment.key);
+  public read(alignment: Alignment | string): number {
+    if (typeof alignment === "string") {
+      return this.readIndex(alignment);
+    } else {
+      return this.readIndex(alignment.key);
+    }
   }
 
   /**
@@ -30,5 +34,6 @@ export default class AlignmentIndex extends FrequencyIndex {
    */
   public increment(alignment: Alignment, value: number = 1) {
     this.incrementIndex(alignment.key, value);
+    // TODO: increment the lemma
   }
 }

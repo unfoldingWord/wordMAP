@@ -8,10 +8,14 @@ export default class NgramIndex extends FrequencyIndex {
 
   /**
    * Reads a value from the index
-   * @param ngram - the n-gram index to read
+   * @param ngram - the n-gram index to read. This may be a specific key, or the ngram object to read the default key.
    */
-  public read(ngram: Ngram): number {
-    return this.readIndex(ngram.key);
+  public read(ngram: Ngram | string): number {
+    if (typeof ngram === "string") {
+      return this.readIndex(ngram);
+    } else {
+      return this.readIndex(ngram.key);
+    }
   }
 
   /**
@@ -31,5 +35,6 @@ export default class NgramIndex extends FrequencyIndex {
    */
   public increment(ngram: Ngram, value: number = 1) {
     this.incrementIndex(ngram.key, value);
+    // TODO: increment the lemma
   }
 }
