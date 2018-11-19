@@ -9,7 +9,7 @@
     "docs": "typedoc --out docs --mode modules --target ES6",
     "test": "npm run lint && jest",
     "prebuild": "rm -rf dist",
-    "build": "tsc",
+    "build": "tsc --strict",
     "prepare": "if [ ! -d './dist/' ]; then npm run build; fi",
     "prepublishOnly": "npm test && npm run build"
   },

@@ -29,12 +29,16 @@ export default class NgramIndex extends FrequencyIndex {
   }
 
   /**
-   * Increments a value in the index
+   * Increments the n-gram frequency.
+   * This will increment all of the important keys in the n-gram such as
+   * the words in question, lemma, etc.
    * @param {Ngram} ngram - the n-gram index to add
    * @param {number} value
    */
   public increment(ngram: Ngram, value: number = 1) {
     this.incrementIndex(ngram.key, value);
-    // TODO: increment the lemma
+    if (ngram.lemmaKey !== undefined) {
+      this.incrementIndex(ngram.lemmaKey, value);
+    }
   }
 }

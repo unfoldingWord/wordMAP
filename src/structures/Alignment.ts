@@ -9,32 +9,36 @@ export default class Alignment {
   private sourceNgram: Ngram;
   private targetNgram: Ngram;
   private cachedKey!: string; // TRICKY: definite assignment assertion
+  private cachedLemmaKey: string | undefined;
 
   /**
    * Returns the n-gram from the source text
-   * @return {Ngram}
    */
-  public get source() {
+  public get source(): Ngram {
     return this.sourceNgram;
   }
 
   /**
    * Returns the n-gram from the target text
-   * @return {Ngram}
    */
-  public get target() {
+  public get target(): Ngram {
     return this.targetNgram;
   }
 
   /**
-   * Returns the alignment key.
-   * @return {string}
+   * Returns the alignment key
    */
   public get key(): string {
-    if (this.cachedKey === undefined) {
-      this.cachedKey = `${this.sourceNgram.key}->${this.targetNgram.key}`.toLowerCase();
-    }
+    this.cacheKeys();
     return this.cachedKey;
+  }
+
+  /**
+   * Returns the alignment lemma-based key
+   */
+  public get lemmaKey(): string | undefined {
+    this.cacheKeys();
+    return this.cachedLemmaKey;
   }
 
   /**
@@ -45,5 +49,23 @@ export default class Alignment {
   constructor(sourceNgram: Ngram, targetNgram: Ngram) {
     this.sourceNgram = sourceNgram;
     this.targetNgram = targetNgram;
+  }
+
+  /**
+   * Caches the keys if they have not already been generated
+   */
+  private cacheKeys() {
+    if (this.cachedKey === undefined) {
+      this.cachedKey = `${this.sourceNgram.key}->${this.targetNgram.key}`.toLowerCase();
+
+      // TRICKY: source and target must have a lemma to generate the key
+      const sourceHasLemma = this.sourceNgram.lemmaKey !== undefined;
+      const targethasLemma = this.targetNgram.lemmaKey !== undefined;
+      if (sourceHasLemma && targethasLemma) {
+        this.cachedLemmaKey = `${this.sourceNgram.lemmaKey}->${this.targetNgram.lemmaKey}`.toLowerCase();
+      } else if (sourceHasLemma || targethasLemma) {
+        console.warn(`${this.cachedKey} is missing a lemma in one of it's n-grams`);
+      }
+    }
   }
 }
