@@ -4,7 +4,7 @@ import NgramIndex from "./NgramIndex";
 import PermutationIndex from "./PermutationIndex";
 
 /**
- * A collection of indexes for the saved alignments
+ * A collection of indexes for the alignment memory
  */
 export default class AlignmentMemoryIndex {
   private permutationIndex: PermutationIndex;

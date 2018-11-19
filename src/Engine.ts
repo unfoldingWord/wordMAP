@@ -133,7 +133,7 @@ export default class Engine {
         weights
       );
 
-      // confidence based on saved alignments
+      // confidence based on alignment memory
       const alignmentMemoryWeightedKeys = [
         "sourceAlignmentMemoryFrequencyRatio",
         "targetAlignmentMemoryFrequencyRatio",
@@ -155,7 +155,7 @@ export default class Engine {
         confidence *= p.getScore("phrasePlausibility");
       }
 
-      // boost confidence for saved alignments
+      // boost confidence for alignment memory
       if (isAlignmentMemory) {
         confidence++;
       }
@@ -343,8 +343,8 @@ export default class Engine {
   }
 
   /**
-   * Appends new saved alignments to the engine.
-   * Adding saved alignments improves the quality of predictions.
+   * Appends new alignment memory to the engine.
+   * Adding alignment memory improves the quality of predictions.
    * @param {Array<Alignment>} alignmentMemory - a list of alignments
    */
   public addAlignmentMemory(alignmentMemory: Alignment[]) {

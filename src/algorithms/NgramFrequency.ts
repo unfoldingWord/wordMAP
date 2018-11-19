@@ -55,13 +55,13 @@ export default class NgramFrequency implements Algorithm {
     const alignmentFrequencyAlignmentMemorySums: NumberObject = {};
 
     for (const p  of predictions) {
-      // alignment permutation frequency within the corpus/saved alignments
+      // alignment permutation frequency within the corpus/alignment memory
       const alignmentFrequencyCorpus: number = cIndex.permutations.alignmentFrequency.read(
         p.alignment);
       const alignmentFrequencyAlignmentMemory: number = saIndex.alignmentFrequency.read(
         p.alignment);
 
-      // n-gram permutation frequency within the corpus/saved alignments
+      // n-gram permutation frequency within the corpus/alignment memory
       // looked up by n-gram
       // TODO: rename to something like this.
       // const sourceNgramFrequencyInCorpusPermutations
@@ -124,11 +124,11 @@ export default class NgramFrequency implements Algorithm {
       // we want to generate filtered ngramFrequencyCorpusSource and ngramFrequencyCorpusTarget
       // see notes in ngram_frequency line 160.
 
-      // alignment frequency in the filtered corpus and saved alignments
+      // alignment frequency in the filtered corpus and alignment memory
       const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.key];
       const alignmentFrequencyAlignmentMemoryFiltered = alignmentFrequencyAlignmentMemorySums[p.key];
 
-      // source and target frequency ratio for the corpus and saved alignments
+      // source and target frequency ratio for the corpus and alignment memory
       const frequencyRatioCorpusFiltered: number = NgramFrequency.divideSafe(
         alignmentFrequencyCorpus,
         alignmentFrequencyCorpusFiltered

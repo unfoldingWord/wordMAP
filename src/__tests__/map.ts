@@ -46,9 +46,9 @@ describe("MAP", () => {
   //     "n:world->n:nhoj");
   // });
 
-  it("predicts from saved alignments", () => {
+  it("predicts from alignment memory", () => {
     const map = new WordMap();
-    // append saved alignments
+    // append alignment memory
     const sourceAlignmentMemory = fs.readFileSync(path.join(
       __dirname,
       "fixtures/corrections/greek.txt"
@@ -76,7 +76,7 @@ describe("MAP", () => {
       suggestions[4].toString()
     ];
 
-    console.log("saved alignments\n", stuff);
+    console.log("alignment memory\n", stuff);
   });
 
   it("indexes corpus quickly", () => {
@@ -216,7 +216,7 @@ describe("MAP", () => {
     });
   });
 
-  it("predicts from corpus and saved alignments", () => {
+  it("predicts from corpus and alignment memory", () => {
     const map = new WordMap();
 
     // append corpus
@@ -233,7 +233,7 @@ describe("MAP", () => {
       targetCorpus.toString("utf-8")
     );
 
-    // append saved alignments
+    // append alignment memory
     const sourceAlignmentMemory = fs.readFileSync(path.join(
       __dirname,
       "fixtures/corrections/greek.txt"
@@ -262,7 +262,7 @@ describe("MAP", () => {
     ];
 
     // noinspection TsLint
-    console.log("corpus and saved alignments\n", stuff);
+    console.log("corpus and alignment memory\n", stuff);
   });
 });
 
