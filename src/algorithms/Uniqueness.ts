@@ -24,7 +24,8 @@ export default class Uniqueness implements Algorithm {
       const sourceUniqueness = sourceNgramFrequency / sourceTokenLength;
       const targetUniqueness = targetNgramFrequency / targetTokenLength;
       // higher is better
-      weight = Math.min(sourceUniqueness, targetUniqueness) / Math.max(sourceUniqueness, targetUniqueness);
+      weight = Math.min(sourceUniqueness, targetUniqueness) /
+        Math.max(sourceUniqueness, targetUniqueness);
       // TODO: if similarity is high and uniqueness is low we want to give a low score.
     }
 
@@ -32,37 +33,21 @@ export default class Uniqueness implements Algorithm {
   }
 
   /**
-   * Just a light wrapper around the calc function to reduce redundancy.
-   * @param sourceFrequency
-   * @param targetFrequency
-   * @param p
-   * @param cIndex
-   */
-  private static calcUniqueness(sourceFrequency: number, targetFrequency: number, p: Prediction, cIndex: CorpusIndex) {
-    return Uniqueness.calc(
-      sourceFrequency,
-      targetFrequency,
-      cIndex.static.sourceTokenLength,
-      cIndex.static.targetTokenLength,
-      p.getScore("phrasePlausibility")
-    );
-  }
-
-  /**
    * Calculates the uniqueness of the n-gram
    * @param p
    * @param cIndex
    */
-  private static executeDefault(p: Prediction, cIndex: CorpusIndex) {
+  private static calcUniqueness(p: Prediction, cIndex: CorpusIndex) {
     const sourceNgramStaticCorpusFrequency = cIndex.static.sourceNgramFrequency.read(
       p.source);
     const targetNgramStaticCorpusFrequency = cIndex.static.targetNgramFrequency.read(
       p.target);
-    const weight = Uniqueness.calcUniqueness(
+    const weight = Uniqueness.calc(
       sourceNgramStaticCorpusFrequency,
       targetNgramStaticCorpusFrequency,
-      p,
-      cIndex
+      cIndex.static.sourceTokenLength,
+      cIndex.static.targetTokenLength,
+      p.getScore("phrasePlausibility")
     );
     p.setScore("uniqueness", weight);
   }
@@ -72,17 +57,18 @@ export default class Uniqueness implements Algorithm {
    * @param p
    * @param cIndex
    */
-  private static executeLemma(p: Prediction, cIndex: CorpusIndex) {
+  private static calcLemmaUniqueness(p: Prediction, cIndex: CorpusIndex) {
     if (p.source.lemmaKey !== undefined && p.target.lemmaKey !== undefined) {
       const sourceNgramStaticCorpusLemmaFrequency = cIndex.static.sourceNgramFrequency.read(
         p.source.lemmaKey);
       const targetNgramStaticCorpusLemmaFrequency = cIndex.static.targetNgramFrequency.read(
         p.target.lemmaKey);
-      const lemmaWeight = Uniqueness.calcUniqueness(
+      const lemmaWeight = Uniqueness.calc(
         sourceNgramStaticCorpusLemmaFrequency,
         targetNgramStaticCorpusLemmaFrequency,
-        p,
-        cIndex
+        cIndex.static.sourceTokenLength,
+        cIndex.static.targetTokenLength,
+        p.getScore("lemmaPhrasePlausibility")
       );
       p.setScore("lemmaUniqueness", lemmaWeight);
     }
@@ -93,8 +79,8 @@ export default class Uniqueness implements Algorithm {
   public execute(predictions: Prediction[], cIndex: CorpusIndex): Prediction[] {
 
     for (const p of predictions) {
-      Uniqueness.executeDefault(p, cIndex);
-      Uniqueness.executeLemma(p, cIndex);
+      Uniqueness.calcUniqueness(p, cIndex);
+      Uniqueness.calcLemmaUniqueness(p, cIndex);
     }
     return predictions;
   }

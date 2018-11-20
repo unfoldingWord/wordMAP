@@ -168,7 +168,7 @@ export default class LemmaNgramFrequency implements Algorithm {
       p.setScores({
         // alignmentFrequencyCorpusFiltered,
         // alignmentFrequencyAlignmentMemoryFiltered,
-
+        // TODO: we aren't using these at the moment
         lemmaFrequencyRatioCorpusFiltered,
         lemmaFrequencyRatioAlignmentMemoryFiltered
       });

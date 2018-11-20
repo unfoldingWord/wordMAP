@@ -87,8 +87,10 @@ export default class Engine {
       if (key in weights) {
         weight = weights[key];
       }
-      scoreSum += prediction.getScore(key) * weight;
-      weightSum += weight;
+      if (prediction.hasScore(key)) {
+        scoreSum += prediction.getScore(key) * weight;
+        weightSum += weight;
+      }
     }
     return scoreSum / weightSum;
   }
@@ -106,13 +108,19 @@ export default class Engine {
       "sourceNgramLength": 0.2,
       "characterLength": 0.3,
       "alignmentOccurrences": 0.4,
+      "lemmaAlignmentOccurrences": 0.4,
       "uniqueness": 0.5,
+      "lemmaUniqueness": 0.5,
 
       "sourceCorpusPermutationsFrequencyRatio": 0.7,
+      "sourceCorpusLemmaPermutationsFrequencyRatio": 0.7,
       "targetCorpusPermutationsFrequencyRatio": 0.7,
+      "targetCorpusLemmaPermutationsFrequencyRatio": 0.7,
 
       "sourceAlignmentMemoryFrequencyRatio": 0.7,
-      "targetAlignmentMemoryFrequencyRatio": 0.7
+      "sourceAlignmentMemoryLemmaFrequencyRatio": 0.7,
+      "targetAlignmentMemoryFrequencyRatio": 0.7,
+      "targetAlignmentMemoryLemmaFrequencyRatio": 0.7
     };
 
     for (const p of predictions) {
@@ -121,12 +129,16 @@ export default class Engine {
       // confidence based on corpus
       const corpusWeightedKeys = [
         "sourceCorpusPermutationsFrequencyRatio",
+        "sourceCorpusLemmaPermutationsFrequencyRatio",
         "targetCorpusPermutationsFrequencyRatio",
+        "targetCorpusLemmaPermutationsFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
         "characterLength",
         "alignmentOccurrences",
-        "uniqueness"
+        "lemmaAlignmentOccurrences",
+        "uniqueness",
+        "lemmaUniqueness"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
@@ -137,12 +149,16 @@ export default class Engine {
       // confidence based on alignment memory
       const alignmentMemoryWeightedKeys = [
         "sourceAlignmentMemoryFrequencyRatio",
+        "sourceAlignmentMemoryLemmaFrequencyRatio",
         "targetAlignmentMemoryFrequencyRatio",
+        "targetAlignmentMemoryLemmaFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
         "characterLength",
         "alignmentOccurrences",
-        "uniqueness"
+        "lemmaAlignmentOccurrences",
+        "uniqueness",
+        "lemmaUniqueness"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
@@ -154,6 +170,7 @@ export default class Engine {
       if (!isAlignmentMemory) {
         confidence = corpusConfidence;
         confidence *= p.getScore("phrasePlausibility");
+        // TODO: lemmaPhrasePlausibility
       }
 
       // boost confidence for alignment memory

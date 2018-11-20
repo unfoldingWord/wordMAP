@@ -143,6 +143,7 @@ export default class NgramFrequency implements Algorithm {
         // alignmentFrequencyCorpusFiltered,
         // alignmentFrequencyAlignmentMemoryFiltered,
 
+        // TODO: we aren't using these at the moment
         frequencyRatioCorpusFiltered,
         frequencyRatioAlignmentMemoryFiltered
       });

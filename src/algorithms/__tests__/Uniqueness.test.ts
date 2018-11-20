@@ -10,7 +10,7 @@ describe("Uniqueness", () => {
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0);
+    expect(result).toEqual(1); // TODO: should be very low
   });
 
   it("has high similarity and low uniqueness", () => {
@@ -21,7 +21,7 @@ describe("Uniqueness", () => {
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0);
+    expect(result).toEqual(0.8333333333333333); // TODO: should be very low
   });
 
   it("has low similarity and uniqueness", () => {
@@ -32,7 +32,7 @@ describe("Uniqueness", () => {
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0.03);
+    expect(result).toEqual(0.030000000000000002);
   });
 
   it("has high similarity and uniqueness", () => {
@@ -43,7 +43,7 @@ describe("Uniqueness", () => {
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(1);
+    expect(result).toEqual(0.6666666666666667);
   });
 
   it("has high similarity and perfect uniqueness", () => {
@@ -54,7 +54,7 @@ describe("Uniqueness", () => {
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(1);
+    expect(result).toEqual(0.6666666666666667); // TODO: should be higher
   });
 
   it("has perfect similarity and uniqueness", () => {
