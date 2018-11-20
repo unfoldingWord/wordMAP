@@ -20,8 +20,10 @@ export default class Uniqueness implements Algorithm {
     let weight = 0;
 
     if (sourceTokenLength !== 0 && targetTokenLength !== 0) {
+      // lower is better
       const sourceUniqueness = sourceNgramFrequency / sourceTokenLength;
       const targetUniqueness = targetNgramFrequency / targetTokenLength;
+      // higher is better
       weight = Math.min(sourceUniqueness, targetUniqueness) / Math.max(sourceUniqueness, targetUniqueness);
       // TODO: if similarity is high and uniqueness is low we want to give a low score.
     }
