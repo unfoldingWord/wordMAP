@@ -33,6 +33,20 @@ export function makeCorpus(source: string, target: string): Token[][][] {
 }
 
 /**
+ * Generates some strings into corpus with support for lemma
+ * @param source
+ * @param target
+ */
+export function makeComplexCorpus(source: string, target: string): Token[][][] {
+  const sourceCorpusTokens = tokenizeComplexMockSentence(source);
+  const targetCorpusTokens = tokenizeComplexMockSentence(target);
+  return [
+    [sourceCorpusTokens],
+    [targetCorpusTokens]
+  ];
+}
+
+/**
  * converts some strings into an unaligned sentence pair
  * @param {string} source
  * @param {string} target

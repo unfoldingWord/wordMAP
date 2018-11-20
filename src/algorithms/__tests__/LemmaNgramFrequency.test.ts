@@ -4,7 +4,7 @@ import CorpusIndex from "../../index/CorpusIndex";
 import NumberObject from "../../index/NumberObject";
 import Prediction from "../../structures/Prediction";
 import {
-  alignComplexMockSentence,
+  alignComplexMockSentence, makeComplexCorpus,
   makeComplexMockAlignment,
   makeCorpus,
   makeMockAlignment,
@@ -46,7 +46,7 @@ describe("calculate frequency", () => {
 
   it("produces results from alignment memory", () => {
     const source = "the:das";
-    const target = "eht"; // reverseSentenceWords(source);
+    const target = "eht";
     const sourceTokens = tokenizeComplexMockSentence(source);
     const targetTokens = tokenizeComplexMockSentence(target);
     const sourceNgrams = Engine.generateSentenceNgrams(sourceTokens);
@@ -88,13 +88,16 @@ describe("calculate frequency", () => {
   });
 
   it("should return correct scores based on the corpus", () => {
-    const unalignedSentence = makeUnalignedSentence("hello", "olleh");
+    const unalignedSentence = [
+      tokenizeComplexMockSentence("hello:hi"),
+      tokenizeMockSentence("olleh")
+    ];
     const engine = new Engine();
     engine.registerAlgorithm(new LemmaNgramFrequency());
 
     // training data
-    const initialCorpus = makeCorpus(
-      "hello taco world",
+    const initialCorpus = makeComplexCorpus(
+      "greetings:hi taco world",
       "dlalignment ocat olleh"
     );
     engine.addCorpus(initialCorpus[0], initialCorpus[1]);
@@ -106,17 +109,17 @@ describe("calculate frequency", () => {
     );
     expect(firstPredictions[0].getScores())
       .toEqual({
-        "frequencyRatioCorpusFiltered": 1,
-        "frequencyRatioAlignmentMemoryFiltered": 0,
-        "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
-        "sourceAlignmentMemoryFrequencyRatio": 0,
-        "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
-        "targetAlignmentMemoryFrequencyRatio": 0
+        "lemmaFrequencyRatioCorpusFiltered": 1,
+        "lemmaFrequencyRatioAlignmentMemoryFiltered": 0,
+        "sourceCorpusLemmaPermutationsFrequencyRatio": 0.14285714285714285,
+        "sourceAlignmentMemoryLemmaFrequencyRatio": 0,
+        "targetCorpusLemmaPermutationsFrequencyRatio": 0.08333333333333333,
+        "targetAlignmentMemoryLemmaFrequencyRatio": 0
       });
 
     // append new corpus
-    const secondCorpus = makeCorpus(
-      "hello taco world and",
+    const secondCorpus = makeComplexCorpus(
+      "greetings:hi taco world and",
       "dlalignment ocat olleh dna"
     );
     engine.addCorpus(secondCorpus[0], secondCorpus[1]);
@@ -128,12 +131,12 @@ describe("calculate frequency", () => {
     );
     expect(secondPredictions[0].getScores())
       .toEqual({
-          "frequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
-          "frequencyRatioAlignmentMemoryFiltered": 0,
-          "sourceCorpusPermutationsFrequencyRatio": 0.11764705882352941,
-          "sourceAlignmentMemoryFrequencyRatio": 0,
-          "targetCorpusPermutationsFrequencyRatio": 0.13333333333333333,
-          "targetAlignmentMemoryFrequencyRatio": 0
+          "lemmaFrequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
+          "lemmaFrequencyRatioAlignmentMemoryFiltered": 0,
+          "sourceCorpusLemmaPermutationsFrequencyRatio": 0.11764705882352941,
+          "sourceAlignmentMemoryLemmaFrequencyRatio": 0,
+          "targetCorpusLemmaPermutationsFrequencyRatio": 0.06666666666666667,
+          "targetAlignmentMemoryLemmaFrequencyRatio": 0
         }
       );
   });
@@ -145,28 +148,28 @@ describe("calculate frequency", () => {
       engine.registerAlgorithm(new LemmaNgramFrequency());
 
       // training data
-      const sourceCorpusSentence = "hello taco world";
+      const sourceCorpusSentence = "greetings:hi taco world";
       const targetCorpusSentence = "dlalignment ocat olleh";
-      const sourceCorpusTokens = tokenizeMockSentence(sourceCorpusSentence);
+      const sourceCorpusTokens = tokenizeComplexMockSentence(sourceCorpusSentence);
       const targetCorpusTokens = tokenizeMockSentence(targetCorpusSentence);
       engine.addCorpus([sourceCorpusTokens], [targetCorpusTokens]);
-      engine.addAlignmentMemory([makeMockAlignment("hello", "olleh")]);
+      engine.addAlignmentMemory([makeComplexMockAlignment("greetings:hi", "olleh")]);
 
       // un-aligned sentence pair
-      const sourceSentence = "hello";
+      const sourceSentence = "hello:hi";
       const targetSentence = "olleh";
-      const sourceTokens = tokenizeMockSentence(sourceSentence);
+      const sourceTokens = tokenizeComplexMockSentence(sourceSentence);
       const targetTokens = tokenizeMockSentence(targetSentence);
       const predictions = engine.run(sourceTokens, targetTokens);
 
       expect(predictions[0].getScores())
         .toEqual({
-          "frequencyRatioCorpusFiltered": 1,
-          "frequencyRatioAlignmentMemoryFiltered": 1,
-          "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
-          "sourceAlignmentMemoryFrequencyRatio": 1,
-          "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
-          "targetAlignmentMemoryFrequencyRatio": 1
+          "lemmaFrequencyRatioCorpusFiltered": 1,
+          "lemmaFrequencyRatioAlignmentMemoryFiltered": 1,
+          "sourceCorpusLemmaPermutationsFrequencyRatio": 0.14285714285714285,
+          "sourceAlignmentMemoryLemmaFrequencyRatio": 1,
+          "targetCorpusLemmaPermutationsFrequencyRatio": 0.16666666666666666,
+          "targetAlignmentMemoryLemmaFrequencyRatio": 0.5
         });
     }
   );

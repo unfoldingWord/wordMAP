@@ -95,6 +95,7 @@ export default class Engine {
 
   /**
    * Scores the predictions and returns a filtered set of suggestions
+   * TODO: this should not be done in the engine because we don't know anything about the algorithms here.
    * @param predictions
    * @param saIndex
    */
