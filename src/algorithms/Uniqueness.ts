@@ -8,27 +8,43 @@ import Prediction from "../structures/Prediction";
 export default class Uniqueness implements Algorithm {
 
   /**
-   * Calculates uniqueness from the source n-gram and target n-gram static frequency
+   * Performs the uniqueness calculation.
+   * This is the pure algorithm code.
+   * @param sourceFrequency - source n-gram frequency in the static corpus
+   * @param targetFrequency - target n-gram frequency in the static corpus
+   * @param sourceTokenLength - length of the source text in units of {@link Token}
+   * @param targetTokenLength - length of the target text in units of {@link Token}
+   * @param phrasePlausibility - the likely hood that the n-gram is a phrase. Produced by {@link PhrasePlausibility}
+   */
+  public static calc(sourceFrequency: number, targetFrequency: number, sourceTokenLength: number, targetTokenLength: number, phrasePlausibility: number) {
+    let weight = 0;
+
+    if (sourceTokenLength !== 0 && targetTokenLength !== 0) {
+      const sourceUniqueness = sourceFrequency / sourceTokenLength;
+      const targetUniqueness = targetFrequency / targetTokenLength;
+      const similarity = Math.min(sourceUniqueness, targetUniqueness) / Math.max(sourceUniqueness, targetUniqueness);
+      weight = 1 - 1 / (similarity * (1 / Math.min(sourceUniqueness, targetUniqueness))); // maybe 1 - uniqueness?
+    }
+    // I want similarity and uniqueness to be small and the same.
+
+    return weight * phrasePlausibility;
+  }
+
+  /**
+   * Just a light wrapper around the calc function to reduce redundancy.
    * @param sourceFrequency
    * @param targetFrequency
    * @param p
    * @param cIndex
    */
   private static calcUniqueness(sourceFrequency: number, targetFrequency: number, p: Prediction, cIndex: CorpusIndex) {
-    let weight = 0;
-
-    if (sourceFrequency !== 0 &&
-      targetFrequency !==
-      0) {
-      const x = sourceFrequency /
-        cIndex.static.sourceTokenLength;
-      const y = targetFrequency /
-        cIndex.static.targetTokenLength;
-      weight = Math.min(x, y) / Math.max(x, y);
-    }
-
-    weight *= p.getScore("phrasePlausibility");
-    return weight;
+    return Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      cIndex.static.sourceTokenLength,
+      cIndex.static.targetTokenLength,
+      p.getScore("phrasePlausibility")
+    );
   }
 
   /**
