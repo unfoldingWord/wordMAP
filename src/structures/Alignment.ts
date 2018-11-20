@@ -58,13 +58,13 @@ export default class Alignment {
     if (this.cachedKey === undefined) {
       this.cachedKey = `${this.sourceNgram.key}->${this.targetNgram.key}`.toLowerCase();
 
-      // TRICKY: source and target must have a lemma to generate the key
+      // TRICKY: the alignment supports lemma fallback if either language has lemma
       const sourceHasLemma = this.sourceNgram.lemmaKey !== undefined;
-      const targethasLemma = this.targetNgram.lemmaKey !== undefined;
-      if (sourceHasLemma && targethasLemma) {
-        this.cachedLemmaKey = `${this.sourceNgram.lemmaKey}->${this.targetNgram.lemmaKey}`.toLowerCase();
-      } else if (sourceHasLemma || targethasLemma) {
-        console.warn(`${this.cachedKey} is missing a lemma in one of it's n-grams`);
+      const targetHasLemma = this.targetNgram.lemmaKey !== undefined;
+      if (sourceHasLemma || targetHasLemma) {
+        const sourceLemma = sourceHasLemma ? this.sourceNgram.lemmaKey : this.sourceNgram.key;
+        const targetLemma = targetHasLemma ? this.targetNgram.lemmaKey : this.targetNgram.key;
+        this.cachedLemmaKey = `${sourceLemma}->${targetLemma}`.toLowerCase();
       }
     }
   }

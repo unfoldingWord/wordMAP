@@ -56,8 +56,7 @@ export default class LemmaNgramFrequency implements Algorithm {
 
     for (const p  of predictions) {
       // skip predictions without lemmas
-      if (p.alignment.lemmaKey === undefined || p.source.lemmaKey ===
-        undefined || p.target.lemmaKey === undefined) {
+      if (p.alignment.lemmaKey === undefined) {
         continue;
       }
 
@@ -71,14 +70,30 @@ export default class LemmaNgramFrequency implements Algorithm {
       // looked up by n-gram
       // TODO: rename to something like this.
       // const sourceNgramFrequencyInCorpusPermutations
-      const ngramFrequencyCorpusSource: number = cIndex.permutations.sourceNgramFrequency.read(
-        p.source.lemmaKey);
-      const ngramFrequencyAlignmentMemorySource: number = saIndex.sourceNgramFrequency.read(
-        p.source.lemmaKey);
-      const ngramFrequencyCorpusTarget: number = cIndex.permutations.targetNgramFrequency.read(
-        p.target.lemmaKey);
-      const ngramFrequencyAlignmentMemoryTarget: number = saIndex.targetNgramFrequency.read(
-        p.target.lemmaKey);
+
+      // first. default to default n-gram frequency
+      let ngramFrequencyCorpusSource: number = cIndex.permutations.sourceNgramFrequency.read(
+        p.source.key);
+      let ngramFrequencyAlignmentMemorySource: number = saIndex.sourceNgramFrequency.read(
+        p.source.key);
+      let ngramFrequencyCorpusTarget: number = cIndex.permutations.targetNgramFrequency.read(
+        p.target.key);
+      let ngramFrequencyAlignmentMemoryTarget: number = saIndex.targetNgramFrequency.read(
+        p.target.key);
+
+      // second. use lemma n-gram frequency where available
+      if (p.source.lemmaKey !== undefined) {
+        ngramFrequencyCorpusSource = cIndex.permutations.sourceNgramFrequency.read(
+          p.source.lemmaKey);
+        ngramFrequencyAlignmentMemorySource = saIndex.sourceNgramFrequency.read(
+          p.source.lemmaKey);
+      }
+      if (p.target.lemmaKey !== undefined) {
+        ngramFrequencyCorpusTarget = cIndex.permutations.targetNgramFrequency.read(
+          p.target.lemmaKey);
+        ngramFrequencyAlignmentMemoryTarget = saIndex.targetNgramFrequency.read(
+          p.target.lemmaKey);
+      }
 
       // permutation frequency ratio
       const sourceCorpusLemmaPermutationsFrequencyRatio: number = LemmaNgramFrequency.divideSafe(

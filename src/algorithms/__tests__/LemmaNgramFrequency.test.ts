@@ -4,11 +4,12 @@ import CorpusIndex from "../../index/CorpusIndex";
 import NumberObject from "../../index/NumberObject";
 import Prediction from "../../structures/Prediction";
 import {
-  alignMockSentence,
+  alignComplexMockSentence,
+  makeComplexMockAlignment,
   makeCorpus,
   makeMockAlignment,
   makeUnalignedSentence,
-  reverseSentenceWords,
+  tokenizeComplexMockSentence,
   tokenizeMockSentence
 } from "../../util/testUtils";
 import LemmaNgramFrequency from "../LemmaNgramFrequency";
@@ -26,7 +27,7 @@ describe("calculate frequency", () => {
   });
 
   it("produces un-scored results", () => {
-    const alignments = alignMockSentence("In the beginning God created");
+    const alignments = alignComplexMockSentence("In the beginning God created");
     const predictions: Prediction[] = [];
     for (const a of alignments) {
       predictions.push(new Prediction(a));
@@ -44,18 +45,19 @@ describe("calculate frequency", () => {
   });
 
   it("produces results from alignment memory", () => {
-    const source = "the";
-    const target = reverseSentenceWords(source);
-    const sourceTokens = tokenizeMockSentence(source);
-    const targetTokens = tokenizeMockSentence(target);
+    const source = "the:das";
+    const target = "eht"; // reverseSentenceWords(source);
+    const sourceTokens = tokenizeComplexMockSentence(source);
+    const targetTokens = tokenizeComplexMockSentence(target);
     const sourceNgrams = Engine.generateSentenceNgrams(sourceTokens);
     const targetNgrams = Engine.generateSentenceNgrams(targetTokens);
     const predictions = Engine.generatePredictions(sourceNgrams, targetNgrams);
 
     const saIndex = new AlignmentMemoryIndex();
     saIndex.append([
-      ...alignMockSentence("the the red fox trots at midnight"),
-      makeMockAlignment("the", "fox")
+      ...alignComplexMockSentence(
+        "the:das the:das red:red fox:fox trots:trot at:at midnight:midnight"),
+      makeComplexMockAlignment("the:das", "fox:fox")
     ]);
 
     const engine = new LemmaNgramFrequency();
@@ -66,22 +68,22 @@ describe("calculate frequency", () => {
     );
     // aligned to something
     expect(result[0].getScores()).toEqual({
-      "frequencyRatioCorpusFiltered": 0,
-      "frequencyRatioAlignmentMemoryFiltered": 1,
-      "sourceCorpusPermutationsFrequencyRatio": 0,
-      "sourceAlignmentMemoryFrequencyRatio": 0.6666666666666666,
-      "targetCorpusPermutationsFrequencyRatio": 0,
-      "targetAlignmentMemoryFrequencyRatio": 1
+      "lemmaFrequencyRatioCorpusFiltered": 0,
+      "lemmaFrequencyRatioAlignmentMemoryFiltered": 1,
+      "sourceCorpusLemmaPermutationsFrequencyRatio": 0,
+      "sourceAlignmentMemoryLemmaFrequencyRatio": 0.6666666666666666,
+      "targetCorpusLemmaPermutationsFrequencyRatio": 0,
+      "targetAlignmentMemoryLemmaFrequencyRatio": 1
     });
 
     // aligned to nothing
     expect(result[1].getScores()).toEqual({
-      "frequencyRatioCorpusFiltered": 0,
-      "frequencyRatioAlignmentMemoryFiltered": 0,
-      "sourceCorpusPermutationsFrequencyRatio": 0,
-      "sourceAlignmentMemoryFrequencyRatio": 0,
-      "targetCorpusPermutationsFrequencyRatio": 0,
-      "targetAlignmentMemoryFrequencyRatio": 0
+      "lemmaFrequencyRatioCorpusFiltered": 0,
+      "lemmaFrequencyRatioAlignmentMemoryFiltered": 0,
+      "sourceCorpusLemmaPermutationsFrequencyRatio": 0,
+      "sourceAlignmentMemoryLemmaFrequencyRatio": 0,
+      "targetCorpusLemmaPermutationsFrequencyRatio": 0,
+      "targetAlignmentMemoryLemmaFrequencyRatio": 0
     });
   });
 

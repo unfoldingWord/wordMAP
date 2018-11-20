@@ -34,6 +34,8 @@ export default class AlignmentIndex extends FrequencyIndex {
    */
   public increment(alignment: Alignment, value: number = 1) {
     this.incrementIndex(alignment.key, value);
-    // TODO: increment the lemma
+    if (alignment.lemmaKey !== undefined) {
+      this.incrementIndex(alignment.lemmaKey, value);
+    }
   }
 }

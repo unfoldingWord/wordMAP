@@ -40,6 +40,6 @@ describe("create alignment", () => {
     ]);
     const alignment = new Alignment(source, target);
 
-    expect(alignment.lemmaKey).toBeUndefined();
+    expect(alignment.lemmaKey).toEqual("n:hi:earth->n:greetings:you");
   });
 });
