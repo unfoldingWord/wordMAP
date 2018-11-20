@@ -79,7 +79,7 @@ describe("MAP", () => {
     console.log("saved alignments\n", stuff);
   });
 
-  it("indexes corpus quickly", () => {
+  it.skip("indexes corpus quickly", () => {
     const map = new WordMap();
 
     // append corpus
