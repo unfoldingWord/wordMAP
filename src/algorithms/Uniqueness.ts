@@ -22,8 +22,8 @@ export default class Uniqueness implements Algorithm {
     if (sourceTokenLength !== 0 && targetTokenLength !== 0) {
       const sourceUniqueness = sourceFrequency / sourceTokenLength;
       const targetUniqueness = targetFrequency / targetTokenLength;
-      const similarity = Math.min(sourceUniqueness, targetUniqueness) / Math.max(sourceUniqueness, targetUniqueness);
-      weight = 1 - 1 / (similarity * (1 / Math.min(sourceUniqueness, targetUniqueness))); // maybe 1 - uniqueness?
+      weight = Math.min(sourceUniqueness, targetUniqueness) / Math.max(sourceUniqueness, targetUniqueness);
+      // TODO: if similarity is high and uniqueness is low we want to give a low score.
     }
     // I want similarity and uniqueness to be small and the same.
 

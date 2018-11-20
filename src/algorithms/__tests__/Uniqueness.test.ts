@@ -1,40 +1,63 @@
 import Uniqueness from "../Uniqueness";
 
 describe("Uniqueness", () => {
-  it("has low uniqueness in both data sets", () => {
-    const sourceFrequency = 30;
-    const targetFrequency = 20;
-    const sourceTokenLength = 150;
+
+  it("has prefect similarity and low uniqueness", () => {
+    const sourceFrequency = 80;
+    const targetFrequency = 80;
+    const sourceTokenLength = 100;
     const targetTokenLength = 100;
-    const phrasePlausibility = 0.9;
+    const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0); // this should be small
+    expect(result).toEqual(0);
   });
 
-  it("has dis-similar uniqueness", () => {
-    const sourceFrequency = 30;
+  it("has high similarity and low uniqueness", () => {
+    const sourceFrequency = 80;
+    const targetFrequency = 80;
+    const sourceTokenLength = 120;
+    const targetTokenLength = 100;
+    const phrasePlausibility = 1;
+
+    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    expect(result).toEqual(0);
+  });
+
+  it("has low similarity and uniqueness", () => {
+    const sourceFrequency = 100;
     const targetFrequency = 2;
     const sourceTokenLength = 150;
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0); // this should be small
+    expect(result).toEqual(0.03);
   });
 
-  it("has good uniqueness", () => {
-    const sourceFrequency = 3;
+  it("has high similarity and uniqueness", () => {
+    const sourceFrequency = 2;
     const targetFrequency = 2;
     const sourceTokenLength = 150;
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0.98);
+    expect(result).toEqual(1);
   });
 
-  it("has perfect uniqueness", () => {
+  it("has high similarity and perfect uniqueness", () => {
+    const sourceFrequency = 1;
+    const targetFrequency = 1;
+    const sourceTokenLength = 150;
+    const targetTokenLength = 100;
+    const phrasePlausibility = 1;
+
+    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    expect(result).toEqual(1);
+  });
+
+  it("has perfect similarity and uniqueness", () => {
     const sourceFrequency = 1;
     const targetFrequency = 1;
     const sourceTokenLength = 100;
@@ -42,6 +65,6 @@ describe("Uniqueness", () => {
     const phrasePlausibility = 1;
 
     const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
-    expect(result).toEqual(0.99);
+    expect(result).toEqual(1);
   });
 });
