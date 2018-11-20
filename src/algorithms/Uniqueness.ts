@@ -10,22 +10,21 @@ export default class Uniqueness implements Algorithm {
   /**
    * Performs the uniqueness calculation.
    * This is the pure algorithm code.
-   * @param sourceFrequency - source n-gram frequency in the static corpus
-   * @param targetFrequency - target n-gram frequency in the static corpus
+   * @param sourceNgramFrequency - source n-gram frequency in the static corpus
+   * @param targetNgramFrequency - target n-gram frequency in the static corpus
    * @param sourceTokenLength - length of the source text in units of {@link Token}
    * @param targetTokenLength - length of the target text in units of {@link Token}
    * @param phrasePlausibility - the likely hood that the n-gram is a phrase. Produced by {@link PhrasePlausibility}
    */
-  public static calc(sourceFrequency: number, targetFrequency: number, sourceTokenLength: number, targetTokenLength: number, phrasePlausibility: number) {
+  public static calc(sourceNgramFrequency: number, targetNgramFrequency: number, sourceTokenLength: number, targetTokenLength: number, phrasePlausibility: number) {
     let weight = 0;
 
     if (sourceTokenLength !== 0 && targetTokenLength !== 0) {
-      const sourceUniqueness = sourceFrequency / sourceTokenLength;
-      const targetUniqueness = targetFrequency / targetTokenLength;
+      const sourceUniqueness = sourceNgramFrequency / sourceTokenLength;
+      const targetUniqueness = targetNgramFrequency / targetTokenLength;
       weight = Math.min(sourceUniqueness, targetUniqueness) / Math.max(sourceUniqueness, targetUniqueness);
       // TODO: if similarity is high and uniqueness is low we want to give a low score.
     }
-    // I want similarity and uniqueness to be small and the same.
 
     return weight * phrasePlausibility;
   }
