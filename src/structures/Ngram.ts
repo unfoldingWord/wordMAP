@@ -156,11 +156,7 @@ export default class Ngram {
    * @return {object}
    */
   public toJSON(verbose: boolean = false): object {
-    const json = [];
-    for (const t of this.tokens) {
-      json.push(t.toJSON(verbose));
-    }
-    return json;
+    return this.tokens.map((t) => t.toJSON(verbose));
   }
 
   /**

@@ -52,6 +52,18 @@ export default class Alignment {
   }
 
   /**
+   * Outputs the alignment to json
+   * @param verbose - print full metadata
+   * @return {object}
+   */
+  public toJSON(verbose: boolean = false): object {
+    return {
+      sourceNgram: this.sourceNgram.toJSON(verbose),
+      targetNgram: this.targetNgram.toJSON(verbose)
+    };
+  }
+
+  /**
    * Caches the keys if they have not already been generated
    */
   private cacheKeys() {
@@ -62,8 +74,12 @@ export default class Alignment {
       const sourceHasLemma = this.sourceNgram.lemmaKey !== undefined;
       const targetHasLemma = this.targetNgram.lemmaKey !== undefined;
       if (sourceHasLemma || targetHasLemma) {
-        const sourceLemma = sourceHasLemma ? this.sourceNgram.lemmaKey : this.sourceNgram.key;
-        const targetLemma = targetHasLemma ? this.targetNgram.lemmaKey : this.targetNgram.key;
+        const sourceLemma = sourceHasLemma ?
+          this.sourceNgram.lemmaKey :
+          this.sourceNgram.key;
+        const targetLemma = targetHasLemma ?
+          this.targetNgram.lemmaKey :
+          this.targetNgram.key;
         this.cachedLemmaKey = `${sourceLemma}->${targetLemma}`.toLowerCase();
       }
     }
