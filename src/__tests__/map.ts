@@ -49,17 +49,17 @@ describe("MAP", () => {
   it("predicts from saved alignments", () => {
     const map = new WordMap();
     // append saved alignments
-    const sourceSavedAlignments = fs.readFileSync(path.join(
+    const sourceAlignmentMemory = fs.readFileSync(path.join(
       __dirname,
       "fixtures/corrections/greek.txt"
     ));
-    const targetSavedAlignments = fs.readFileSync(path.join(
+    const targetAlignmentMemory = fs.readFileSync(path.join(
       __dirname,
       "fixtures/corrections/english.txt"
     ));
-    map.appendSavedAlignmentsString(
-      sourceSavedAlignments.toString("utf-8"),
-      targetSavedAlignments.toString("utf-8")
+    map.appendAlignmentMemoryString(
+      sourceAlignmentMemory.toString("utf-8"),
+      targetAlignmentMemory.toString("utf-8")
     );
 
     const unalignedPair = [
@@ -79,6 +79,29 @@ describe("MAP", () => {
     console.log("saved alignments\n", stuff);
   });
 
+  it.skip("indexes corpus quickly", () => {
+    const map = new WordMap();
+
+    // append corpus
+    const sourceCorpus = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corpus/greek.txt"
+    )).toString("utf-8");
+    const targetCorpus = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corpus/english.txt"
+    )).toString("utf-8");
+
+    const start = new Date().getTime();
+    map.appendCorpusString(
+      sourceCorpus,
+      targetCorpus
+    );
+    const end = new Date().getTime();
+    const duration = end - start;
+    expect(duration).toBeLessThan(1000);
+  });
+
   it("predicts from corpus", () => {
     const map = new WordMap();
 
@@ -91,6 +114,7 @@ describe("MAP", () => {
       __dirname,
       "fixtures/corpus/english.txt"
     ));
+
     map.appendCorpusString(
       sourceCorpus.toString("utf-8"),
       targetCorpus.toString("utf-8")
@@ -162,8 +186,8 @@ describe("MAP", () => {
     it("excludes alignment memory that exceeds the max ngram length", () => {
       const map = new WordMap({targetNgramLength: 3});
 
-      map.appendSavedAlignmentsString("φιλοτέκνους", "and children");
-      map.appendSavedAlignmentsString("φιλάνδρους", "love their own husbands");
+      map.appendAlignmentMemoryString("φιλοτέκνους", "and children");
+      map.appendAlignmentMemoryString("φιλάνδρους", "love their own husbands");
       const suggestions = map.predict(
         "ἵνα σωφρονίζωσι τὰς νέας, φιλάνδρους εἶναι, φιλοτέκνους",
         "In this way they may train the younger women to love their own husbands and children"
@@ -178,8 +202,8 @@ describe("MAP", () => {
     it("uses alignment memory that falls within expanded ngram length", () => {
       const map = new WordMap({targetNgramLength: 4});
 
-      map.appendSavedAlignmentsString("φιλοτέκνους", "and children");
-      map.appendSavedAlignmentsString("φιλάνδρους", "love their own husbands");
+      map.appendAlignmentMemoryString("φιλοτέκνους", "and children");
+      map.appendAlignmentMemoryString("φιλάνδρους", "love their own husbands");
       const suggestions = map.predict(
         "ἵνα σωφρονίζωσι τὰς νέας, φιλάνδρους εἶναι, φιλοτέκνους",
         "In this way they may train the younger women to love their own husbands and children"
@@ -210,17 +234,17 @@ describe("MAP", () => {
     );
 
     // append saved alignments
-    const sourceSavedAlignments = fs.readFileSync(path.join(
+    const sourceAlignmentMemory = fs.readFileSync(path.join(
       __dirname,
       "fixtures/corrections/greek.txt"
     ));
-    const targetSavedAlignments = fs.readFileSync(path.join(
+    const targetAlignmentMemory = fs.readFileSync(path.join(
       __dirname,
       "fixtures/corrections/english.txt"
     ));
-    map.appendSavedAlignmentsString(
-      sourceSavedAlignments.toString("utf-8"),
-      targetSavedAlignments.toString("utf-8")
+    map.appendAlignmentMemoryString(
+      sourceAlignmentMemory.toString("utf-8"),
+      targetAlignmentMemory.toString("utf-8")
     );
 
     const unalignedPair = [

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/translationCoreApps/wordmap.svg?branch=master)](https://travis-ci.org/translationCoreApps/wordmap)
+[![Build Status](https://travis-ci.org/translationCoreApps/wordMAP.svg?branch=master)](https://travis-ci.org/translationCoreApps/wordMAP)
 [![codecov](https://codecov.io/gh/translationCoreApps/wordmap/branch/master/graph/badge.svg)](https://codecov.io/gh/translationCoreApps/wordmap)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
@@ -33,7 +33,7 @@ Alignments provide many valuable benefits to translators including:
 * **n-gram (word or phrase)**: A contiguous sequence of n tokens from a given sample of text. An n-gram containing a single token is referred to as a "unigram"; two tokens is a "bigram", etc. For example: "hello" is a unigram, while "hello world" is a bigram.
 * **Unaligned Sentence Pair**: A sentence in two languages that need to be aligned. e.g. a sentence from a primary text and secondary text.
 * **Alignment**: Two individual `n-grams` that have been matched from two texts. e.g. from a primary text and secondary text.
-* **Saved Alignment**: An alignment that has been approved/corrected by the user.
+* **Saved Alignment (Alignment Memory)**: An alignment that has been approved/corrected by the user.
 * **Engine**: Contains a index of every permutation of possible `n-gram` `alignments`. And an index of `saved alignments`.
 * **Corpus**: The input dataset which is the primary and secondary text given as a list of `unaligned sentence pairs`. This is used in training the engine. Note: This is not input directly provided by the user.
 * **Tokenization**: Separating a sentence into individual words and punctuation.

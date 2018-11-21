@@ -1,8 +1,8 @@
 import {Token} from "wordmap-lexer";
 import Algorithm from "./Algorithm";
+import AlignmentMemoryIndex from "./index/AlignmentMemoryIndex";
 import CorpusIndex from "./index/CorpusIndex";
 import NumberObject from "./index/NumberObject";
-import SavedAlignmentsIndex from "./index/SavedAlignmentsIndex";
 import UnalignedSentenceIndex from "./index/UnalignedSentenceIndex";
 import Parser from "./Parser";
 import Alignment from "./structures/Alignment";
@@ -98,7 +98,7 @@ export default class Engine {
    * @param predictions
    * @param saIndex
    */
-  public static calculateConfidence(predictions: Prediction[], saIndex: SavedAlignmentsIndex): Prediction[] {
+  public static calculateConfidence(predictions: Prediction[], saIndex: AlignmentMemoryIndex): Prediction[] {
     const finalPredictions: Prediction[] = [];
     const weights: NumberObject = {
       "alignmentPosition": 0.7,
@@ -110,12 +110,12 @@ export default class Engine {
       "sourceCorpusPermutationsFrequencyRatio": 0.7,
       "targetCorpusPermutationsFrequencyRatio": 0.7,
 
-      "sourceSavedAlignmentsFrequencyRatio": 0.7,
-      "targetSavedAlignmentsFrequencyRatio": 0.7
+      "sourceAlignmentMemoryFrequencyRatio": 0.7,
+      "targetAlignmentMemoryFrequencyRatio": 0.7
     };
 
     for (const p of predictions) {
-      const isSavedAlignment = saIndex.alignmentFrequency.read(p.alignment);
+      const isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment);
 
       // confidence based on corpus
       const corpusWeightedKeys = [
@@ -134,9 +134,9 @@ export default class Engine {
       );
 
       // confidence based on saved alignments
-      const savedAlignmentsWeightedKeys = [
-        "sourceSavedAlignmentsFrequencyRatio",
-        "targetSavedAlignmentsFrequencyRatio",
+      const alignmentMemoryWeightedKeys = [
+        "sourceAlignmentMemoryFrequencyRatio",
+        "targetAlignmentMemoryFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
         "characterLength",
@@ -145,18 +145,18 @@ export default class Engine {
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
-        savedAlignmentsWeightedKeys,
+        alignmentMemoryWeightedKeys,
         weights
       );
 
       // prefer to use the saved alignment confidence
-      if (!isSavedAlignment) {
+      if (!isAlignmentMemory) {
         confidence = corpusConfidence;
         confidence *= p.getScore("phrasePlausibility");
       }
 
       // boost confidence for saved alignments
-      if (isSavedAlignment) {
+      if (isAlignmentMemory) {
         confidence++;
       }
 
@@ -250,7 +250,7 @@ export default class Engine {
   private maxSourceNgramLength: number;
   private registeredAlgorithms: Algorithm[] = [];
   private corpusIndex: CorpusIndex;
-  private savedAlignmentsIndex: SavedAlignmentsIndex;
+  private alignmentMemoryIndex: AlignmentMemoryIndex;
 
   /**
    * Returns a list of algorithms that are registered in the engine
@@ -267,7 +267,7 @@ export default class Engine {
     this.maxSourceNgramLength = sourceNgramLength;
     this.maxTargetNgramLength = targetNgramLength;
     this.corpusIndex = new CorpusIndex();
-    this.savedAlignmentsIndex = new SavedAlignmentsIndex();
+    this.alignmentMemoryIndex = new AlignmentMemoryIndex();
   }
 
   /**
@@ -277,11 +277,11 @@ export default class Engine {
    * @param {Token[]} sourceSentence - the source sentence tokens.
    * @param {Token[]} targetSentence - the target sentence tokens.
    * @param {CorpusIndex} cIndex
-   * @param {SavedAlignmentsIndex} saIndex
+   * @param {AlignmentMemoryIndex} saIndex
    * @param {Algorithm[]} algorithms
    * @return {Prediction[]}
    */
-  public performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex, algorithms: Algorithm[]) {
+  public performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, algorithms: Algorithm[]) {
     const sourceNgrams = Parser.ngrams(
       sourceSentence,
       this.maxSourceNgramLength
@@ -320,7 +320,7 @@ export default class Engine {
   public score(predictions: Prediction[]): Prediction[] {
     const results = Engine.calculateConfidence(
       predictions,
-      this.savedAlignmentsIndex
+      this.alignmentMemoryIndex
     );
     return Engine.sortPredictions(results);
   }
@@ -347,19 +347,19 @@ export default class Engine {
    * Adding saved alignments improves the quality of predictions.
    * @param {Array<Alignment>} alignmentMemory - a list of alignments
    */
-  public addSavedAlignments(alignmentMemory: Alignment[]) {
+  public addAlignmentMemory(alignmentMemory: Alignment[]) {
     for (let i = alignmentMemory.length - 1; i >= 0; i--) {
       const target = alignmentMemory[i].target;
       if (target.tokenLength > this.maxTargetNgramLength) {
-        console.warn(`Alignment memory "${target.key}" exceeds maximum n-gram length of ${this.maxTargetNgramLength} and may be ignored.`);
+        console.warn(`Target Alignment Memory "${target.key}" exceeds maximum n-gram length of ${this.maxTargetNgramLength} and may be ignored.`);
       }
       const source = alignmentMemory[i].source;
       if (source.tokenLength > this.maxSourceNgramLength) {
-        console.warn(`Alignment memory "${source.key}" exceeds maximum n-gram length of ${this.maxSourceNgramLength} and may be ignored.`);
+        console.warn(`Source Alignment Memory "${source.key}" exceeds maximum n-gram length of ${this.maxSourceNgramLength} and may be ignored.`);
       }
     }
 
-    this.savedAlignmentsIndex.append(alignmentMemory);
+    this.alignmentMemoryIndex.append(alignmentMemory);
   }
 
   /**
@@ -373,7 +373,7 @@ export default class Engine {
       sourceSentence,
       targetSentence,
       this.corpusIndex,
-      this.savedAlignmentsIndex,
+      this.alignmentMemoryIndex,
       this.registeredAlgorithms
     );
   }

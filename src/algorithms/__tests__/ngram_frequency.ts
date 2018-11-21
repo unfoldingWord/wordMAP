@@ -1,7 +1,7 @@
 import Engine from "../../Engine";
+import AlignmentMemoryIndex from "../../index/AlignmentMemoryIndex";
 import CorpusIndex from "../../index/CorpusIndex";
 import NumberObject from "../../index/NumberObject";
-import SavedAlignmentsIndex from "../../index/SavedAlignmentsIndex";
 import Prediction from "../../structures/Prediction";
 import {
   alignMockSentence,
@@ -20,7 +20,7 @@ describe("calculate frequency", () => {
     const result = engine.execute(
       predictions,
       new CorpusIndex(),
-      new SavedAlignmentsIndex()
+      new AlignmentMemoryIndex()
     );
     expect(result).toHaveLength(0);
   });
@@ -36,7 +36,7 @@ describe("calculate frequency", () => {
     const result = engine.execute(
       predictions,
       new CorpusIndex(),
-      new SavedAlignmentsIndex()
+      new AlignmentMemoryIndex()
     );
     for (const r of result) {
       expectEmptyScores(r.getScores());
@@ -52,7 +52,7 @@ describe("calculate frequency", () => {
     const targetNgrams = Engine.generateSentenceNgrams(targetTokens);
     const predictions = Engine.generatePredictions(sourceNgrams, targetNgrams);
 
-    const saIndex = new SavedAlignmentsIndex();
+    const saIndex = new AlignmentMemoryIndex();
     saIndex.append([
       ...alignMockSentence("the the red fox trots at midnight"),
       makeMockAlignment("the", "fox")
@@ -67,21 +67,21 @@ describe("calculate frequency", () => {
     // aligned to something
     expect(result[0].getScores()).toEqual({
       "frequencyRatioCorpusFiltered": 0,
-      "frequencyRatioSavedAlignmentsFiltered": 1,
+      "frequencyRatioAlignmentMemoryFiltered": 1,
       "sourceCorpusPermutationsFrequencyRatio": 0,
-      "sourceSavedAlignmentsFrequencyRatio": 0.6666666666666666,
+      "sourceAlignmentMemoryFrequencyRatio": 0.6666666666666666,
       "targetCorpusPermutationsFrequencyRatio": 0,
-      "targetSavedAlignmentsFrequencyRatio": 1
+      "targetAlignmentMemoryFrequencyRatio": 1
     });
 
     // aligned to nothing
     expect(result[1].getScores()).toEqual({
       "frequencyRatioCorpusFiltered": 0,
-      "frequencyRatioSavedAlignmentsFiltered": 0,
+      "frequencyRatioAlignmentMemoryFiltered": 0,
       "sourceCorpusPermutationsFrequencyRatio": 0,
-      "sourceSavedAlignmentsFrequencyRatio": 0,
+      "sourceAlignmentMemoryFrequencyRatio": 0,
       "targetCorpusPermutationsFrequencyRatio": 0,
-      "targetSavedAlignmentsFrequencyRatio": 0
+      "targetAlignmentMemoryFrequencyRatio": 0
     });
   });
 
@@ -105,11 +105,11 @@ describe("calculate frequency", () => {
     expect(firstPredictions[0].getScores())
       .toEqual({
         "frequencyRatioCorpusFiltered": 1,
-        "frequencyRatioSavedAlignmentsFiltered": 0,
+        "frequencyRatioAlignmentMemoryFiltered": 0,
         "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
-        "sourceSavedAlignmentsFrequencyRatio": 0,
+        "sourceAlignmentMemoryFrequencyRatio": 0,
         "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
-        "targetSavedAlignmentsFrequencyRatio": 0
+        "targetAlignmentMemoryFrequencyRatio": 0
       });
 
     // append new corpus
@@ -127,11 +127,11 @@ describe("calculate frequency", () => {
     expect(secondPredictions[0].getScores())
       .toEqual({
           "frequencyRatioCorpusFiltered": 1, // TODO: this is not right. we'll fix this later
-          "frequencyRatioSavedAlignmentsFiltered": 0,
+          "frequencyRatioAlignmentMemoryFiltered": 0,
           "sourceCorpusPermutationsFrequencyRatio": 0.11764705882352941,
-          "sourceSavedAlignmentsFrequencyRatio": 0,
+          "sourceAlignmentMemoryFrequencyRatio": 0,
           "targetCorpusPermutationsFrequencyRatio": 0.13333333333333333,
-          "targetSavedAlignmentsFrequencyRatio": 0
+          "targetAlignmentMemoryFrequencyRatio": 0
         }
       );
   });
@@ -148,7 +148,7 @@ describe("calculate frequency", () => {
       const sourceCorpusTokens = tokenizeMockSentence(sourceCorpusSentence);
       const targetCorpusTokens = tokenizeMockSentence(targetCorpusSentence);
       engine.addCorpus([sourceCorpusTokens], [targetCorpusTokens]);
-      engine.addSavedAlignments([makeMockAlignment("hello", "olleh")]);
+      engine.addAlignmentMemory([makeMockAlignment("hello", "olleh")]);
 
       // un-aligned sentence pair
       const sourceSentence = "hello";
@@ -160,11 +160,11 @@ describe("calculate frequency", () => {
       expect(predictions[0].getScores())
         .toEqual({
           "frequencyRatioCorpusFiltered": 1,
-          "frequencyRatioSavedAlignmentsFiltered": 1,
+          "frequencyRatioAlignmentMemoryFiltered": 1,
           "sourceCorpusPermutationsFrequencyRatio": 0.14285714285714285,
-          "sourceSavedAlignmentsFrequencyRatio": 1,
+          "sourceAlignmentMemoryFrequencyRatio": 1,
           "targetCorpusPermutationsFrequencyRatio": 0.16666666666666666,
-          "targetSavedAlignmentsFrequencyRatio": 1
+          "targetAlignmentMemoryFrequencyRatio": 1
         });
     }
   );

@@ -1,10 +1,10 @@
 jest.mock("../index/PermutationIndex");
 import {Token} from "wordmap-lexer";
 import Engine from "../Engine";
+import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
 import CorpusIndex from "../index/CorpusIndex";
 // @ts-ignore
 import {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
-import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
 import {
@@ -30,7 +30,7 @@ it("registers an algorithm", () => {
 it("adds the alignment to the index", () => {
   const sentence = alignMockSentence("Once upon a time");
   const engine = new Engine();
-  engine.addSavedAlignments(sentence);
+  engine.addAlignmentMemory(sentence);
   expect(mockAddAlignments).toBeCalledWith(sentence);
 });
 
@@ -153,7 +153,7 @@ it("runs all the algorithms", () => {
     source,
     target,
     new CorpusIndex(),
-    new SavedAlignmentsIndex(),
+    new AlignmentMemoryIndex(),
     algorithms
   );
 
@@ -197,10 +197,10 @@ describe("scoring", () => {
     prediction.setScores({
       alignmentPosition: 1,
       ngramLength: 2,
-      sourceSavedAlignmentsFrequencyRatio: 3,
+      sourceAlignmentMemoryFrequencyRatio: 3,
       sourceCorpusPermutationsFrequencyRatio: 5,
       targetCorpusPermutationsFrequencyRatio: 2,
-      targetSavedAlignmentsFrequencyRatio: 1,
+      targetAlignmentMemoryFrequencyRatio: 1,
       phrasePlausibility: 2,
       sourceNgramLength: 1,
       characterLength: 3,
@@ -209,7 +209,7 @@ describe("scoring", () => {
     });
     const result = Engine.calculateConfidence(
       [prediction],
-      new SavedAlignmentsIndex()
+      new AlignmentMemoryIndex()
     );
     expect(result[0].getScore("confidence")).toEqual(4.558139534883723);
   });

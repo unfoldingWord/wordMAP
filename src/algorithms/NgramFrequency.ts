@@ -1,7 +1,7 @@
 import Algorithm from "../Algorithm";
+import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
 import CorpusIndex from "../index/CorpusIndex";
 import NumberObject from "../index/NumberObject";
-import SavedAlignmentsIndex from "../index/SavedAlignmentsIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -50,15 +50,15 @@ export default class NgramFrequency implements Algorithm {
    * @param  saIndex     [description]
    * @return             [description]
    */
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: SavedAlignmentsIndex): Prediction[] {
+  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex): Prediction[] {
     const alignmentFrequencyCorpusSums: NumberObject = {};
-    const alignmentFrequencySavedAlignmentsSums: NumberObject = {};
+    const alignmentFrequencyAlignmentMemorySums: NumberObject = {};
 
     for (const p  of predictions) {
       // alignment permutation frequency within the corpus/saved alignments
       const alignmentFrequencyCorpus: number = cIndex.permutations.alignmentFrequency.read(
         p.alignment);
-      const alignmentFrequencySavedAlignments: number = saIndex.alignmentFrequency.read(
+      const alignmentFrequencyAlignmentMemory: number = saIndex.alignmentFrequency.read(
         p.alignment);
 
       // n-gram permutation frequency within the corpus/saved alignments
@@ -67,11 +67,11 @@ export default class NgramFrequency implements Algorithm {
       // const sourceNgramFrequencyInCorpusPermutations
       const ngramFrequencyCorpusSource: number = cIndex.permutations.sourceNgramFrequency.read(
         p.source);
-      const ngramFrequencySavedAlignmentsSource: number = saIndex.sourceNgramFrequency.read(
+      const ngramFrequencyAlignmentMemorySource: number = saIndex.sourceNgramFrequency.read(
         p.source);
       const ngramFrequencyCorpusTarget: number = cIndex.permutations.targetNgramFrequency.read(
         p.target);
-      const ngramFrequencySavedAlignmentsTarget: number = saIndex.targetNgramFrequency.read(
+      const ngramFrequencyAlignmentMemoryTarget: number = saIndex.targetNgramFrequency.read(
         p.target);
 
       // permutation frequency ratio
@@ -83,21 +83,21 @@ export default class NgramFrequency implements Algorithm {
         alignmentFrequencyCorpus,
         ngramFrequencyCorpusTarget
       );
-      const sourceSavedAlignmentsFrequencyRatio: number = NgramFrequency.divideSafe(
-        alignmentFrequencySavedAlignments,
-        ngramFrequencySavedAlignmentsSource
+      const sourceAlignmentMemoryFrequencyRatio: number = NgramFrequency.divideSafe(
+        alignmentFrequencyAlignmentMemory,
+        ngramFrequencyAlignmentMemorySource
       );
-      const targetSavedAlignmentsFrequencyRatio: number = NgramFrequency.divideSafe(
-        alignmentFrequencySavedAlignments,
-        ngramFrequencySavedAlignmentsTarget
+      const targetAlignmentMemoryFrequencyRatio: number = NgramFrequency.divideSafe(
+        alignmentFrequencyAlignmentMemory,
+        ngramFrequencyAlignmentMemoryTarget
       );
 
       // store scores
       p.setScores({
         sourceCorpusPermutationsFrequencyRatio,
         targetCorpusPermutationsFrequencyRatio,
-        sourceSavedAlignmentsFrequencyRatio,
-        targetSavedAlignmentsFrequencyRatio,
+        sourceAlignmentMemoryFrequencyRatio,
+        targetAlignmentMemoryFrequencyRatio
       });
 
       // sum alignment frequencies
@@ -107,9 +107,9 @@ export default class NgramFrequency implements Algorithm {
         alignmentFrequencyCorpus
       );
       NgramFrequency.addObjectNumber(
-        alignmentFrequencySavedAlignmentsSums,
+        alignmentFrequencyAlignmentMemorySums,
         p.key,
-        alignmentFrequencySavedAlignments
+        alignmentFrequencyAlignmentMemory
       );
     }
 
@@ -117,7 +117,7 @@ export default class NgramFrequency implements Algorithm {
     for (const p of predictions) {
       const alignmentFrequencyCorpus: number = cIndex.permutations.alignmentFrequency.read(
         p.alignment);
-      const alignmentFrequencySavedAlignments: number = saIndex.alignmentFrequency.read(
+      const alignmentFrequencyAlignmentMemory: number = saIndex.alignmentFrequency.read(
         p.alignment);
 
       // TODO: instead of generating filters of alignmentFrequencyCorpus etc
@@ -126,25 +126,25 @@ export default class NgramFrequency implements Algorithm {
 
       // alignment frequency in the filtered corpus and saved alignments
       const alignmentFrequencyCorpusFiltered = alignmentFrequencyCorpusSums[p.key];
-      const alignmentFrequencySavedAlignmentsFiltered = alignmentFrequencySavedAlignmentsSums[p.key];
+      const alignmentFrequencyAlignmentMemoryFiltered = alignmentFrequencyAlignmentMemorySums[p.key];
 
       // source and target frequency ratio for the corpus and saved alignments
       const frequencyRatioCorpusFiltered: number = NgramFrequency.divideSafe(
         alignmentFrequencyCorpus,
         alignmentFrequencyCorpusFiltered
       );
-      const frequencyRatioSavedAlignmentsFiltered: number = NgramFrequency.divideSafe(
-        alignmentFrequencySavedAlignments,
-        alignmentFrequencySavedAlignmentsFiltered
+      const frequencyRatioAlignmentMemoryFiltered: number = NgramFrequency.divideSafe(
+        alignmentFrequencyAlignmentMemory,
+        alignmentFrequencyAlignmentMemoryFiltered
       );
 
       // store scores
       p.setScores({
         // alignmentFrequencyCorpusFiltered,
-        // alignmentFrequencySavedAlignmentsFiltered,
+        // alignmentFrequencyAlignmentMemoryFiltered,
 
         frequencyRatioCorpusFiltered,
-        frequencyRatioSavedAlignmentsFiltered
+        frequencyRatioAlignmentMemoryFiltered
       });
     }
 

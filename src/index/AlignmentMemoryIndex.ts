@@ -6,7 +6,7 @@ import PermutationIndex from "./PermutationIndex";
 /**
  * A collection of indexes for the saved alignments
  */
-export default class SavedAlignmentsIndex {
+export default class AlignmentMemoryIndex {
   private permutationIndex: PermutationIndex;
 
   public get alignmentFrequency(): AlignmentIndex {
@@ -25,7 +25,7 @@ export default class SavedAlignmentsIndex {
     this.permutationIndex = new PermutationIndex();
   }
 
-  public append(savedAlignments: Alignment[]) {
-    this.permutationIndex.addAlignments(savedAlignments);
+  public append(alignmentMemory: Alignment[]) {
+    this.permutationIndex.addAlignments(alignmentMemory);
   }
 }

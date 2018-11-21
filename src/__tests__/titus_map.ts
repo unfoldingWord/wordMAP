@@ -55,7 +55,8 @@ describe("MAP predictions in Titus", () => {
     );
     console.log(
       "benchmarks\n",
-      map.predictWithBenchmark(secondUnalignedPair[0],
+      map.predictWithBenchmark(
+        secondUnalignedPair[0],
         secondUnalignedPair[1],
         benchmark,
         2

@@ -49,21 +49,40 @@ export default class WordMap {
   public appendCorpusString(source: string, target: string) {
     const sourceSentences = source.split("\n");
     const targetSentences = target.split("\n");
+
     const sourceTokens: Token[][] = [];
     const targetTokens: Token[][] = [];
 
-    for (const s of sourceSentences) {
-      sourceTokens.push(Lexer.tokenize(s));
+    const sourceLength = sourceSentences.length;
+    const targetLength = targetSentences.length;
+
+    if (sourceLength !== targetLength) {
+      throw Error("source and target corpus must be the same length");
     }
-    for (const s of targetSentences) {
-      targetTokens.push(Lexer.tokenize(s));
+
+    for (let i = 0; i < sourceLength; i++) {
+      sourceTokens.push(Lexer.tokenize(sourceSentences[i]));
+      targetTokens.push(Lexer.tokenize(targetSentences[i]));
+    }
+
+    this.appendCorpusTokens(sourceTokens, targetTokens);
+  }
+
+  /**
+   * Adds tokenized corpus to map
+   * @param sourceTokens
+   * @param targetTokens
+   */
+  public appendCorpusTokens(sourceTokens: Token[][], targetTokens: Token[][]) {
+    if (sourceTokens.length !== targetTokens.length) {
+      throw Error("source and target corpus must be the same length");
     }
 
     this.engine.addCorpus(sourceTokens, targetTokens);
   }
 
-  public appendSavedAlignments(alignments: Alignment[]) {
-    this.engine.addSavedAlignments(alignments);
+  public appendAlignmentMemory(alignments: Alignment[]) {
+    this.engine.addAlignmentMemory(alignments);
   }
 
   /**
@@ -74,7 +93,7 @@ export default class WordMap {
    * @param {string} target - a string of target phrases separated by new lines
    * @return {Alignment[]} an array of alignment objects (as a convenience)
    */
-  public appendSavedAlignmentsString(source: string, target: string): Alignment[] {
+  public appendAlignmentMemoryString(source: string, target: string): Alignment[] {
     const alignments: Alignment[] = [];
     const sourceLines = source.split("\n");
     const targetLines = target.split("\n");
@@ -90,7 +109,7 @@ export default class WordMap {
         new Ngram(targetTokens)
       ));
     }
-    this.appendSavedAlignments(alignments);
+    this.appendAlignmentMemory(alignments);
     return alignments;
   }
 

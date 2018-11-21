@@ -59,7 +59,8 @@ export default class PermutationIndex {
    * @param {Alignment[]} alignments - an array of alignments to add
    */
   public addAlignments(alignments: Alignment[]) {
-    for (const alignment of alignments) {
+    for (let i = 0, len = alignments.length; i < len; i ++) {
+      const alignment = alignments[i];
       // alignment frequency in permutations
       this.alignPermFreqIndex.increment(alignment);
 
