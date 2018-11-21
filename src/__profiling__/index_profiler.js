@@ -11,11 +11,11 @@ function profilerStub() {
   // load corpus
   const sourceCorpus = fs.readFileSync(path.join(
     __dirname,
-    "fixtures/corpus/greek.txt"
+    "../__tests__/fixtures/corpus/greek.txt"
   )).toString("utf-8");
   const targetCorpus = fs.readFileSync(path.join(
     __dirname,
-    "fixtures/corpus/english.txt"
+    "../__tests__/fixtures/corpus/english.txt"
   )).toString("utf-8");
 
   // index corpus
@@ -28,7 +28,3 @@ function profilerStub() {
 
 // run so we can profile it
 profilerStub();
-
-it('lets this file pass as a test', () => {
-
-});
