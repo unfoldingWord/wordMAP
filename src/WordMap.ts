@@ -83,8 +83,16 @@ export default class WordMap {
     this.engine.addCorpus(sourceTokens, targetTokens);
   }
 
-  public appendAlignmentMemory(alignments: Alignment[]) {
-    this.engine.addAlignmentMemory(alignments);
+  /**
+   * Appends alignment memory engine.
+   * @param alignments - an alignment or array of alignments
+   */
+  public appendAlignmentMemory(alignments: Alignment | Alignment[]) {
+    if (alignments instanceof Array) {
+      this.engine.addAlignmentMemory(alignments);
+    } else {
+      this.engine.addAlignmentMemory([alignments]);
+    }
   }
 
   /**
