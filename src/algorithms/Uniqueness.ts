@@ -71,6 +71,8 @@ export default class Uniqueness implements Algorithm {
         p.getScore("lemmaPhrasePlausibility")
       );
       p.setScore("lemmaUniqueness", lemmaWeight);
+    } else {
+      p.setScore("lemmaUniqueness", 0);
     }
   }
 

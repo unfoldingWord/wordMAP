@@ -89,6 +89,8 @@ export default class PhrasePlausibility implements Algorithm {
         cIndex.static.targetTokenLength
       );
       p.setScore("lemmaPhrasePlausibility", weight);
+    } else {
+      p.setScore("lemmaPhrasePlausibility", 0);
     }
   }
 

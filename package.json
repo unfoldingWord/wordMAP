@@ -63,7 +63,7 @@
     "tslint": "^5.11.0",
     "typedoc": "^0.13.0",
     "typescript": "^3.1.6",
-    "wordmap-lexer": "^0.3.3"
+    "wordmap-lexer": "^0.3.4"
   },
   "dependencies": {
     "@types/yargs": "^11.0.0",

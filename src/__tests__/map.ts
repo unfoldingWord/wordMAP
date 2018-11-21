@@ -1,7 +1,12 @@
 import * as fs from "fs-extra";
 import * as path from "path";
+import {Token} from "wordmap-lexer";
 import Alignment from "../structures/Alignment";
-import {makeMockAlignment} from "../util/testUtils";
+import Ngram from "../structures/Ngram";
+import {
+  makeMockAlignment,
+  tokenizeComplexMockSentence
+} from "../util/testUtils";
 import WordMap from "../WordMap";
 
 describe("MAP", () => {
@@ -77,6 +82,32 @@ describe("MAP", () => {
     ];
 
     console.log("alignment memory\n", stuff);
+  });
+
+  it("predicts from alignment memory with lemma fallback", () => {
+    const map = new WordMap();
+    // append alignment memory
+    const sourceAlignmentMemory = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corrections/greek.txt"
+    ));
+    const targetAlignmentMemory = fs.readFileSync(path.join(
+      __dirname,
+      "fixtures/corrections/english.txt"
+    ));
+    map.appendAlignmentMemoryString(
+      sourceAlignmentMemory.toString("utf-8"),
+      targetAlignmentMemory.toString("utf-8")
+    );
+
+    const unalignedPair = [
+      tokenizeComplexMockSentence("Βίβλος γενέσεωςalt:γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ."),
+      "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
+    ];
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+
+    expect(suggestions[0].getPredictions()[0].key).toEqual("n:βίβλος->n:the:book:of");
+    expect(suggestions[0].getPredictions()[1].key).toEqual("n:γενέσεωςalt->n:the:genealogy:of");
   });
 
   // it("indexes corpus quickly", () => {

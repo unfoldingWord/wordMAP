@@ -53,6 +53,8 @@ export default class AlignmentOccurrences implements Algorithm {
         targetFrequency
       );
       p.setScore("lemmaAlignmentOccurrences", weight);
+    } else {
+      p.setScore("lemmaAlignmentOccurrences", 0);
     }
   }
 

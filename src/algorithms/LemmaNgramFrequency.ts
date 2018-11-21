@@ -57,6 +57,12 @@ export default class LemmaNgramFrequency implements Algorithm {
     for (const p  of predictions) {
       // skip predictions without lemmas
       if (p.alignment.lemmaKey === undefined) {
+        p.setScores({
+          "sourceCorpusLemmaPermutationsFrequencyRatio": 0,
+          "targetCorpusLemmaPermutationsFrequencyRatio": 0,
+          "sourceAlignmentMemoryLemmaFrequencyRatio": 0,
+          "targetAlignmentMemoryLemmaFrequencyRatio": 0
+        });
         continue;
       }
 
@@ -138,6 +144,13 @@ export default class LemmaNgramFrequency implements Algorithm {
     for (const p of predictions) {
       // skip predictions without lemmas
       if (p.alignment.lemmaKey === undefined) {
+        p.setScores({
+          // alignmentFrequencyCorpusFiltered,
+          // alignmentFrequencyAlignmentMemoryFiltered,
+          // TODO: we aren't using these at the moment
+          "lemmaFrequencyRatioCorpusFiltered": 0,
+          "lemmaFrequencyRatioAlignmentMemoryFiltered": 0
+        });
         continue;
       }
 

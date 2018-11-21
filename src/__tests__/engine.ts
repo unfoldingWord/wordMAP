@@ -198,20 +198,26 @@ describe("scoring", () => {
       alignmentPosition: 1,
       ngramLength: 2,
       sourceAlignmentMemoryFrequencyRatio: 3,
+      sourceAlignmentMemoryLemmaFrequencyRatio: 3,
       sourceCorpusPermutationsFrequencyRatio: 5,
+      sourceCorpusLemmaPermutationsFrequencyRatio: 5,
       targetCorpusPermutationsFrequencyRatio: 2,
+      targetCorpusLemmaPermutationsFrequencyRatio: 2,
       targetAlignmentMemoryFrequencyRatio: 1,
+      targetAlignmentMemoryLemmaFrequencyRatio: 1,
       phrasePlausibility: 2,
       sourceNgramLength: 1,
       characterLength: 3,
       alignmentOccurrences: 2,
-      uniqueness: 1
+      lemmaAlignmentOccurrences: 2,
+      uniqueness: 1,
+      lemmaUniqueness: 1
     });
     const result = Engine.calculateConfidence(
       [prediction],
       new AlignmentMemoryIndex()
     );
-    expect(result[0].getScore("confidence")).toEqual(4.558139534883723);
+    expect(result[0].getScore("confidence")).toEqual(4.848484848484848);
   });
 });
 

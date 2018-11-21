@@ -87,10 +87,10 @@ export default class Engine {
       if (key in weights) {
         weight = weights[key];
       }
-      if (prediction.hasScore(key)) {
-        scoreSum += prediction.getScore(key) * weight;
-        weightSum += weight;
-      }
+      // if (prediction.hasScore(key)) {
+      scoreSum += prediction.getScore(key) * weight;
+      weightSum += weight;
+      // }
     }
     return scoreSum / weightSum;
   }
@@ -124,7 +124,11 @@ export default class Engine {
     };
 
     for (const p of predictions) {
-      const isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment);
+      let isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment);
+      // TRICKY: fall back to lemma
+      if (!isAlignmentMemory && p.alignment.lemmaKey !== undefined) {
+        isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment.lemmaKey);
+      }
 
       // confidence based on corpus
       const corpusWeightedKeys = [
