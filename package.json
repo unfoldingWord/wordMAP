@@ -67,7 +67,7 @@
   },
   "dependencies": {
     "@types/yargs": "^11.0.0",
-    "yargs": "^11.0.0"
+    "yargs": "^13.1.0"
   },
   "peerDependencies": {
     "wordmap-lexer": "0.3.3"
