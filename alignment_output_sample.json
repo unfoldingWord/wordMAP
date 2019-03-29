@@ -1,100 +1,84 @@
 {
-  "comments - !!not part of the specification!!": [
-    "Tokens in alignment sourceNgram and targetNgram may be represented as an integer instead of an object if no metadata is needed/provided.",
-    "All metadata fields are optional.",
-    "Metadata in the alignment tokens may be used in generating the usfm output.",
-    "Cross verse alignment are indicated like 10001. That is verse 10 token 1."
-  ],
   "metadata": {
-    "source": {
-      "languageCode": "grc",
-      "tokenizerRegexp": {
-        "word": null,
-        "punctuation": null,
-        "whitespace": null
+    "resources": {
+      "r0": {
+        "languageCode": "el-x-koine",
+        "name": "UGNT",
+        "version": "0.1"
       },
-      "version": "UGNT"
+      "r1": {
+        "languageCode": "en",
+        "name": "ULT",
+        "version": "9"
+      }
     },
-    "target": {
-      "languageCode": "eng",
-      "tokenizerRegexp": {
-        "word": null,
-        "punctuation": null,
-        "whitespace": null
-      },
-      "version": "ULT"
-    },
-    "timestamp": "1524293704"
+    "modified": "1524293704"
   },
-  "formatVersion": "1.0",
-  "sentences": [
+  "conformsTo": "alignment-0.1",
+  "segments": [
     {
-      "compoundConfidence": 0.4990773709816275,
-      "source": {
+      "resources": {
+        "r0": {
         "text": "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
-        "tokens": [
-          {
-            "occurrence": 1,
-            "occurrences": 1,
-            "text": "Βίβλος",
-            "lemma": "βίβλος",
-            "strong": "G09760",
-            "morph": "Gr,N,,,,,NFS,",
-            "contextId": "MAT001001"
-          },
-          "γενέσεως", "Ἰησοῦ", "Χριστοῦ", "υἱοῦ", "Δαυὶδ", "υἱοῦ", "Ἀβραάμ"
-        ],
+        "tokens": ["Βίβλος", "γενέσεως", "Ἰησοῦ", "Χριστοῦ", "υἱοῦ", "Δαυὶδ", "υἱοῦ", "Ἀβραάμ"],
         "metadata": {
-          "contextId": "MAT001001"
+        "contextId": "MAT001001"
         }
-      },
-      "target": {
+        },
+        "r1": {
         "text": "The book of the genealogy of Jesus Christ, son of David, son of Abraham:",
         "tokens": ["The", "book", "of", "the", "genealogy", "of", "Jesus", "Christ", "son", "of", "David", "son", "of", "Abraham"],
         "metadata": {
-          "contextId": "MAT001001"
+        "contextId": "MAT001001"
         }
-      },
+        },
+      }
       "alignments": [
         {
-          "confidence": 0.516905944153279,
-          "sourceNgram": [0],
-          "targetNgram": [0, 1, 10001]
+          "score": 0.516905944153279,
+          "r0": [0, 1],
+          "r1": [1, 4],
+          "verified": false
         },
         {
-          "confidence": 0.5363691430931895,
-          "sourceNgram": [1],
-          "targetNgram": [4]
+          "score": 0.5363691430931895,
+          "r0": [1, 2],
+          "r1": [4],
+          "verified": false
         },
         {
-          "confidence": 0.5372550334365089,
-          "sourceNgram": [2],
-          "targetNgram": [6]
+          "score": 0.5372550334365089,
+          "r0": [2],
+          "r1": [6, 7],
+          "verified": false
         },
         {
-          "confidence": 0.4762634342491979,
-          "sourceNgram": [3],
-          "targetNgram": [7]
+          "score": 0.4762634342491979,
+          "r0": [3],
+          "r1": [7],
+          "verified": false
         },
         {
-          "confidence": 0.46762244230161903,
-          "sourceNgram": [4],
-          "targetNgram": [8, 9]
+          "score": 0.46762244230161903,
+          "r0": [],
+          "r1": [8, 9],
+          "verified": false
         },
         {
-          "confidence": 0.5253404588058129,
-          "sourceNgram": [5],
-          "targetNgram": [10]
+          "score": 0.5253404588058129,
+          "r0": [5],
+          "r1": [],
+          "verified": true
         },
         {
-          "confidence": 0.46762244230161903,
-          "sourceNgram": [6],
-          "targetNgram": [11, 12]
+          "r0": [6],
+          "r1": [10, 12],
+          "verified": true
         },
         {
-          "confidence": 0.46524006951179425,
-          "sourceNgram": [7],
-          "targetNgram": [13]
+          "r0": [7, 9],
+          "r1": [13],
+          "verified": true
         }
       ]
     }
