@@ -19,19 +19,19 @@
     {
       "resources": {
         "r0": {
-        "text": "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
-        "tokens": ["Βίβλος", "γενέσεως", "Ἰησοῦ", "Χριστοῦ", "υἱοῦ", "Δαυὶδ", "υἱοῦ", "Ἀβραάμ"],
-        "metadata": {
-        "contextId": "MAT001001"
-        }
+          "text": "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
+          "tokens": ["Βίβλος", "γενέσεως", "Ἰησοῦ", "Χριστοῦ", "υἱοῦ", "Δαυὶδ", "υἱοῦ", "Ἀβραάμ"],
+          "metadata": {
+            "contextId": "MAT001001"
+          }
         },
         "r1": {
-        "text": "The book of the genealogy of Jesus Christ, son of David, son of Abraham:",
-        "tokens": ["The", "book", "of", "the", "genealogy", "of", "Jesus", "Christ", "son", "of", "David", "son", "of", "Abraham"],
-        "metadata": {
-        "contextId": "MAT001001"
+          "text": "The book of the genealogy of Jesus Christ, son of David, son of Abraham:",
+          "tokens": ["The", "book", "of", "the", "genealogy", "of", "Jesus", "Christ", "son", "of", "David", "son", "of", "Abraham"],
+          "metadata": {
+            "contextId": "MAT001001"
+          }
         }
-        },
       },
       "alignments": [
         {
