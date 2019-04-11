@@ -27,7 +27,12 @@
         },
         "r1": {
           "text": "The book of the genealogy of Jesus Christ, son of David, son of Abraham:",
-          "tokens": ["The", "book", "of", "the", "genealogy", "of", "Jesus", "Christ", "son", "of", "David", "son", "of", "Abraham"],
+          "tokens": [{
+              "text": "The",
+              "occurrence": 1,
+              "occurrences": 2,
+              "contextId": "MAT001001"
+            }, "book", "of", "the", "genealogy", "of", "Jesus", "Christ", "son", "of", "David", "son", "of", "Abraham"],
           "metadata": {
             "contextId": "MAT001001"
           }
