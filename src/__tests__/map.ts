@@ -6,19 +6,19 @@ import WordMap from "../WordMap";
 
 describe("MAP", () => {
 
-  it("predicts alignments with the sentence pair the same as corpus", () => {
-      const map = new WordMap();
-      const source = "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.";
-      const target = "The book of the genealogy of Jesus Christ, son of David, son of Abraham:";
-
-      map.appendCorpusString(source, target);
-      const suggestions = map.predict(source, target, 5);
-      console.log("input as corpus\n", suggestions.map((s) => {
-          return s.toString();
-        })
-      );
-    }
-  );
+  // it("predicts alignments with the sentence pair the same as corpus", () => {
+  //     const map = new WordMap();
+  //     const source = "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.";
+  //     const target = "The book of the genealogy of Jesus Christ, son of David, son of Abraham:";
+  //
+  //     map.appendCorpusString(source, target);
+  //     const suggestions = map.predict(source, target, 5);
+  //     console.log("input as corpus\n", suggestions.map((s) => {
+  //         return s.toString();
+  //       })
+  //     );
+  //   }
+  // );
 
   // it("has no corpus", () => {
   //   const map = new MAP();
@@ -174,13 +174,108 @@ describe("MAP", () => {
 
     const thirdSuggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
 
-    const stuff3 = thirdSuggestions.map((s) => {
-      return s.toString();
-    });
+  // it("indexes corpus quickly", () => {
+  //   const map = new WordMap();
+  //
+  //   // append corpus
+  //   const sourceCorpus = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corpus/greek.txt"
+  //   )).toString("utf-8");
+  //   const targetCorpus = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corpus/english.txt"
+  //   )).toString("utf-8");
+  //
+  //   const start = new Date().getTime();
+  //   map.appendCorpusString(
+  //     sourceCorpus,
+  //     targetCorpus
+  //   );
+  //   const end = new Date().getTime();
+  //   const duration = end - start;
+  //   expect(duration).toBeLessThan(1000);
+  // });
 
-    // noinspection TsLint
-    // console.log("corpus (3)\n", stuff3);
-  });
+  // it("predicts from corpus", () => {
+  //   const map = new WordMap();
+  //
+  //   // append corpus
+  //   const sourceCorpus = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corpus/greek.txt"
+  //   ));
+  //   const targetCorpus = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corpus/english.txt"
+  //   ));
+  //
+  //   map.appendCorpusString(
+  //     sourceCorpus.toString("utf-8"),
+  //     targetCorpus.toString("utf-8")
+  //   );
+  //
+  //   const unalignedPair = [
+  //     "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
+  //     "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
+  //   ];
+  //   console.log(
+  //     "corpus (1)\n",
+  //     map.predict(unalignedPair[0], unalignedPair[1], 20).map((s) => {
+  //       return s.toString();
+  //     })
+  //   );
+  //
+  //   // run it again to make sure things work
+  //
+  //   const secondUnalignedPair = [
+  //     "Ἀβραὰμ ἐγέννησεν τὸν Ἰσαὰκ, Ἰσαὰκ δὲ ἐγέννησεν τὸν Ἰακὼβ, Ἰακὼβ δὲ ἐγέννησεν τὸν Ἰούδαν καὶ τοὺς ἀδελφοὺς αὐτοῦ,",
+  //     "Abraham begat Isaac, and Isaac begat Jacob, and Jacob begat Judah and his brothers."
+  //   ];
+  //   const benchmark: Alignment[] = [];
+  //   benchmark.push(makeMockAlignment("Ἀβραὰμ", "Abraham"));
+  //   benchmark.push(makeMockAlignment("ἐγέννησεν", "begat"));
+  //   benchmark.push(makeMockAlignment("Ἰσαὰκ", "Isaac"));
+  //   benchmark.push(makeMockAlignment("δὲ", ""));
+  //   benchmark.push(makeMockAlignment("τὸν", "and"));
+  //   benchmark.push(makeMockAlignment("Ἰακὼβ", "Jacob"));
+  //   benchmark.push(makeMockAlignment("δὲ", ""));
+  //   benchmark.push(makeMockAlignment("Ἰούδαν", "Judah"));
+  //   benchmark.push(makeMockAlignment("καὶ", "and"));
+  //   benchmark.push(makeMockAlignment("τοὺς", ""));
+  //   benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
+  //   benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
+  //
+  //   console.log(
+  //     "corpus (2)\n",
+  //     map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2)
+  //       .map((s) => {
+  //         return s.toString();
+  //       })
+  //   );
+  //   console.log(
+  //     "corpus (2): benchmark\n",
+  //     map.predictWithBenchmark(
+  //       secondUnalignedPair[0],
+  //       secondUnalignedPair[1],
+  //       benchmark,
+  //       2
+  //     ).map((s) => {
+  //       return s.toString();
+  //     })
+  //   );
+  //
+  //   // make sure we get the same output as at first
+  //
+  //   const thirdSuggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+  //
+  //   const stuff3 = thirdSuggestions.map((s) => {
+  //     return s.toString();
+  //   });
+  //
+  //   // noinspection TsLint
+  //   // console.log("corpus (3)\n", stuff3);
+  // });
 
   describe("ngram length", () => {
     it("excludes alignment memory that exceeds the max ngram length", () => {
@@ -216,54 +311,54 @@ describe("MAP", () => {
     });
   });
 
-  it("predicts from corpus and saved alignments", () => {
-    const map = new WordMap();
-
-    // append corpus
-    const sourceCorpus = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corpus/greek.txt"
-    ));
-    const targetCorpus = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corpus/english.txt"
-    ));
-    map.appendCorpusString(
-      sourceCorpus.toString("utf-8"),
-      targetCorpus.toString("utf-8")
-    );
-
-    // append saved alignments
-    const sourceAlignmentMemory = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corrections/greek.txt"
-    ));
-    const targetAlignmentMemory = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corrections/english.txt"
-    ));
-    map.appendAlignmentMemoryString(
-      sourceAlignmentMemory.toString("utf-8"),
-      targetAlignmentMemory.toString("utf-8")
-    );
-
-    const unalignedPair = [
-      "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
-      "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
-    ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
-
-    const stuff = [
-      suggestions[0].toString(),
-      suggestions[1].toString(),
-      suggestions[2].toString(),
-      suggestions[3].toString(),
-      suggestions[4].toString()
-    ];
-
-    // noinspection TsLint
-    console.log("corpus and saved alignments\n", stuff);
-  });
+  // it("predicts from corpus and saved alignments", () => {
+  //   const map = new WordMap();
+  //
+  //   // append corpus
+  //   const sourceCorpus = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corpus/greek.txt"
+  //   ));
+  //   const targetCorpus = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corpus/english.txt"
+  //   ));
+  //   map.appendCorpusString(
+  //     sourceCorpus.toString("utf-8"),
+  //     targetCorpus.toString("utf-8")
+  //   );
+  //
+  //   // append saved alignments
+  //   const sourceAlignmentMemory = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corrections/greek.txt"
+  //   ));
+  //   const targetAlignmentMemory = fs.readFileSync(path.join(
+  //     __dirname,
+  //     "fixtures/corrections/english.txt"
+  //   ));
+  //   map.appendAlignmentMemoryString(
+  //     sourceAlignmentMemory.toString("utf-8"),
+  //     targetAlignmentMemory.toString("utf-8")
+  //   );
+  //
+  //   const unalignedPair = [
+  //     "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
+  //     "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
+  //   ];
+  //   const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
+  //
+  //   const stuff = [
+  //     suggestions[0].toString(),
+  //     suggestions[1].toString(),
+  //     suggestions[2].toString(),
+  //     suggestions[3].toString(),
+  //     suggestions[4].toString()
+  //   ];
+  //
+  //   // noinspection TsLint
+  //   console.log("corpus and saved alignments\n", stuff);
+  // });
 });
 
 //
