@@ -79,101 +79,6 @@ describe("MAP", () => {
     console.log("saved alignments\n", stuff);
   });
 
-  it.skip("indexes corpus quickly", () => {
-    const map = new WordMap();
-
-    // append corpus
-    const sourceCorpus = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corpus/greek.txt"
-    )).toString("utf-8");
-    const targetCorpus = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corpus/english.txt"
-    )).toString("utf-8");
-
-    const start = new Date().getTime();
-    map.appendCorpusString(
-      sourceCorpus,
-      targetCorpus
-    );
-    const end = new Date().getTime();
-    const duration = end - start;
-    expect(duration).toBeLessThan(1000);
-  });
-
-  it("predicts from corpus", () => {
-    const map = new WordMap();
-
-    // append corpus
-    const sourceCorpus = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corpus/greek.txt"
-    ));
-    const targetCorpus = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corpus/english.txt"
-    ));
-
-    map.appendCorpusString(
-      sourceCorpus.toString("utf-8"),
-      targetCorpus.toString("utf-8")
-    );
-
-    const unalignedPair = [
-      "Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ.",
-      "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
-    ];
-    console.log(
-      "corpus (1)\n",
-      map.predict(unalignedPair[0], unalignedPair[1], 20).map((s) => {
-        return s.toString();
-      })
-    );
-
-    // run it again to make sure things work
-
-    const secondUnalignedPair = [
-      "Ἀβραὰμ ἐγέννησεν τὸν Ἰσαὰκ, Ἰσαὰκ δὲ ἐγέννησεν τὸν Ἰακὼβ, Ἰακὼβ δὲ ἐγέννησεν τὸν Ἰούδαν καὶ τοὺς ἀδελφοὺς αὐτοῦ,",
-      "Abraham begat Isaac, and Isaac begat Jacob, and Jacob begat Judah and his brothers."
-    ];
-    const benchmark: Alignment[] = [];
-    benchmark.push(makeMockAlignment("Ἀβραὰμ", "Abraham"));
-    benchmark.push(makeMockAlignment("ἐγέννησεν", "begat"));
-    benchmark.push(makeMockAlignment("Ἰσαὰκ", "Isaac"));
-    benchmark.push(makeMockAlignment("δὲ", ""));
-    benchmark.push(makeMockAlignment("τὸν", "and"));
-    benchmark.push(makeMockAlignment("Ἰακὼβ", "Jacob"));
-    benchmark.push(makeMockAlignment("δὲ", ""));
-    benchmark.push(makeMockAlignment("Ἰούδαν", "Judah"));
-    benchmark.push(makeMockAlignment("καὶ", "and"));
-    benchmark.push(makeMockAlignment("τοὺς", ""));
-    benchmark.push(makeMockAlignment("ἀδελφοὺς", "brothers"));
-    benchmark.push(makeMockAlignment("αὐτοῦ", "his"));
-
-    console.log(
-      "corpus (2)\n",
-      map.predict(secondUnalignedPair[0], secondUnalignedPair[1], 2)
-        .map((s) => {
-          return s.toString();
-        })
-    );
-    console.log(
-      "corpus (2): benchmark\n",
-      map.predictWithBenchmark(
-        secondUnalignedPair[0],
-        secondUnalignedPair[1],
-        benchmark,
-        2
-      ).map((s) => {
-        return s.toString();
-      })
-    );
-
-    // make sure we get the same output as at first
-
-    const thirdSuggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
-
   // it("indexes corpus quickly", () => {
   //   const map = new WordMap();
   //
@@ -280,7 +185,6 @@ describe("MAP", () => {
   describe("ngram length", () => {
     it("excludes alignment memory that exceeds the max ngram length", () => {
       const map = new WordMap({targetNgramLength: 3});
-
       map.appendAlignmentMemoryString("φιλοτέκνους", "and children");
       map.appendAlignmentMemoryString("φιλάνδρους", "love their own husbands");
       const suggestions = map.predict(
