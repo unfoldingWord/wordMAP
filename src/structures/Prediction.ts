@@ -30,7 +30,7 @@ export default class Prediction {
    * @return {Ngram}
    */
   get source(): Ngram {
-    return this.predictedAlignment.source;
+    return this.predictedAlignment.sourceNgram;
   }
 
   /**
@@ -38,7 +38,7 @@ export default class Prediction {
    * @return {Ngram}
    */
   get target(): Ngram {
-    return this.predictedAlignment.target;
+    return this.predictedAlignment.targetNgram;
   }
 
   /**

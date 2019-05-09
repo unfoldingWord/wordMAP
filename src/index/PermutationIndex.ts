@@ -73,7 +73,7 @@ export default class PermutationIndex {
     this.alignPermFreqIndex.increment(alignment);
 
     // n-gram frequency in permutations
-    this.srcNgramPermFreqIndex.increment(alignment.source);
-    this.tgtNgramPermFreqIndex.increment(alignment.target);
+    this.srcNgramPermFreqIndex.increment(alignment.sourceNgram);
+    this.tgtNgramPermFreqIndex.increment(alignment.targetNgram);
   }
 }

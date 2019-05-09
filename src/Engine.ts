@@ -349,11 +349,11 @@ export default class Engine {
    */
   public addAlignmentMemory(alignmentMemory: Alignment[]) {
     for (let i = alignmentMemory.length - 1; i >= 0; i--) {
-      const target = alignmentMemory[i].target;
+      const target = alignmentMemory[i].targetNgram;
       if (target.tokenLength > this.maxTargetNgramLength) {
         console.warn(`Target Alignment Memory "${target.key}" exceeds maximum n-gram length of ${this.maxTargetNgramLength} and may be ignored.`);
       }
-      const source = alignmentMemory[i].source;
+      const source = alignmentMemory[i].sourceNgram;
       if (source.tokenLength > this.maxSourceNgramLength) {
         console.warn(`Source Alignment Memory "${source.key}" exceeds maximum n-gram length of ${this.maxSourceNgramLength} and may be ignored.`);
       }

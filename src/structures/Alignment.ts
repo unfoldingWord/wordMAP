@@ -6,12 +6,13 @@ import Ngram from "./Ngram";
  */
 export default class Alignment {
 
-  private sourceNgram: Ngram;
-  private targetNgram: Ngram;
+  public sourceNgram: Ngram;
+  public targetNgram: Ngram;
   private cachedKey!: string; // TRICKY: definite assignment assertion
 
   /**
-   * Returns the n-gram from the source text
+   * Returns the n-gram from the source text.
+   * @deprecated Consider using {@link sourceNgram} instead since getters have a performance hit.
    * @return {Ngram}
    */
   public get source() {
@@ -20,6 +21,7 @@ export default class Alignment {
 
   /**
    * Returns the n-gram from the target text
+   * @deprecated Consider using {@link targetNgram} instead since getters have a performance hit.
    * @return {Ngram}
    */
   public get target() {
