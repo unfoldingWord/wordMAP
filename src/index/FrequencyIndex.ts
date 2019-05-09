@@ -17,8 +17,9 @@ export default abstract class FrequencyIndex {
    * @param {string} key
    */
   protected readIndex(key: string): number {
-    if (key in this.index) {
-      return this.index[key];
+    const val = this.index[key];
+    if (val !== undefined) {
+      return val;
     } else {
       return 0;
     }

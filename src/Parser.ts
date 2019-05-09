@@ -1,4 +1,5 @@
 import {Token} from "wordmap-lexer";
+import PermutationIndex from "./index/PermutationIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
 
@@ -48,6 +49,7 @@ export default class Parser {
 
   /**
    * Generates an array of all possible alignments between two sets of n-grams
+   * @deprecated used {@link indexAlignmentPermutations} instead (it's faster).
    * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
    * @param {Ngram[]} targetNgrams - every possible n-gram in the target text
    * @return {Alignment[]}
@@ -63,5 +65,22 @@ export default class Parser {
       alignments.push(new Alignment(source, new Ngram()));
     }
     return alignments;
+  }
+
+  /**
+   * Indexes all possible alignment permutations between two sets of n-grams
+   * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
+   * @param {Ngram[]} targetNgrams - every possible n-gram in the target text
+   * @param {PermutationIndex} index - the index that will receive the permutations
+   */
+  public static indexAlignmentPermutations(sourceNgrams: Ngram[], targetNgrams: Ngram[], index: PermutationIndex) {
+    for (let s = 0, slen = sourceNgrams.length; s < slen; s ++) {
+      for (let t = 0, tlen = targetNgrams.length; t < tlen; t ++) {
+        index.addAlignment(new Alignment(sourceNgrams[s], targetNgrams[t]));
+      }
+
+      // TRICKY: include empty match alignment
+      index.addAlignment(new Alignment(sourceNgrams[s], new Ngram()));
+    }
   }
 }

@@ -31,6 +31,8 @@ const args = yargs.usage(
 console.log(args.c, args.s, args.p);
 const map = new WordMap();
 
+const start = new Date().getTime(); // start clock
+
 console.log("Reading corpus...");
 
 const sourceCorpus = fs.readFileSync(args.c[0]);
@@ -54,4 +56,7 @@ for (const s of suggestions) {
 }
 fs.writeFileSync(args.o, JSON.stringify(alignmentData));
 
-console.log("Finished!");
+const end = new Date().getTime(); // end clock
+const duration = end - start;
+
+console.log(`Finished! ${duration / 1000.0}s`);

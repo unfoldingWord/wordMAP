@@ -60,13 +60,20 @@ export default class PermutationIndex {
    */
   public addAlignments(alignments: Alignment[]) {
     for (let i = 0, len = alignments.length; i < len; i ++) {
-      const alignment = alignments[i];
-      // alignment frequency in permutations
-      this.alignPermFreqIndex.increment(alignment);
-
-      // n-gram frequency in permutations
-      this.srcNgramPermFreqIndex.increment(alignment.source);
-      this.tgtNgramPermFreqIndex.increment(alignment.target);
+      this.addAlignment(alignments[i]);
     }
+  }
+
+  /**
+   * Adds a single alignment to the index
+   * @param alignment
+   */
+  public addAlignment(alignment: Alignment) {
+    // alignment frequency in permutations
+    this.alignPermFreqIndex.increment(alignment);
+
+    // n-gram frequency in permutations
+    this.srcNgramPermFreqIndex.increment(alignment.source);
+    this.tgtNgramPermFreqIndex.increment(alignment.target);
   }
 }

@@ -55,8 +55,9 @@ export default class CorpusIndex {
         );
 
         // index permutation metrics
-        const alignments = Parser.alignments(sourceNgrams, targetNgrams);
-        this.permutationIndex.addAlignments(alignments);
+        Parser.indexAlignmentPermutations(sourceNgrams, targetNgrams, this.permutationIndex);
+        // const alignments = Parser.alignments(sourceNgrams, targetNgrams);
+        // this.permutationIndex.addAlignments(alignments);
       }
     }
   }
