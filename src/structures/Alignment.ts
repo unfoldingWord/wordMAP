@@ -35,7 +35,7 @@ export default class Alignment {
    */
   public get key(): string {
     if (this.cachedKey === undefined) {
-      this.cachedKey = `${this.sourceNgram.key}->${this.targetNgram.key}`.toLowerCase();
+      this.cachedKey = `${this.sourceNgram.key}->${this.targetNgram.key}`;
     }
     return this.cachedKey;
   }
