@@ -23,8 +23,8 @@ export default class Ngram {
    */
   get characterLength() {
     let length = 0;
-    for (const token of this.tokens) {
-      length += token.toString().length;
+    for (let i = 0, len = this.tokens.length; i < len; i ++) {
+      length += this.tokens[i].toString().length;
     }
     return length;
   }
@@ -84,11 +84,11 @@ export default class Ngram {
    */
   public get key(): string {
     if (this.cachedKey === undefined) {
-      const tokenValues = [];
-      for (const token of this.tokens) {
-        tokenValues.push(token.toString());
+      let newKey = "n:";
+      for (let i = 0, len = this.tokens.length; i < len; i ++) {
+        newKey += this.tokens[i].toString() + ":";
       }
-      this.cachedKey = "n:" + tokenValues.join(":").toLowerCase();
+      this.cachedKey = newKey.slice(0, -1).toLowerCase();
     }
     return this.cachedKey;
   }
@@ -155,8 +155,8 @@ export default class Ngram {
    */
   public toJSON(verbose: boolean = false): object {
     const json = [];
-    for (const t of this.tokens) {
-      json.push(t.toJSON(verbose));
+    for (let i = 0, len = this.tokens.length; i < len; i ++) {
+      json.push(this.tokens[i].toJSON(verbose));
     }
     return json;
   }
@@ -169,7 +169,7 @@ export default class Ngram {
   public equals(ngram: Ngram): boolean {
     if (this.tokens.length === ngram.tokens.length) {
       // check if tokens are equal
-      for (let i = 0; i < this.tokens.length; i++) {
+      for (let i = 0, len = this.tokens.length; i < len; i++) {
         if (!this.tokens[i].equals(ngram.tokens[i])) {
           return false;
         }
@@ -187,7 +187,7 @@ export default class Ngram {
   public looksLike(ngram: Ngram): boolean {
     if (this.tokens.length === ngram.tokens.length) {
       // check if tokens are equal
-      for (let i = 0; i < this.tokens.length; i++) {
+      for (let i = 0, len = this.tokens.length; i < len; i++) {
         if (!this.tokens[i].looksLike(ngram.tokens[i])) {
           return false;
         }

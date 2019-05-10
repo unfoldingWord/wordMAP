@@ -30,6 +30,7 @@ export default class Alignment {
 
   /**
    * Returns the alignment key.
+   * TODO: would a regular function be faster?
    * @return {string}
    */
   public get key(): string {

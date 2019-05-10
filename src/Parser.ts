@@ -74,13 +74,15 @@ export default class Parser {
    * @param {PermutationIndex} index - the index that will receive the permutations
    */
   public static indexAlignmentPermutations(sourceNgrams: Ngram[], targetNgrams: Ngram[], index: PermutationIndex) {
+    const tlen = targetNgrams.length;
     for (let s = 0, slen = sourceNgrams.length; s < slen; s ++) {
-      for (let t = 0, tlen = targetNgrams.length; t < tlen; t ++) {
-        index.addAlignment(new Alignment(sourceNgrams[s], targetNgrams[t]));
+      const sourceNgram = sourceNgrams[s];
+      for (let t = 0; t < tlen; t ++) {
+        index.addAlignment(new Alignment(sourceNgram, targetNgrams[t]));
       }
 
       // TRICKY: include empty match alignment
-      index.addAlignment(new Alignment(sourceNgrams[s], new Ngram()));
+      index.addAlignment(new Alignment(sourceNgram, new Ngram()));
     }
   }
 }

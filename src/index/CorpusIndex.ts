@@ -42,22 +42,22 @@ export default class CorpusIndex {
       throw Error("source and target corpus must be the same length");
     } else {
       for (let i = 0; i < sourceLength; i++) {
+        const sourceToken = source[i];
+        const targetToken = target[i];
 
-        const sourceNgrams = Parser.ngrams(source[i]);
-        const targetNgrams = Parser.ngrams(target[i]);
+        const sourceNgrams = Parser.ngrams(sourceToken);
+        const targetNgrams = Parser.ngrams(targetToken);
 
         // index static metrics
         this.staticIndex.addSentence(
-          source[i],
-          target[i],
+          sourceToken,
+          targetToken,
           sourceNgrams,
           targetNgrams
         );
 
         // index permutation metrics
         Parser.indexAlignmentPermutations(sourceNgrams, targetNgrams, this.permutationIndex);
-        // const alignments = Parser.alignments(sourceNgrams, targetNgrams);
-        // this.permutationIndex.addAlignments(alignments);
       }
     }
   }
