@@ -35,4 +35,13 @@ describe("AlignmentIndex", () => {
     const value = index.read(alignment);
     expect(value).toEqual(0);
   });
+
+  it("reads a specific key", () => {
+    const index = new AlignmentIndex();
+    const alignment = makeMockAlignment("hello", "olleh");
+    index.increment(alignment);
+
+    const value = index.read(alignment.key);
+    expect(value).toEqual(1);
+  });
 });

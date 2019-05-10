@@ -3,7 +3,7 @@ const path = require("path");
 const WordMap = require("../../dist/WordMap").default;
 
 /**
- * This is used for running V8 CPU Memory and CPU profiling.
+ * This is used for running V8 CPU Memory and CPU profiling without jest overhead.
  * Before running the profile on this script make sure you have built
  * the project so the imports above work.
  */

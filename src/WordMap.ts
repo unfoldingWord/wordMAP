@@ -2,6 +2,7 @@ import Lexer, {Token} from "wordmap-lexer";
 import AlignmentOccurrences from "./algorithms/AlignmentOccurrences";
 import AlignmentPosition from "./algorithms/AlignmentPosition";
 import CharacterLength from "./algorithms/CharacterLength";
+import LemmaNgramFrequency from "./algorithms/LemmaNgramFrequency";
 import NgramFrequency from "./algorithms/NgramFrequency";
 import NgramLength from "./algorithms/NgramLength";
 import PhrasePlausibility from "./algorithms/PhrasePlausibility";
@@ -22,6 +23,7 @@ export default class WordMap {
 
     this.engine = new Engine(opts);
     this.engine.registerAlgorithm(new NgramFrequency());
+    this.engine.registerAlgorithm(new LemmaNgramFrequency()); // TODO: combine this with NgramFrequency for better performance
     this.engine.registerAlgorithm(new AlignmentPosition());
     this.engine.registerAlgorithm(new PhrasePlausibility());
     this.engine.registerAlgorithm(new NgramLength());
@@ -81,12 +83,20 @@ export default class WordMap {
     this.engine.addCorpus(sourceTokens, targetTokens);
   }
 
-  public appendAlignmentMemory(alignments: Alignment[]) {
-    this.engine.addAlignmentMemory(alignments);
+  /**
+   * Appends alignment memory engine.
+   * @param alignments - an alignment or array of alignments
+   */
+  public appendAlignmentMemory(alignments: Alignment | Alignment[]) {
+    if (alignments instanceof Array) {
+      this.engine.addAlignmentMemory(alignments);
+    } else {
+      this.engine.addAlignmentMemory([alignments]);
+    }
   }
 
   /**
-   * Appends some saved alignments.
+   * Appends some alignment memory.
    * This may be multiple lines of text or a single line.
    *
    * @param {string} source - a string of source phrases separated by new lines
@@ -114,15 +124,27 @@ export default class WordMap {
   }
 
   /**
-   * Predicts the word alignments between the sentences
-   * @param {string} sourceSentence
-   * @param {string} targetSentence
-   * @param {number} maxSuggestions
+   * Predicts the word alignments between the sentences.
+   * @param {string} sourceSentence - a sentence from the source text
+   * @param {string} targetSentence - a sentence from the target text
+   * @param {number} maxSuggestions - the maximum number of suggestions to return
    * @return {Suggestion[]}
    */
-  public predict(sourceSentence: string, targetSentence: string, maxSuggestions: number = 1): Suggestion[] {
-    const sourceTokens = Lexer.tokenize(sourceSentence);
-    const targetTokens = Lexer.tokenize(targetSentence);
+  public predict(sourceSentence: string | Token[], targetSentence: string | Token[], maxSuggestions: number = 1): Suggestion[] {
+    let sourceTokens = [];
+    let targetTokens = [];
+
+    if (typeof sourceSentence === "string") {
+      sourceTokens = Lexer.tokenize(sourceSentence);
+    } else {
+      sourceTokens = sourceSentence;
+    }
+
+    if (typeof targetSentence === "string") {
+      targetTokens = Lexer.tokenize(targetSentence);
+    } else {
+      targetTokens = targetSentence;
+    }
 
     let predictions = this.engine.run(sourceTokens, targetTokens);
     predictions = this.engine.score(predictions);

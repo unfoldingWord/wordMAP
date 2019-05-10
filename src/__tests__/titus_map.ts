@@ -1,7 +1,11 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 import Alignment from "../structures/Alignment";
-import {makeMockAlignment, scoreSuggestion} from "../util/testUtils";
+import {
+  makeMockAlignment,
+  scoreSuggestion,
+  tokenizeComplexMockSentence
+} from "../util/testUtils";
 import WordMap from "../WordMap";
 
 describe("MAP predictions in Titus", () => {
@@ -9,6 +13,23 @@ describe("MAP predictions in Titus", () => {
   const english = path.join(__dirname, "fixtures/corpus/tit/english.txt");
   const map = new WordMap();
   loadCorpus(map, greek, english);
+
+  it("predicts the first verse with lemma fallback", () => {
+    // this just makes sure things don't break
+    const unalignedPair = [
+      tokenizeComplexMockSentence("Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν"),
+      "Paul a servant of God and an apostle of Jesus Christ for the faith of God s chosen people and the knowledge of the truth that agrees with godliness"
+    ];
+    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 2);
+    const chapterOneAlignmentPath = path.join(
+      __dirname,
+      "fixtures/corpus/tit/alignmentData/1.json"
+    );
+    scoreSuggestion(suggestions[0], getAlignments(chapterOneAlignmentPath, 1));
+    console.log("suggestions\n", suggestions.map((s) => {
+      return s.toString();
+    }).join("\n"));
+  });
 
   it("predicts the first verse", () => {
     const unalignedPair = [

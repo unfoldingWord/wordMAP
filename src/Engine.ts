@@ -87,14 +87,17 @@ export default class Engine {
       if (key in weights) {
         weight = weights[key];
       }
+      // if (prediction.hasScore(key)) {
       scoreSum += prediction.getScore(key) * weight;
       weightSum += weight;
+      // }
     }
     return scoreSum / weightSum;
   }
 
   /**
    * Scores the predictions and returns a filtered set of suggestions
+   * TODO: this should not be done in the engine because we don't know anything about the algorithms here.
    * @param predictions
    * @param saIndex
    */
@@ -105,27 +108,41 @@ export default class Engine {
       "sourceNgramLength": 0.2,
       "characterLength": 0.3,
       "alignmentOccurrences": 0.4,
+      "lemmaAlignmentOccurrences": 0.4,
       "uniqueness": 0.5,
+      "lemmaUniqueness": 0.5,
 
       "sourceCorpusPermutationsFrequencyRatio": 0.7,
+      "sourceCorpusLemmaPermutationsFrequencyRatio": 0.7,
       "targetCorpusPermutationsFrequencyRatio": 0.7,
+      "targetCorpusLemmaPermutationsFrequencyRatio": 0.7,
 
       "sourceAlignmentMemoryFrequencyRatio": 0.7,
-      "targetAlignmentMemoryFrequencyRatio": 0.7
+      "sourceAlignmentMemoryLemmaFrequencyRatio": 0.7,
+      "targetAlignmentMemoryFrequencyRatio": 0.7,
+      "targetAlignmentMemoryLemmaFrequencyRatio": 0.7
     };
 
     for (const p of predictions) {
-      const isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment);
+      let isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment);
+      // TRICKY: fall back to lemma
+      if (!isAlignmentMemory && p.alignment.lemmaKey !== undefined) {
+        isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment.lemmaKey);
+      }
 
       // confidence based on corpus
       const corpusWeightedKeys = [
         "sourceCorpusPermutationsFrequencyRatio",
+        "sourceCorpusLemmaPermutationsFrequencyRatio",
         "targetCorpusPermutationsFrequencyRatio",
+        "targetCorpusLemmaPermutationsFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
         "characterLength",
         "alignmentOccurrences",
-        "uniqueness"
+        "lemmaAlignmentOccurrences",
+        "uniqueness",
+        "lemmaUniqueness"
       ];
       const corpusConfidence = Engine.calculateWeightedConfidence(
         p,
@@ -133,15 +150,19 @@ export default class Engine {
         weights
       );
 
-      // confidence based on saved alignments
+      // confidence based on alignment memory
       const alignmentMemoryWeightedKeys = [
         "sourceAlignmentMemoryFrequencyRatio",
+        "sourceAlignmentMemoryLemmaFrequencyRatio",
         "targetAlignmentMemoryFrequencyRatio",
+        "targetAlignmentMemoryLemmaFrequencyRatio",
         "alignmentPosition",
         "ngramLength",
         "characterLength",
         "alignmentOccurrences",
-        "uniqueness"
+        "lemmaAlignmentOccurrences",
+        "uniqueness",
+        "lemmaUniqueness"
       ];
       let confidence = Engine.calculateWeightedConfidence(
         p,
@@ -153,9 +174,10 @@ export default class Engine {
       if (!isAlignmentMemory) {
         confidence = corpusConfidence;
         confidence *= p.getScore("phrasePlausibility");
+        // TODO: lemmaPhrasePlausibility
       }
 
-      // boost confidence for saved alignments
+      // boost confidence for alignment memory
       if (isAlignmentMemory) {
         confidence++;
       }
@@ -343,8 +365,8 @@ export default class Engine {
   }
 
   /**
-   * Appends new saved alignments to the engine.
-   * Adding saved alignments improves the quality of predictions.
+   * Appends new alignment memory to the engine.
+   * Adding alignment memory improves the quality of predictions.
    * @param {Array<Alignment>} alignmentMemory - a list of alignments
    */
   public addAlignmentMemory(alignmentMemory: Alignment[]) {

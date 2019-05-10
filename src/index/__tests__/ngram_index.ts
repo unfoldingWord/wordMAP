@@ -35,4 +35,12 @@ describe("NgramIndex", () => {
     const value = index.read(ngram);
     expect(value).toEqual(0);
   });
+
+  it("reads a specific key", () => {
+    const index = new NgramIndex();
+    index.increment(ngram);
+
+    const value = index.read(ngram.key);
+    expect(value).toEqual(1);
+  });
 });

@@ -33,6 +33,20 @@ export function makeCorpus(source: string, target: string): Token[][][] {
 }
 
 /**
+ * Generates some strings into corpus with support for lemma
+ * @param source
+ * @param target
+ */
+export function makeComplexCorpus(source: string, target: string): Token[][][] {
+  const sourceCorpusTokens = tokenizeComplexMockSentence(source);
+  const targetCorpusTokens = tokenizeComplexMockSentence(target);
+  return [
+    [sourceCorpusTokens],
+    [targetCorpusTokens]
+  ];
+}
+
+/**
  * converts some strings into an unaligned sentence pair
  * @param {string} source
  * @param {string} target
@@ -66,6 +80,26 @@ export function alignMockSentence(sentence: string): Alignment[] {
 }
 
 /**
+ * Generates a sample alignment from a complex sentence.
+ * Additional data like `lemma` can be appended to the words like `word:lemma`
+ * @param sentence
+ */
+export function alignComplexMockSentence(sentence: string): Alignment[] {
+  let alignments: Alignment[] = [];
+  const tokens = tokenizeComplexMockSentence(sentence);
+  while (tokens.length) {
+    const ngramLength = randNgramLength(tokens.length, 1);
+    alignments = [
+      ...alignments,
+      alignComplexMockTokens(tokens.slice(0, ngramLength))
+    ];
+    tokens.splice(0, ngramLength);
+  }
+
+  return alignments;
+}
+
+/**
  * Creates a mock alignment from two strings.
  * The strings will be tokenized and converted to n-grams in the alignment
  * @param {string} source
@@ -75,6 +109,18 @@ export function alignMockSentence(sentence: string): Alignment[] {
 export function makeMockAlignment(source: string, target: string): Alignment {
   const sourceTokens = Lexer.tokenize(source);
   const targetTokens = Lexer.tokenize(target);
+  return new Alignment(new Ngram(sourceTokens), new Ngram(targetTokens));
+}
+
+/**
+ * Creates a mock alignment from two complex strings.
+ * Additional data like `lemma` can be appended to the word like `word:lemma`
+ * @param source
+ * @param target
+ */
+export function makeComplexMockAlignment(source: string, target: string): Alignment {
+  const sourceTokens = tokenizeComplexMockSentence(source);
+  const targetTokens = tokenizeComplexMockSentence(target);
   return new Alignment(new Ngram(sourceTokens), new Ngram(targetTokens));
 }
 
@@ -115,6 +161,29 @@ function alignMockTokens(tokens: Token[]): Alignment {
 }
 
 /**
+ * Generates a sample alignment
+ * @param {Array<Token>} tokens - An array of tokens to align
+ * @return {Alignment} a sample alignment
+ */
+function alignComplexMockTokens(tokens: Token[]): Alignment {
+  const source = new Ngram(tokens);
+  const flippedTokens: Token[] = [];
+  for (const token of tokens) {
+    flippedTokens.push(
+      new Token({
+        text: token.toString().split("").reverse().join(""),
+        position: token.position,
+        characterPosition: token.charPosition,
+        sentenceTokenLen: token.sentenceTokenLength,
+        sentenceCharLen: token.sentenceCharacterLength
+      })
+    );
+  }
+  const target = new Ngram(flippedTokens);
+  return new Alignment(source, target);
+}
+
+/**
  * Reverses the character order of words in a sentence
  * @param {string} sentence
  * @return {string}
@@ -132,6 +201,35 @@ export function reverseSentenceWords(sentence: string): string {
  */
 export function tokenizeMockSentence(sentence: string): Token[] {
   return Lexer.tokenize(sentence);
+}
+
+/**
+ * Converts a sentence to an array of
+ * @param sentence - a sentence with lemmas appended to words like `word:lemma`.
+ */
+export function tokenizeComplexMockSentence(sentence: string): Token[] {
+  const words = sentence.split(/\s+/);
+  const sentenceWords = [];
+  const lemmaWords = [];
+  for (const w of words) {
+    const [text, lemma] = w.split(":");
+    sentenceWords.push(text);
+    if (lemma) {
+      lemmaWords.push(lemma);
+    } else {
+      lemmaWords.push(text);
+    }
+  }
+
+  const tokens = Lexer.tokenize(sentenceWords.join(" "));
+  const tokenizedSentence = [];
+  for (let i = 0, len = tokens.length; i < len; i++) {
+    tokenizedSentence.push(new Token({
+      ...tokens[i].toJSON(true),
+      lemma: lemmaWords[i]
+    }));
+  }
+  return tokenizedSentence;
 }
 
 /**

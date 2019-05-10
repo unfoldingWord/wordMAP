@@ -7,12 +7,13 @@ export default class Ngram {
 
   private tokens: Token[];
   private cachedKey!: string; // TRICKY: definite assignment assertion
+  private cachedLemmaKey: string | undefined;
 
   /**
    * Returns the length of the n-gram in {@link Token}'s
    * @return {number}
    */
-  get tokenLength() {
+  get tokenLength(): number {
     return this.tokens.length;
   }
 
@@ -21,9 +22,9 @@ export default class Ngram {
    * This does not account for whitespace.
    * @return {number}
    */
-  get characterLength() {
+  get characterLength(): number {
     let length = 0;
-    for (let i = 0, len = this.tokens.length; i < len; i ++) {
+    for (let i = 0, len = this.tokens.length; i < len; i++) {
       length += this.tokens[i].toString().length;
     }
     return length;
@@ -33,7 +34,7 @@ export default class Ngram {
    * Returns the position (in units of {@link Token} ) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */
-  get tokenPosition() {
+  get tokenPosition(): number {
     if (this.tokens.length) {
       return this.tokens[0].position;
     } else {
@@ -45,7 +46,7 @@ export default class Ngram {
    * Returns the length of the sentence (in units of {@link Token}) in which this n-gram occurs.
    * @return {number}
    */
-  get sentenceTokenLength() {
+  get sentenceTokenLength(): number {
     if (this.tokens.length) {
       return this.tokens[0].sentenceTokenLength;
     } else {
@@ -58,7 +59,7 @@ export default class Ngram {
    * This includes whitespace in the sentence
    * @return {number}
    */
-  get sentenceCharacterLength() {
+  get sentenceCharacterLength(): number {
     if (this.tokens.length) {
       return this.tokens[0].sentenceCharacterLength;
     } else {
@@ -70,7 +71,7 @@ export default class Ngram {
    * Returns the position (in units of character) at which this n-gram appears in the sentence.
    * @return {number} - the position
    */
-  get characterPosition() {
+  get characterPosition(): number {
     if (this.tokens.length) {
       return this.tokens[0].charPosition;
     } else {
@@ -80,17 +81,18 @@ export default class Ngram {
 
   /**
    * Returns the n-gram key
-   * @return {string}
    */
   public get key(): string {
-    if (this.cachedKey === undefined) {
-      let newKey = "n:";
-      for (let i = 0, len = this.tokens.length; i < len; i ++) {
-        newKey += this.tokens[i].toString() + ":";
-      }
-      this.cachedKey = newKey.slice(0, -1).toLowerCase();
-    }
+    this.cacheKeys();
     return this.cachedKey;
+  }
+
+  /**
+   * Returns the n-gram lemma-based key
+   */
+  public get lemmaKey(): string | undefined {
+    this.cacheKeys();
+    return this.cachedLemmaKey;
   }
 
   /**
@@ -104,7 +106,7 @@ export default class Ngram {
    * Checks if this n-gram contains one token
    * @return {boolean}
    */
-  public isUnigram() {
+  public isUnigram(): boolean {
     return this.tokens.length === 1;
   }
 
@@ -112,7 +114,7 @@ export default class Ngram {
    * Checks if this n-gram contains two tokens
    * @return {boolean}
    */
-  public isBigram() {
+  public isBigram(): boolean {
     return this.tokens.length === 2;
   }
 
@@ -120,7 +122,7 @@ export default class Ngram {
    * Checks if this n-gram contains three tokens
    * @return {boolean}
    */
-  public isTrigram() {
+  public isTrigram(): boolean {
     return this.tokens.length === 3;
   }
 
@@ -128,7 +130,7 @@ export default class Ngram {
    * Checks if this n-grams is an empty placeholder
    * @return {boolean}
    */
-  public isNull() {
+  public isNull(): boolean {
     return this.tokens.length === 0;
   }
 
@@ -136,7 +138,7 @@ export default class Ngram {
    * Returns the tokens in this n-gram
    * @return {Token[]}
    */
-  public getTokens() {
+  public getTokens(): Token[] {
     return this.tokens;
   }
 
@@ -155,7 +157,7 @@ export default class Ngram {
    */
   public toJSON(verbose: boolean = false): object {
     const json = [];
-    for (let i = 0, len = this.tokens.length; i < len; i ++) {
+    for (let i = 0, len = this.tokens.length; i < len; i++) {
       json.push(this.tokens[i].toJSON(verbose));
     }
     return json;
@@ -195,5 +197,40 @@ export default class Ngram {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Caches the keys if they have not already been generated
+   */
+  private cacheKeys() {
+    if (this.cachedKey === undefined) {
+      let defaultKey = "n:";
+      let lemmaKey = "n:";
+      let missingLemma = false;
+
+      const numTokens = this.tokens.length;
+      for (let i = 0; i < numTokens; i++) {
+        const token = this.tokens[i];
+        defaultKey += token.toString() + ":";
+
+        // TRICKY: lemma is not always available
+        const lemma = token.lemma;
+        if (lemma !== "") {
+          lemmaKey += lemma + ":";
+        } else {
+          missingLemma = true;
+        }
+      }
+      if (numTokens > 0) {
+        this.cachedKey = defaultKey.slice(0, -1).toLowerCase();
+      } else {
+        this.cachedKey = defaultKey;
+      }
+
+      // TRICKY: all tokens must have a lemma
+      if (lemmaKey.length > 0 && !missingLemma) {
+        this.cachedLemmaKey = lemmaKey.slice(0, -1).toLowerCase();
+      }
+    }
   }
 }

@@ -104,6 +104,14 @@ export default class Prediction {
   }
 
   /**
+   * Checks if the score key exists.
+   * @param key
+   */
+  public hasScore(key: string): boolean {
+    return key in this.scores;
+  }
+
+  /**
    * Returns a copy of the prediction scores
    * @return {NumberObject}
    */

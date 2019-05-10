@@ -2,6 +2,10 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import WordMap from "../WordMap";
 
+/**
+ * This is used for profiling.
+ * There will be some overhead from jest.
+ */
 describe("MAP", () => {
 
   it("indexes corpus quickly", () => {
