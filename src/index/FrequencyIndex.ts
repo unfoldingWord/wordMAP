@@ -1,14 +1,12 @@
-import NumberObject from "./NumberObject";
-
 /**
  * An index of frequencies
  */
 export default abstract class FrequencyIndex {
 
-  private index: NumberObject;
+  private index: Map<string, number>;
 
   constructor() {
-    this.index = {};
+    this.index = new Map();
   }
 
   /**
@@ -17,7 +15,7 @@ export default abstract class FrequencyIndex {
    * @param {string} key
    */
   protected readIndex(key: string): number {
-    const val = this.index[key];
+    const val = this.index.get(key);
     if (val !== undefined) {
       return val;
     } else {
@@ -33,7 +31,7 @@ export default abstract class FrequencyIndex {
    */
   protected incrementIndex(key: string, value: number = 1) {
     const originalValue = this.readIndex(key);
-    this.index[key] = originalValue + value;
+    this.index.set(key, originalValue + value);
   }
 
   /**
@@ -43,6 +41,6 @@ export default abstract class FrequencyIndex {
    * @param {number} value
    */
   protected writeIndex(key: string, value: number) {
-    this.index[key] = value;
+    this.index.set(key, value);
   }
 }
