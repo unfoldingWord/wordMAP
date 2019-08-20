@@ -373,6 +373,7 @@ export default class Engine {
    * @param {Array<Alignment>} alignmentMemory - a list of alignments
    */
   public addAlignmentMemory(alignmentMemory: Alignment[]) {
+    // TODO: we need a better way for calling program to query the number of nGrams that exceed the limit
     if (this.nmapWarning) {
       for (let i = alignmentMemory.length - 1; i >= 0; i--) {
         const target = alignmentMemory[i].targetNgram;
