@@ -10,6 +10,18 @@
 npm i wordmap
 ```
 
+# Using
+
+Initialize API by:
+```
+const map = new WordMAP({sourceNgramLength = 3, targetNgramLength = 3, nGramWarnings = true});
+```
+
+The parameters above are the default initialization settings.
+* sourceNgramLength: sets the limit for length of source nGrams
+* targetNgramLength: sets the limit for length of target nGrams
+* nGramWarnings: if true, then will write warnings to console where ngrams exceed lengths above
+
 # Introduction
 
 Word alignment prediction is the process of associating (mapping) words from some primary text with corresponding words in a secondary text. This tool uses statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
