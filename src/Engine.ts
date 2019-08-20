@@ -270,6 +270,7 @@ export default class Engine {
 
   private maxTargetNgramLength: number;
   private maxSourceNgramLength: number;
+  private nmapWarning: boolean;
   private registeredAlgorithms: Algorithm[] = [];
   private corpusIndex: CorpusIndex;
   private alignmentMemoryIndex: AlignmentMemoryIndex;
@@ -282,12 +283,14 @@ export default class Engine {
     return this.registeredAlgorithms;
   }
 
-  constructor({sourceNgramLength = 3, targetNgramLength = 3} = {
+  constructor({sourceNgramLength = 3, targetNgramLength = 3, nmapWarning = true} = {
     sourceNgramLength: 3,
-    targetNgramLength: 3
+    targetNgramLength: 3,
+    nmapWarning: true
   }) {
     this.maxSourceNgramLength = sourceNgramLength;
     this.maxTargetNgramLength = targetNgramLength;
+    this.nmapWarning = nmapWarning;
     this.corpusIndex = new CorpusIndex();
     this.alignmentMemoryIndex = new AlignmentMemoryIndex();
   }
@@ -370,16 +373,18 @@ export default class Engine {
    * @param {Array<Alignment>} alignmentMemory - a list of alignments
    */
   public addAlignmentMemory(alignmentMemory: Alignment[]) {
-    // for (let i = alignmentMemory.length - 1; i >= 0; i--) {
-    //   const target = alignmentMemory[i].targetNgram;
-    //   if (target.tokenLength > this.maxTargetNgramLength) {
-    //     console.warn(`Target Alignment Memory "${target.key}" exceeds maximum n-gram length of ${this.maxTargetNgramLength} and may be ignored.`);
-    //   }
-    //   const source = alignmentMemory[i].sourceNgram;
-    //   if (source.tokenLength > this.maxSourceNgramLength) {
-    //     console.warn(`Source Alignment Memory "${source.key}" exceeds maximum n-gram length of ${this.maxSourceNgramLength} and may be ignored.`);
-    //   }
-    // }
+    if (this.nmapWarning) {
+      for (let i = alignmentMemory.length - 1; i >= 0; i--) {
+        const target = alignmentMemory[i].targetNgram;
+        if (target.tokenLength > this.maxTargetNgramLength) {
+          console.warn(`Target Alignment Memory "${target.key}" exceeds maximum n-gram length of ${this.maxTargetNgramLength} and may be ignored.`);
+        }
+        const source = alignmentMemory[i].sourceNgram;
+        if (source.tokenLength > this.maxSourceNgramLength) {
+          console.warn(`Source Alignment Memory "${source.key}" exceeds maximum n-gram length of ${this.maxSourceNgramLength} and may be ignored.`);
+        }
+      }
+    }
 
     this.alignmentMemoryIndex.append(alignmentMemory);
   }
