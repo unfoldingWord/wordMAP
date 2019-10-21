@@ -3,7 +3,7 @@ import CorpusIndex from "../index/CorpusIndex";
 import Prediction from "../structures/Prediction";
 
 /**
- * Determines the likely hood that an n-gram is a phrase.
+ * Determines how unique the n-gram is.
  */
 export default class Uniqueness implements Algorithm {
 

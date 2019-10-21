@@ -30,6 +30,11 @@ export default class AlignmentPosition implements Algorithm {
         const delta = Math.abs(sourceRelativePosition - targetRelativePosition);
         weight = 1 - delta;
       }
+
+      // throttle the alignment position weight by the relative occurrence
+      if (p.hasScore("alignmentRelativeOccurrence")) {
+        weight *= p.getScore("alignmentRelativeOccurrence");
+      }
       p.setScore("alignmentPosition", weight);
     }
     return predictions;

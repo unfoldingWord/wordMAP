@@ -1,6 +1,7 @@
 import Lexer, {Token} from "wordmap-lexer";
 import AlignmentOccurrences from "./algorithms/AlignmentOccurrences";
 import AlignmentPosition from "./algorithms/AlignmentPosition";
+import AlignmentRelativeOccurrence from "./algorithms/AlignmentRelativeOccurrence";
 import CharacterLength from "./algorithms/CharacterLength";
 import LemmaNgramFrequency from "./algorithms/LemmaNgramFrequency";
 import NgramFrequency from "./algorithms/NgramFrequency";
@@ -24,6 +25,7 @@ export default class WordMap {
     this.engine = new Engine(opts);
     this.engine.registerAlgorithm(new NgramFrequency());
     this.engine.registerAlgorithm(new LemmaNgramFrequency()); // TODO: combine this with NgramFrequency for better performance
+    this.engine.registerAlgorithm(new AlignmentRelativeOccurrence());
     this.engine.registerAlgorithm(new AlignmentPosition());
     this.engine.registerAlgorithm(new PhrasePlausibility());
     this.engine.registerAlgorithm(new NgramLength());

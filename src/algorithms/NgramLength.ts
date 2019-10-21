@@ -1,6 +1,14 @@
 import Algorithm from "../Algorithm";
 import Prediction from "../structures/Prediction";
 
+/**
+ * In other algorithms n-grams are scored equally regardless of length.
+ * However, shorter n-grams are more prevalent than longer n-grams.
+ * This typically results in shorter n-grams overwhelming the output.
+ *
+ * The weight of an alignment increases proportionally to it's length,
+ * and relative sentence coverage in primary and secondary text.
+ */
 export default class NgramLength implements Algorithm {
   public name = "n-gram length";
 
