@@ -328,7 +328,7 @@ export default class Engine {
     const numPredictions = predictions.length;
 
     const sentenceIndex: UnalignedSentenceIndex = new UnalignedSentenceIndex();
-    sentenceIndex.append([sourceSentence], [targetSentence]);
+    sentenceIndex.append([sourceSentence], [targetSentence], this.maxSourceNgramLength, this.maxTargetNgramLength);
 
     // run global algorithms first
     for (const algorithm of globalAlgorithms) {
@@ -389,7 +389,7 @@ export default class Engine {
    * @param {[Token[]]} target - an array of tokenized target sentences.
    */
   public addCorpus(source: Token[][], target: Token[][]) {
-    this.corpusIndex.append(source, target);
+    this.corpusIndex.append(source, target, this.maxSourceNgramLength, this.maxTargetNgramLength);
   }
 
   /**
