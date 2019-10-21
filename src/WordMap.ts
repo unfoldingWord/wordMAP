@@ -25,6 +25,7 @@ export default class WordMap {
     this.engine = new Engine(opts);
     this.engine.registerAlgorithm(new NgramFrequency());
     this.engine.registerAlgorithm(new LemmaNgramFrequency()); // TODO: combine this with NgramFrequency for better performance
+
     this.engine.registerAlgorithm(new AlignmentRelativeOccurrence());
     this.engine.registerAlgorithm(new AlignmentPosition());
     this.engine.registerAlgorithm(new PhrasePlausibility());

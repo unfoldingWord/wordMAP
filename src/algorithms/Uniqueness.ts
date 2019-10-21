@@ -5,7 +5,7 @@ import Prediction from "../structures/Prediction";
 /**
  * Determines how unique the n-gram is.
  */
-export default class Uniqueness implements Algorithm {
+export default class Uniqueness extends Algorithm {
 
   /**
    * Performs the uniqueness calculation.
@@ -78,12 +78,9 @@ export default class Uniqueness implements Algorithm {
 
   public name = "uniqueness";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex): Prediction[] {
-
-    for (const p of predictions) {
-      Uniqueness.calcUniqueness(p, cIndex);
-      Uniqueness.calcLemmaUniqueness(p, cIndex);
-    }
-    return predictions;
+  public execute(prediction: Prediction, cIndex: CorpusIndex): Prediction {
+    Uniqueness.calcUniqueness(prediction, cIndex);
+    Uniqueness.calcLemmaUniqueness(prediction, cIndex);
+    return prediction;
   }
 }

@@ -11,7 +11,7 @@ import Prediction from "../structures/Prediction";
  * This algorithm can be used to correct those false positives.
  * Results range from 0 to 1.
  */
-export default class AlignmentRelativeOccurrence implements Algorithm {
+export default class AlignmentRelativeOccurrence extends Algorithm {
 
   public static calculate(prediction: Prediction): number {
     const yToken = prediction.alignment.source.getTokens()[0];
@@ -49,28 +49,26 @@ export default class AlignmentRelativeOccurrence implements Algorithm {
 
   public name = "alignment relative occurrence";
 
-  public execute(predictions: Prediction[]): Prediction[] {
-    for (const p of predictions) {
-      // TRICKY: do not score null alignments
-      if (p.target.isNull()) {
-        continue;
-      }
-
-      // TRICKY: for now this algorithm only works on uni-grams
-      if (!(p.source.isUnigram() && p.target.isUnigram())) {
-        continue;
-      }
-
-      const weight = AlignmentRelativeOccurrence.calculate(p);
-
-      // TRICKY: this will only apply to alignments of tokens with multiple occurrences.
-      //  for all others the result will be NaN.
-      if (isNaN(weight)) {
-        continue;
-      }
-
-      p.setScore("alignmentRelativeOccurrence", weight);
+  public execute(prediction: Prediction): Prediction {
+    // TRICKY: do not score null alignments
+    if (prediction.target.isNull()) {
+      return prediction;
     }
-    return predictions;
+
+    // TRICKY: for now this algorithm only works on uni-grams
+    if (!(prediction.source.isUnigram() && prediction.target.isUnigram())) {
+      return prediction;
+    }
+
+    const weight = AlignmentRelativeOccurrence.calculate(prediction);
+
+    // TRICKY: this will only apply to alignments of tokens with multiple occurrences.
+    //  for all others the result will be NaN.
+    if (isNaN(weight)) {
+      return prediction;
+    }
+
+    prediction.setScore("alignmentRelativeOccurrence", weight);
+    return prediction;
   }
 }

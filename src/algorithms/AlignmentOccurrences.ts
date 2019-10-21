@@ -8,7 +8,7 @@ import Prediction from "../structures/Prediction";
  * A commonly seen pattern in translation is that word repetition in the primary text
  * is often seen in the secondary text.
  */
-export default class AlignmentOccurrences implements Algorithm {
+export default class AlignmentOccurrences extends Algorithm {
 
   /**
    * Calculates the
@@ -60,11 +60,9 @@ export default class AlignmentOccurrences implements Algorithm {
 
   public name = "alignment occurrences";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: UnalignedSentenceIndex): Prediction[] {
-    for (const p of predictions) {
-      AlignmentOccurrences.calcOccurrenceSimilarity(p, usIndex);
-      AlignmentOccurrences.calcLemmaOccurrenceSimilarity(p, usIndex);
-    }
-    return predictions;
+  public execute(prediction: Prediction, cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: UnalignedSentenceIndex): Prediction {
+    AlignmentOccurrences.calcOccurrenceSimilarity(prediction, usIndex);
+    AlignmentOccurrences.calcLemmaOccurrenceSimilarity(prediction, usIndex);
+    return prediction;
   }
 }

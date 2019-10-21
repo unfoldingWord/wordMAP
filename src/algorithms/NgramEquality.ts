@@ -8,7 +8,7 @@ import Prediction from "../structures/Prediction";
  * This is primarily useful when aligning texts within the same language.
  * e.g. to uncover variations within the text such as spelling and word order.
  */
-export default class NgramEquality implements Algorithm {
+export default class NgramEquality extends Algorithm {
   public name: string = "n-gram equality";
 
   /**
@@ -18,11 +18,11 @@ export default class NgramEquality implements Algorithm {
    * @param saIndex
    * @param usIndex
    */
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: CorpusIndex): Prediction[] {
+  public execute(prediction: Prediction, cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: CorpusIndex): Prediction {
     // TODO: implement algorithm.
     // compare text
     // compare lemma
     // using Levenstein's distance for comparisons https://www.npmjs.com/package/levenshtein
-    return predictions;
+    return prediction;
   }
 }

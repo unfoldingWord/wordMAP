@@ -252,10 +252,10 @@ function randNgramLength(numTokens: number, maxLength: number = 3): number {
   return Math.floor(Math.random() * ceiling) + 1;
 }
 
-export class MockAlgorithm implements Algorithm {
+export class MockAlgorithm extends Algorithm {
   public name: string = "mock algorithm";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex): Prediction[] {
-    return predictions;
+  execute(prediction: Prediction, cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: CorpusIndex): Prediction {
+    return prediction;
   }
 }

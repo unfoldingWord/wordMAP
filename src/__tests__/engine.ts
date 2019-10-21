@@ -154,7 +154,8 @@ it("runs all the algorithms", () => {
     target,
     new CorpusIndex(),
     new AlignmentMemoryIndex(),
-    algorithms
+    algorithms,
+    []
   );
 
   for (const s of spies) {

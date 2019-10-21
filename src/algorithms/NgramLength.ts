@@ -9,33 +9,31 @@ import Prediction from "../structures/Prediction";
  * The weight of an alignment increases proportionally to it's length,
  * and relative sentence coverage in primary and secondary text.
  */
-export default class NgramLength implements Algorithm {
+export default class NgramLength extends Algorithm {
   public name = "n-gram length";
 
-  public execute(predictions: Prediction[]): Prediction[] {
-    for (const p of predictions) {
-      let weight = 0;
-      // TRICKY: do not score null alignments
-      if (!p.target.isNull()) {
-        // sentence lengths
-        const sourceSentenceLength = p.source.sentenceTokenLength;
-        const targetSentenceLength = p.target.sentenceTokenLength;
+  public execute(prediction: Prediction): Prediction {
+    let weight = 0;
+    // TRICKY: do not score null alignments
+    if (!prediction.target.isNull()) {
+      // sentence lengths
+      const sourceSentenceLength = prediction.source.sentenceTokenLength;
+      const targetSentenceLength = prediction.target.sentenceTokenLength;
 
-        // n-gram lengths
-        const sourceLength = p.source.tokenLength;
-        const targetLength = p.target.tokenLength;
+      // n-gram lengths
+      const sourceLength = prediction.source.tokenLength;
+      const targetLength = prediction.target.tokenLength;
 
-        const primaryLengthRatio = sourceLength / sourceSentenceLength;
-        const secondaryLengthRatio = targetLength / targetSentenceLength;
+      const primaryLengthRatio = sourceLength / sourceSentenceLength;
+      const secondaryLengthRatio = targetLength / targetSentenceLength;
 
-        // length affinity
-        const delta = Math.abs(primaryLengthRatio - secondaryLengthRatio);
-        // TRICKY: the power of 5 improves the curve
-        weight = Math.pow(1 - delta, 5);
-      }
-      p.setScore("ngramLength", weight);
+      // length affinity
+      const delta = Math.abs(primaryLengthRatio - secondaryLengthRatio);
+      // TRICKY: the power of 5 improves the curve
+      weight = Math.pow(1 - delta, 5);
     }
-    return predictions;
+    prediction.setScore("ngramLength", weight);
+    return prediction;
   }
 
 }

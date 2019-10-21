@@ -1,4 +1,5 @@
 import Algorithm from "../Algorithm";
+import GlobalAlgorithm from "../GlobalAlgorithm";
 import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
 import CorpusIndex from "../index/CorpusIndex";
 import NumberObject from "../index/NumberObject";
@@ -7,7 +8,7 @@ import Prediction from "../structures/Prediction";
 /**
  * This algorithm calculates the frequency of n-gram occurrences.
  */
-export default class NgramFrequency implements Algorithm {
+export default class NgramFrequency extends GlobalAlgorithm {
 
   /**
    * Performs a numerical addition with the value of a key in a number object.

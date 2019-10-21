@@ -6,7 +6,7 @@ import Prediction from "../structures/Prediction";
 /**
  * Determines the likely hood that an n-gram is a phrase.
  */
-export default class PhrasePlausibility implements Algorithm {
+export default class PhrasePlausibility extends Algorithm {
 
   /**
    * Calculates the plausibility
@@ -96,12 +96,9 @@ export default class PhrasePlausibility implements Algorithm {
 
   public name = "phrase plausibility";
 
-  public execute(predictions: Prediction[], cIndex: CorpusIndex): Prediction[] {
-    for (const p of predictions) {
-      PhrasePlausibility.calcPlausibility(p, cIndex);
-      PhrasePlausibility.calcLemmaPlausibility(p, cIndex);
-    }
-    return predictions;
+  public execute(prediction: Prediction, cIndex: CorpusIndex): Prediction {
+    PhrasePlausibility.calcPlausibility(prediction, cIndex);
+    PhrasePlausibility.calcLemmaPlausibility(prediction, cIndex);
+    return prediction;
   }
-
 }

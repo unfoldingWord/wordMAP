@@ -1,5 +1,7 @@
 import {Token} from "wordmap-lexer";
 import Algorithm from "./Algorithm";
+import AlgorithmInterface from "./AlgorithmInterface";
+import GlobalAlgorithm from "./GlobalAlgorithm";
 import AlignmentMemoryIndex from "./index/AlignmentMemoryIndex";
 import CorpusIndex from "./index/CorpusIndex";
 import NumberObject from "./index/NumberObject";
@@ -272,6 +274,7 @@ export default class Engine {
   private maxSourceNgramLength: number;
   private nGramWarnings: boolean;
   private registeredAlgorithms: Algorithm[] = [];
+  private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
   private corpusIndex: CorpusIndex;
   private alignmentMemoryIndex: AlignmentMemoryIndex;
 
@@ -304,9 +307,10 @@ export default class Engine {
    * @param {CorpusIndex} cIndex
    * @param {AlignmentMemoryIndex} saIndex
    * @param {Algorithm[]} algorithms
+   * @param {GlobalAlgorithm[]} globalAlgorithms
    * @return {Prediction[]}
    */
-  public performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, algorithms: Algorithm[]) {
+  public performPrediction(sourceSentence: Token[], targetSentence: Token[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, algorithms: Algorithm[], globalAlgorithms: GlobalAlgorithm[]) {
     const sourceNgrams = Parser.ngrams(
       sourceSentence,
       this.maxSourceNgramLength
@@ -321,17 +325,32 @@ export default class Engine {
       sourceNgrams,
       targetNgrams
     );
+    const numPredictions = predictions.length;
 
     const sentenceIndex: UnalignedSentenceIndex = new UnalignedSentenceIndex();
     sentenceIndex.append([sourceSentence], [targetSentence]);
 
-    for (const algorithm of algorithms) {
+    // run global algorithms first
+    for (const algorithm of globalAlgorithms) {
       predictions = algorithm.execute(
         predictions,
         cIndex,
         saIndex,
         sentenceIndex
       );
+    }
+
+    // run regular algorithms
+    const numAlgorithms = algorithms.length;
+    for (let i = 0; i < numPredictions; i++) {
+      for (let j = 0; j < numAlgorithms; j++) {
+        algorithms[j].execute(
+          predictions[i],
+          cIndex,
+          saIndex,
+          sentenceIndex
+        );
+      }
     }
 
     return predictions;
@@ -354,8 +373,14 @@ export default class Engine {
    * Adds a new algorithm to the engine.
    * @param {Algorithm} algorithm - the algorithm to run with the engine.
    */
-  public registerAlgorithm(algorithm: Algorithm): void {
-    this.registeredAlgorithms.push(algorithm);
+  public registerAlgorithm(algorithm: AlgorithmInterface): void {
+    if (algorithm instanceof GlobalAlgorithm) {
+      this.registeredGlobalAlgorithms.push(algorithm);
+    } else if (algorithm instanceof Algorithm) {
+      this.registeredAlgorithms.push(algorithm);
+    } else {
+      throw new Error("Unsupported algorithm type");
+    }
   }
 
   /**
@@ -402,7 +427,8 @@ export default class Engine {
       targetSentence,
       this.corpusIndex,
       this.alignmentMemoryIndex,
-      this.registeredAlgorithms
+      this.registeredAlgorithms,
+      this.registeredGlobalAlgorithms
     );
   }
 }
