@@ -2,6 +2,7 @@ import Engine from "../../Engine";
 import AlignmentMemoryIndex from "../../index/AlignmentMemoryIndex";
 import CorpusIndex from "../../index/CorpusIndex";
 import NumberObject from "../../index/NumberObject";
+import Parser from "../../Parser";
 import Prediction from "../../structures/Prediction";
 import {
   alignComplexMockSentence, makeComplexCorpus,
@@ -49,8 +50,8 @@ describe("calculate frequency", () => {
     const target = "eht";
     const sourceTokens = tokenizeComplexMockSentence(source);
     const targetTokens = tokenizeComplexMockSentence(target);
-    const sourceNgrams = Engine.generateSentenceNgrams(sourceTokens);
-    const targetNgrams = Engine.generateSentenceNgrams(targetTokens);
+    const sourceNgrams = Parser.ngrams(sourceTokens);
+    const targetNgrams = Parser.ngrams(targetTokens);
     const predictions = Engine.generatePredictions(sourceNgrams, targetNgrams);
 
     const saIndex = new AlignmentMemoryIndex();

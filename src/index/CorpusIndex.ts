@@ -47,7 +47,6 @@ export default class CorpusIndex {
         const sourceToken = source[i];
         const targetToken = target[i];
 
-        // TODO: these tokens should use the max ngram length specified by the user.
         const sourceNgrams = Parser.ngrams(sourceToken, maxSourceNgramLength);
         const targetNgrams = Parser.ngrams(targetToken, maxTargetNgramLength);
 

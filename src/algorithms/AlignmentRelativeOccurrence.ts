@@ -1,4 +1,7 @@
 import Algorithm from "../Algorithm";
+import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
+import CorpusIndex from "../index/UnalignedSentenceIndex";
+import UnalignedSentenceIndex from "../index/UnalignedSentenceIndex";
 import Prediction from "../structures/Prediction";
 
 /**
@@ -14,16 +17,16 @@ import Prediction from "../structures/Prediction";
 export default class AlignmentRelativeOccurrence extends Algorithm {
 
   public static calculate(prediction: Prediction): number {
-    const yToken = prediction.alignment.source.getTokens()[0];
-    const xToken = prediction.alignment.target.getTokens()[0];
+    const yData = prediction.alignment.source; // .getTokens()[0];
+    const xData = prediction.alignment.target; // .getTokens()[0];
 
     // ranges
-    const yRange = yToken.occurrences;
-    const xRange = xToken.occurrences;
+    const yRange = yData.occurrences;
+    const xRange = xData.occurrences;
 
     // positions along range
-    const y = yToken.occurrence;
-    const x = xToken.occurrence;
+    const y = yData.occurrence;
+    const x = xData.occurrence;
 
     // plot ranges between two points (range of possible occurrences)
     const [x1, y1] = [1, 1];
@@ -49,16 +52,19 @@ export default class AlignmentRelativeOccurrence extends Algorithm {
 
   public name = "alignment relative occurrence";
 
-  public execute(prediction: Prediction): Prediction {
+  public execute(prediction: Prediction, cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: UnalignedSentenceIndex): Prediction {
     // TRICKY: do not score null alignments
     if (prediction.target.isNull()) {
       return prediction;
     }
 
-    // TRICKY: for now this algorithm only works on uni-grams
-    if (!(prediction.source.isUnigram() && prediction.target.isUnigram())) {
-      return prediction;
-    }
+    // get total ngram occurrences, preferring the lemma.
+    const sourceKey = prediction.source.lemmaKey ? prediction.source.lemmaKey : prediction.source.key;
+    const targetKey = prediction.target.lemmaKey ? prediction.target.lemmaKey : prediction.target.key;
+
+    // inject into the prediction
+    prediction.source.occurrences = usIndex.static.sourceNgramFrequency.read(sourceKey);
+    prediction.target.occurrences = usIndex.static.targetNgramFrequency.read(targetKey);
 
     const weight = AlignmentRelativeOccurrence.calculate(prediction);
 

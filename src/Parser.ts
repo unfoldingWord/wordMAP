@@ -1,4 +1,5 @@
 import {Token} from "wordmap-lexer";
+import NumberObject from "./index/NumberObject";
 import PermutationIndex from "./index/PermutationIndex";
 import Alignment from "./structures/Alignment";
 import Ngram from "./structures/Ngram";
@@ -17,12 +18,21 @@ export default class Parser {
   public static sizedNgrams(sentence: Token[], ngramLength: number): Ngram[] {
     const ngrams: Ngram[] = [];
     const sentenceLength = sentence.length;
+    const occurrences: NumberObject = {};
     for (let pos = 0; pos < sentenceLength; pos++) {
       const end = pos + ngramLength;
       if (end > sentenceLength) {
         break;
       }
       const ngram = new Ngram(sentence.slice(pos, end));
+      // measure occurrence
+      if (ngram.key in occurrences) {
+        occurrences[ngram.key] ++;
+      } else {
+        occurrences[ngram.key] = 1;
+      }
+      // TRICKY: the total occurrences is measured in the CorpusIndex.
+      ngram.occurrence = occurrences[ngram.key];
       ngrams.push(ngram);
     }
     return ngrams;
@@ -75,9 +85,9 @@ export default class Parser {
    */
   public static indexAlignmentPermutations(sourceNgrams: Ngram[], targetNgrams: Ngram[], index: PermutationIndex) {
     const tlen = targetNgrams.length;
-    for (let s = 0, slen = sourceNgrams.length; s < slen; s ++) {
+    for (let s = 0, slen = sourceNgrams.length; s < slen; s++) {
       const sourceNgram = sourceNgrams[s];
-      for (let t = 0; t < tlen; t ++) {
+      for (let t = 0; t < tlen; t++) {
         index.addAlignment(new Alignment(sourceNgram, targetNgrams[t]));
       }
 

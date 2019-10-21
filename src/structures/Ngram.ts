@@ -5,6 +5,8 @@ import {Token} from "wordmap-lexer";
  */
 export default class Ngram {
 
+  public occurrence: number = 1;
+  public occurrences: number = 1;
   private tokens: Token[];
   private cachedKey!: string; // TRICKY: definite assignment assertion
   private cachedLemmaKey: string | undefined;

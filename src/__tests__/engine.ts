@@ -4,7 +4,8 @@ import Engine from "../Engine";
 import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
 import CorpusIndex from "../index/CorpusIndex";
 // @ts-ignore
-import {mockAddAlignment, mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
+import {mockAddAlignment, mockAddAlignments} from "../index/PermutationIndex";
+import Parser from "../Parser";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
 import {
@@ -71,38 +72,69 @@ describe("add corpus", () => {
 describe("process sentence n-grams", () => {
   const sentence = tokenizeMockSentence("In the beginning God created");
   it("reads 0 sized n-grams", () => {
-    const zerograms = Engine.readSizedNgrams(sentence, 0);
+    const zerograms = Parser.sizedNgrams(sentence, 0);
     expect(zerograms).toEqual([
-      {"tokens": []},
-      {"tokens": []},
-      {"tokens": []},
-      {"tokens": []},
-      {"tokens": []}]);
+      {
+        "cachedKey": "n:",
+        "cachedLemmaKey": "n",
+        "occurrence": 1,
+        "occurrences": 1,
+        "tokens": []
+      },
+      {
+        "cachedKey": "n:",
+        "cachedLemmaKey": "n",
+        "occurrence": 2,
+        "occurrences": 1,
+        "tokens": []
+      },
+      {
+        "cachedKey": "n:",
+        "cachedLemmaKey": "n",
+        "occurrence": 3,
+        "occurrences": 1,
+        "tokens": []
+      },
+      {
+        "cachedKey": "n:",
+        "cachedLemmaKey": "n",
+        "occurrence": 4,
+        "occurrences": 1,
+        "tokens": []
+      },
+      {
+        "cachedKey": "n:",
+        "cachedLemmaKey": "n",
+        "occurrence": 5,
+        "occurrences": 1,
+        "tokens": []
+      }
+    ]);
   });
   it("reads uni-grams", () => {
-    const unigrams = Engine.readSizedNgrams(sentence, 1);
+    const unigrams = Parser.sizedNgrams(sentence, 1);
     expect(unigrams.toString())
       .toEqual("n:in,n:the,n:beginning,n:god,n:created");
   });
   it("reads bi-grams", () => {
-    const bigrams = Engine.readSizedNgrams(sentence, 2);
+    const bigrams = Parser.sizedNgrams(sentence, 2);
     expect(bigrams.toString()).toEqual(
       "n:in:the,n:the:beginning,n:beginning:god,n:god:created");
   });
   it("reads tri-grams", () => {
-    const trigrams = Engine.readSizedNgrams(sentence, 3);
+    const trigrams = Parser.sizedNgrams(sentence, 3);
     expect(trigrams.toString()).toEqual(
       "n:in:the:beginning,n:the:beginning:god,n:beginning:god:created");
   });
   it("generates all n-grams", () => {
-    const ngrams = Engine.generateSentenceNgrams(sentence);
+    const ngrams = Parser.ngrams(sentence);
     expect(ngrams.toString()).toEqual(
       "n:in,n:the,n:beginning,n:god,n:created,n:in:the,n:the:beginning,n:beginning:god,n:god:created,n:in:the:beginning,n:the:beginning:god,n:beginning:god:created");
   });
 
   it("throws out of range error", () => {
     const error = () => {
-      return Engine.generateSentenceNgrams(sentence, -1);
+      return Parser.ngrams(sentence, -1);
     };
     expect(error).toThrow(RangeError);
   });

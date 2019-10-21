@@ -4,23 +4,20 @@ import Ngram from "../../structures/Ngram";
 import Prediction from "../../structures/Prediction";
 import AlignmentRelativeOccurrence from "../AlignmentRelativeOccurrence";
 
+function makeNgram(occurrence: number, occurrences: number): Ngram {
+  const ngram = new Ngram([new Token({text: "text"})]);
+  ngram.occurrence = occurrence;
+  ngram.occurrences = occurrences;
+  return ngram;
+}
+
 describe("AlignmentRelativeOccurrence", () => {
 
   describe("short ranges", () => {
     it("is identical", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 1,
-            occurrences: 2
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 1,
-            occurrences: 2
-          })])
+        makeNgram(1, 2),
+        makeNgram(1, 2)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(1);
@@ -28,18 +25,8 @@ describe("AlignmentRelativeOccurrence", () => {
 
     it("is opposite", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 1,
-            occurrences: 2
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 2,
-            occurrences: 2
-          })])
+        makeNgram(1, 2),
+        makeNgram(2, 2)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(0);
@@ -49,18 +36,8 @@ describe("AlignmentRelativeOccurrence", () => {
   describe("long ranges", () => {
     it("is close", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 4,
-            occurrences: 5
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 2,
-            occurrences: 3
-          })])
+        makeNgram(4, 5),
+        makeNgram(2, 3)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(0.75);
@@ -68,18 +45,8 @@ describe("AlignmentRelativeOccurrence", () => {
 
     it("is somewhat close", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 4,
-            occurrences: 4
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 2,
-            occurrences: 3
-          })])
+        makeNgram(4, 4),
+        makeNgram(2, 3)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(0.5);
@@ -88,18 +55,8 @@ describe("AlignmentRelativeOccurrence", () => {
     it("is identical", () => {
       // both points are in the middle
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 3,
-            occurrences: 5
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 5,
-            occurrences: 9
-          })])
+        makeNgram(3, 5),
+        makeNgram(5, 9)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(1);
@@ -107,18 +64,8 @@ describe("AlignmentRelativeOccurrence", () => {
 
     it("is far", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 2,
-            occurrences: 5
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 8,
-            occurrences: 9
-          })])
+        makeNgram(2, 5),
+        makeNgram(8, 9)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(0.375);
@@ -126,18 +73,8 @@ describe("AlignmentRelativeOccurrence", () => {
 
     it("is opposite", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 1,
-            occurrences: 5
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 9,
-            occurrences: 9
-          })])
+        makeNgram(1, 5),
+        makeNgram(9, 9)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(0);
@@ -145,18 +82,8 @@ describe("AlignmentRelativeOccurrence", () => {
 
     it("does not apply", () => {
       const p = new Prediction(new Alignment(
-        new Ngram([
-          new Token({
-            text: "source",
-            occurrence: 1,
-            occurrences: 1
-          })]),
-        new Ngram([
-          new Token({
-            text: "target",
-            occurrence: 1,
-            occurrences: 2
-          })])
+        makeNgram(1, 1),
+        makeNgram(1, 2)
       ));
       const result = AlignmentRelativeOccurrence.calculate(p);
       expect(result).toEqual(NaN);

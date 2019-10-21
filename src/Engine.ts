@@ -37,6 +37,7 @@ export default class Engine {
 
   /**
    * Generates an array of all possible contiguous n-grams within the sentence.
+   * @deprecated use {@link Parser.ngrams} instead
    * @param {Array<Token>} sentence - the tokens in a sentence
    * @param {number} [maxNgramLength=3] - the maximum n-gram size to generate
    * @returns {any[]}
@@ -49,13 +50,14 @@ export default class Engine {
     const ngrams: Ngram[] = [];
     const maxLength = Math.min(maxNgramLength, sentence.length);
     for (let ngramLength = 1; ngramLength <= maxLength; ngramLength++) {
-      ngrams.push.apply(ngrams, Engine.readSizedNgrams(sentence, ngramLength));
+      ngrams.push.apply(ngrams, Parser.sizedNgrams(sentence, ngramLength));
     }
     return ngrams;
   }
 
   /**
    * Returns an array of n-grams of a particular size from a sentence
+   * @deprecated used {@link Parser.sizedNgrams} instead
    * @param {Array<Token>} sentence - the sentence from which n-grams will be read
    * @param {number} ngramLength - the length of each n-gram.
    * @returns {Array<Ngram>}
