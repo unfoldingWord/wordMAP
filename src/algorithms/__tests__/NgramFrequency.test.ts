@@ -43,7 +43,7 @@ describe("calculate frequency", () => {
     }
   });
 
-  it("produces results from saved alignments", () => {
+  it("produces results from alignment memory", () => {
     const source = "the";
     const target = reverseSentenceWords(source);
     const sourceTokens = tokenizeMockSentence(source);
@@ -137,7 +137,7 @@ describe("calculate frequency", () => {
   });
 
   it(
-    "should return correct scores based on the corpus and saved alignments",
+    "should return correct scores based on the corpus and alignment memory",
     () => {
       const engine = new Engine();
       engine.registerAlgorithm(new NgramFrequency());

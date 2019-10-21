@@ -10,6 +10,18 @@
 npm i wordmap
 ```
 
+# Using
+
+Initialize API by:
+```
+const map = new WordMAP({sourceNgramLength = 3, targetNgramLength = 3, nGramWarnings = true});
+```
+
+The parameters above are the default initialization settings.
+* sourceNgramLength: sets the limit for length of source nGrams
+* targetNgramLength: sets the limit for length of target nGrams
+* nGramWarnings: if true, then will write warnings to console where ngrams exceed lengths above
+
 # Introduction
 
 Word alignment prediction is the process of associating (mapping) words from some primary text with corresponding words in a secondary text. This tool uses statistical algorithms to determine which words or phrases in two texts are equivalent in meaning.
@@ -348,12 +360,12 @@ Object.keys(secondaryIndex).forEach(secondaryNgram => {
 
 ## Phrase Plausibility
 
-N-grams are essentially dumb phrases as it combines any contiguous tokens.
+N-grams are essentially dumb phrases as they combine any contiguous tokens.
 A major problem is identifying if an n-gram is actually a phrase.
 Checking to see how common an n-gram is used over the corpus helps determine
 how likely it is a phrase.
 
-Plausibility is determined by first assuming unigrams are a phrase.
+Plausibility is determined by first assuming uni-grams are a phrase.
 Larger n-grams use the calculated commonality.
 
 > NOTE: we need a way to allow 0-length n-grams in alignments,

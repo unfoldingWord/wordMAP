@@ -1,6 +1,6 @@
 {
   "name": "wordmap",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "docs": "typedoc --out docs --mode modules --target ES6",
     "test": "npm run lint && jest",
     "prebuild": "rm -rf dist",
-    "build": "tsc",
+    "build": "tsc --strict",
     "prepare": "if [ ! -d './dist/' ]; then npm run build; fi",
     "prepublishOnly": "npm test && npm run build",
     "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version"
@@ -57,20 +57,20 @@
   "homepage": "https://github.com/translationCoreApps/wordMAP#readme",
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",
-    "@types/jest": "^23.3.2",
-    "fs-extra": "^7.0.0",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.1.4",
-    "tslint": "^5.11.0",
-    "typedoc": "^0.12.0",
-    "typescript": "^3.0.3",
-    "wordmap-lexer": "^0.3.3"
+    "@types/jest": "^23.3.14",
+    "fs-extra": "^7.0.1",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.6.4",
+    "wordmap-lexer": "^0.3.5"
   },
   "dependencies": {
     "@types/yargs": "^11.0.0",
     "yargs": "^11.0.0"
   },
   "peerDependencies": {
-    "wordmap-lexer": "0.3.3"
+    "wordmap-lexer": "^0.3.4"
   }
 }

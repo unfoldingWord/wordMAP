@@ -4,7 +4,7 @@ import CorpusIndex from "./index/CorpusIndex";
 import UnalignedSentenceIndex from "./index/UnalignedSentenceIndex";
 import Prediction from "./structures/Prediction";
 
-export default abstract class Algorithm implements AlgorithmInterface {
+export default abstract class GlobalAlgorithm implements AlgorithmInterface {
   /**
    * The name of the algorithm
    */
@@ -13,6 +13,6 @@ export default abstract class Algorithm implements AlgorithmInterface {
   /**
    * Executes the algorithm
    */
-  abstract execute(prediction: Prediction, cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: UnalignedSentenceIndex): Prediction;
+  abstract execute(predictions: Prediction[], cIndex: CorpusIndex, saIndex: AlignmentMemoryIndex, usIndex: UnalignedSentenceIndex): Prediction[];
 
 }

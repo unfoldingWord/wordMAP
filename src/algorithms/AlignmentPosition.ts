@@ -10,29 +10,32 @@ import Prediction from "../structures/Prediction";
  *
  * Results range from near 0 to 1
  */
-export default class AlignmentPosition implements Algorithm {
+export default class AlignmentPosition extends Algorithm {
   public name = "alignment position";
 
-  public execute(predictions: Prediction[]): Prediction[] {
-    for (const p of predictions) {
-      let weight = 0;
-      // TRICKY: do not score null alignments
-      if (!p.target.isNull()) {
-        // TRICKY: token positions are zero indexed
-        const sourcePosition = 1 + p.source.tokenPosition;
-        const targetPosition = 1 + p.target.tokenPosition;
+  public execute(prediction: Prediction): Prediction {
+    let weight = 0;
+    // TRICKY: do not score null alignments
+    if (!prediction.target.isNull()) {
+      // TRICKY: token positions are zero indexed
+      const sourcePosition = 1 + prediction.source.tokenPosition;
+      const targetPosition = 1 + prediction.target.tokenPosition;
 
-        const sourceSentenceLength = p.source.sentenceTokenLength;
-        const targetSentenceLength = p.target.sentenceTokenLength;
+      const sourceSentenceLength = prediction.source.sentenceTokenLength;
+      const targetSentenceLength = prediction.target.sentenceTokenLength;
 
-        const sourceRelativePosition = sourcePosition / sourceSentenceLength;
-        const targetRelativePosition = targetPosition / targetSentenceLength;
-        const delta = Math.abs(sourceRelativePosition - targetRelativePosition);
-        weight = 1 - delta;
-      }
-      p.setScore("alignmentPosition", weight);
+      const sourceRelativePosition = sourcePosition / sourceSentenceLength;
+      const targetRelativePosition = targetPosition / targetSentenceLength;
+      const delta = Math.abs(sourceRelativePosition - targetRelativePosition);
+      weight = 1 - delta;
     }
-    return predictions;
+
+    // throttle the alignment position weight by the relative occurrence
+    if (prediction.hasScore("alignmentRelativeOccurrence")) {
+      weight *= prediction.getScore("alignmentRelativeOccurrence");
+    }
+    prediction.setScore("alignmentPosition", weight);
+    return prediction;
   }
 
 }

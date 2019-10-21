@@ -35,8 +35,10 @@ export default class CorpusIndex {
    *
    * @param {Token[][]} source
    * @param {Token[][]} target
+   * @param maxSourceNgramLength
+   * @param maxTargetNgramLength
    */
-  public append(source: Token[][], target: Token[][]) {
+  public append(source: Token[][], target: Token[][], maxSourceNgramLength: number, maxTargetNgramLength: number) {
     const sourceLength = source.length;
     if (sourceLength !== target.length) {
       throw Error("source and target corpus must be the same length");
@@ -45,8 +47,9 @@ export default class CorpusIndex {
         const sourceToken = source[i];
         const targetToken = target[i];
 
-        const sourceNgrams = Parser.ngrams(sourceToken);
-        const targetNgrams = Parser.ngrams(targetToken);
+        // TODO: these tokens should use the max ngram length specified by the user.
+        const sourceNgrams = Parser.ngrams(sourceToken, maxSourceNgramLength);
+        const targetNgrams = Parser.ngrams(targetToken, maxTargetNgramLength);
 
         // index static metrics
         this.staticIndex.addSentence(

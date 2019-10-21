@@ -4,7 +4,7 @@ import Engine from "../Engine";
 import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
 import CorpusIndex from "../index/CorpusIndex";
 // @ts-ignore
-import {mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
+import {mockAddAlignment, mockAddAlignments, mockAddSentencePair} from "../index/PermutationIndex";
 import Ngram from "../structures/Ngram";
 import Prediction from "../structures/Prediction";
 import {
@@ -48,7 +48,7 @@ describe("add corpus", () => {
     }
     const engine = new Engine();
     engine.addCorpus(source, target);
-    expect(mockAddAlignments).toBeCalled();
+    expect(mockAddAlignment).toBeCalled();
   });
 
   it("rejects mismatched source and target lengths", () => {
@@ -154,7 +154,8 @@ it("runs all the algorithms", () => {
     target,
     new CorpusIndex(),
     new AlignmentMemoryIndex(),
-    algorithms
+    algorithms,
+    []
   );
 
   for (const s of spies) {
@@ -198,20 +199,26 @@ describe("scoring", () => {
       alignmentPosition: 1,
       ngramLength: 2,
       sourceAlignmentMemoryFrequencyRatio: 3,
+      sourceAlignmentMemoryLemmaFrequencyRatio: 3,
       sourceCorpusPermutationsFrequencyRatio: 5,
+      sourceCorpusLemmaPermutationsFrequencyRatio: 5,
       targetCorpusPermutationsFrequencyRatio: 2,
+      targetCorpusLemmaPermutationsFrequencyRatio: 2,
       targetAlignmentMemoryFrequencyRatio: 1,
+      targetAlignmentMemoryLemmaFrequencyRatio: 1,
       phrasePlausibility: 2,
       sourceNgramLength: 1,
       characterLength: 3,
       alignmentOccurrences: 2,
-      uniqueness: 1
+      lemmaAlignmentOccurrences: 2,
+      uniqueness: 1,
+      lemmaUniqueness: 1
     });
     const result = Engine.calculateConfidence(
       [prediction],
       new AlignmentMemoryIndex()
     );
-    expect(result[0].getScore("confidence")).toEqual(4.558139534883723);
+    expect(result[0].getScore("confidence")).toEqual(4.848484848484848);
   });
 });
 

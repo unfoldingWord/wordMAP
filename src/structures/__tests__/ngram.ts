@@ -43,6 +43,35 @@ describe("creates an n-gram", () => {
     expect(ngram.tokenLength).toEqual(4);
     expect(ngram.characterLength).toEqual(10);
   });
+
+  it("has no lemma when empty", () => {
+    expect(new Ngram([new Token({})]).lemmaKey).toBeUndefined();
+  });
+  
+  it("has no lemma", () => {
+    const tokens = Lexer.tokenize("hello world");
+    const ngram = new Ngram(tokens);
+
+    expect(ngram.lemmaKey).toBeUndefined();
+  });
+
+  it("has lemma", () => {
+    const ngram = new Ngram([
+      new Token({text: "hello", lemma: "hi"}),
+      new Token({text: "world", lemma: "earth"})
+    ]);
+
+    expect(ngram.lemmaKey).toEqual("n:hi:earth");
+  });
+
+  it("has partial lemma", () => {
+    const ngram = new Ngram([
+      new Token({text: "hello", lemma: "hi"}),
+      new Token({text: "world"})
+    ]);
+
+    expect(ngram.lemmaKey).toBeUndefined();
+  });
 });
 
 describe("equals", () => {
