@@ -2,8 +2,8 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import Alignment from "../structures/Alignment";
 import {
-  makeMockAlignment,
-  tokenizeComplexMockSentence
+  makeMockAlignment, reverseSentence,
+  tokenizeComplexMockSentence, tokenizeMockSentence
 } from "../util/testUtils";
 import WordMap from "../WordMap";
 
@@ -49,6 +49,19 @@ describe("MAP", () => {
   //     "n:world->n:nhoj");
   // });
 
+  it("predicts with correct word order", () => {
+    const map = new WordMap();
+    map.appendAlignmentMemoryString("עִם", "with");
+    const source = "וְ⁠הָ⁠עִבְרִ֗ים הָי֤וּ לַ⁠פְּלִשְׁתִּים֙ כְּ⁠אֶתְמ֣וֹל שִׁלְשׁ֔וֹם אֲשֶׁ֨ר עָל֥וּ עִמָּ֛⁠ם בַּֽ⁠מַּחֲנֶ֖ה סָבִ֑יב וְ⁠גַם־ הֵ֗מָּה לִֽ⁠הְיוֹת֙ עִם־ יִשְׂרָאֵ֔ל אֲשֶׁ֥ר עִם־ שָׁא֖וּל וְ⁠יוֹנָתָֽן׃";
+    const target = "Before that, some of the Hebrew men had deserted their army and gone to join with the Philistine army. But now those men revolted and joined with Saul and Jonathan and the other Israelite soldiers.";
+    const suggestions = map.predict(reverseSentence(source), target);
+    const predictions = suggestions[0].getPredictions().filter((p) => p.confidence >= 1);
+    expect(predictions[0].alignment.key).toEqual(predictions[1].alignment.key);
+    // expect target tokens to be used in order
+    expect(predictions[0].alignment.targetNgram.getTokens()[0].occurrence).toEqual(1);
+    expect(predictions[1].alignment.targetNgram.getTokens()[0].occurrence).toEqual(2);
+  });
+
   it("predicts from alignment memory", () => {
     const map = new WordMap();
     // append alignment memory
@@ -80,32 +93,6 @@ describe("MAP", () => {
     ];
 
     console.log("alignment memory\n", stuff);
-  });
-
-  it("predicts from alignment memory with lemma fallback", () => {
-    const map = new WordMap();
-    // append alignment memory
-    const sourceAlignmentMemory = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corrections/greek.txt"
-    ));
-    const targetAlignmentMemory = fs.readFileSync(path.join(
-      __dirname,
-      "fixtures/corrections/english.txt"
-    ));
-    map.appendAlignmentMemoryString(
-      sourceAlignmentMemory.toString("utf-8"),
-      targetAlignmentMemory.toString("utf-8")
-    );
-
-    const unalignedPair = [
-      tokenizeComplexMockSentence("Βίβλος γενέσεωςalt:γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ."),
-      "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
-    ];
-    const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
-
-    expect(suggestions[0].getPredictions()[0].key).toEqual("n:βίβλος->n:the:book:of");
-    expect(suggestions[0].getPredictions()[1].key).toEqual("n:γενέσεωςalt->n:the:genealogy:of");
   });
 
   it("predicts from alignment memory with lemma fallback", () => {
@@ -224,10 +211,10 @@ describe("MAP", () => {
         "In this way they may train the younger women to love their own husbands and children"
       );
       const predictions = suggestions[0].getPredictions();
-      expect(predictions).toHaveLength(6);
+      expect(predictions).toHaveLength(7);
       expect(predictions[4].key).not.toEqual(
         "n:φιλάνδρους->n:love:their:own:husbands");
-      expect(predictions[5].key).toEqual("n:φιλοτέκνους->n:and:children");
+      expect(predictions[6].key).toEqual("n:φιλοτέκνους->n:and:children");
     });
 
     it("uses alignment memory that falls within expanded ngram length", () => {

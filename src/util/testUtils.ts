@@ -195,6 +195,14 @@ export function reverseSentenceWords(sentence: string): string {
 }
 
 /**
+ * Flips a sentence.
+ * @param sentence
+ */
+export function reverseSentence(sentence: string): string {
+  return sentence.split(/\s+/).reverse().join(" ");
+}
+
+/**
  * Converts a sentence to an array of Tokens
  * @param {String} sentence - a raw sentence to convert into tokens
  * @return {Array<Token>} an array of tokens
