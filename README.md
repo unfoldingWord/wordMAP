@@ -31,6 +31,8 @@ map.appendAlignmentMemoryString("Tag", "day");
 const source = "Guten Tag";
 const target = "Good morning";
 const suggestions = map.predict(source, target);
+console.log(suggestions[0].toString());
+// produces -> "0 [0|n:guten->n:good] [0|n:tag->n:morning]"
 ```
 
 ## Learn more
