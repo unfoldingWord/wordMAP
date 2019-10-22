@@ -1,11 +1,11 @@
 sudo: false
 language: node_js
 node_js:
-  - 8
+  - 12
 os:
   - linux
 before_install:
-  - npm i -g npm@5.7.1 codecov
+  - npm i -g npm@6.9.0 codecov
   - npm --version
 install:
   - npm ci
