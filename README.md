@@ -35,5 +35,24 @@ console.log(suggestions[0].toString());
 // produces -> "0 [0|n:guten->n:good] [0|n:tag->n:morning]"
 ```
 
+## Use Cases
+
+* Aligning a primary text with a secondary text e.g. when generating word maps for gateway languages.
+* Aligning a secondary text with a ternary text.
+* Aligning a primary text to a ternary text (using the secondary as a proxy)
+
+## The Need
+
+Existing tools require large data sets, complex running environments, and are usually limited to running in a server environment.
+
+We need a tool that:
+
+* runs on the client with minimal configuration.
+* works with existing web browser technology.
+* integrates with translationCore and related tools.
+* works without an Internet connection.
+* does not have a minimum corpus size.
+* requires minimal system resources.
+
 ## Learn more
 Want to learn more? Read [WHITEPAPER.md](./WHITEPAPER.md).
