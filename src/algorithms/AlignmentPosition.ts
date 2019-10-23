@@ -34,7 +34,12 @@ export default class AlignmentPosition extends Algorithm {
     if (prediction.hasScore("alignmentRelativeOccurrence")) {
       weight *= prediction.getScore("alignmentRelativeOccurrence");
     }
-    // TODO: throttle the alignment position weight by the relative position of the tokens within the target n-gram
+    // throttle the alignment position weight by the relative position of the tokens within the target n-gram
+    if (prediction.hasScore("ngramRelativeTokenDistance")) {
+      if (prediction.getScore("ngramRelativeTokenDistance") < 1) {
+        weight *= prediction.getScore("ngramRelativeTokenDistance");
+      }
+    }
 
     prediction.setScore("alignmentPosition", weight);
     return prediction;

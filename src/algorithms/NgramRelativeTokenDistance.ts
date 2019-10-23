@@ -45,8 +45,10 @@ export default class NgramRelativeTokenDistance extends Algorithm {
       return prediction;
     }
 
+    const targetLength = prediction.target.tokenLength;
+
     // TRICKY: this algorithm only applies to bi-grams or larger
-    if (prediction.target.tokenLength < 2) {
+    if (targetLength < 2) {
       return prediction;
     }
 
@@ -55,7 +57,7 @@ export default class NgramRelativeTokenDistance extends Algorithm {
 
     // score each contiguous pair of tokens within the ngram
     let worstScore = 1;
-    for (let i = 0; i < t - 2; i++) {
+    for (let i = 0; i < targetLength - 1; i++) {
       const x = prediction.target.getTokens()[i];
       const y = prediction.target.getTokens()[i + 1];
       const score = NgramRelativeTokenDistance.calculate(

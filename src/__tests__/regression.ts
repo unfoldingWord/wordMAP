@@ -1,10 +1,29 @@
+import Alignment from "../structures/Alignment";
 import WordMap from "../WordMap";
 
 describe("Regression Tests", () => {
 
-  // it("suggests", () => {
-  //
-  // });
+  it("suggests n-grams with tokens that are close together", () => {
+    // This actually seems to be working ok except that it does not use the correct "the" occurrence.
+    const map = new WordMap();
+    map.appendAlignmentMemoryString("ὁ", "the");
+    map.appendAlignmentMemoryString("Θεὸς", "the God");
+    const source = "περὶ δὲ τῶν νεκρῶν, ὅτι ἐγείρονται, οὐκ ἀνέγνωτε ἐν τῇ βίβλῳ Μωϋσέως ἐπὶ τοῦ βάτου, πῶς εἶπεν αὐτῷ ὁ Θεὸς λέγων, ἐγὼ ὁ Θεὸς Ἀβραὰμ, καὶ ὁ Θεὸς Ἰσαὰκ, καὶ ὁ Θεὸς Ἰακώβ?";
+    const target = "But concerning the dead that are raised, have you not read in the book of Moses, in the account about the bush, how God spoke to him, saying, ‘I am the God of Abraham and the God of Isaac and the God of Jacob’?";
+    const suggestions = map.predict(source, target);
+    const predictions = suggestions[0].getPredictions()
+      .filter((p) => p.confidence >= 1);
+
+    // expect target tokens to be used in sequential order
+    expect(predictions[3].alignment.key).toEqual("n:ὁ->n:the");
+    const firstOccurrence =
+    expect(predictions[3].alignment.targetNgram.getTokens()[0].occurrence)
+      .toEqual(5);
+
+    expect(predictions[4].alignment.key).toEqual("n:θεὸς->n:the:god");
+    expect(predictions[4].alignment.targetNgram.getTokens()[0].occurrence)
+      .toEqual(6);
+  });
 
   it("suggests the correct n-gram occurrence", () => {
     // later occurrences were being preferred over earlier ones.
