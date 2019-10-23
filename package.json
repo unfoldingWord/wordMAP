@@ -11,7 +11,8 @@
     "prebuild": "rm -rf dist",
     "build": "tsc --strict",
     "prepare": "if [ ! -d './dist/' ]; then npm run build; fi",
-    "prepublishOnly": "npm test && npm run build"
+    "prepublishOnly": "npm test && npm run build",
+    "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version"
   },
   "repository": {
     "type": "git",
