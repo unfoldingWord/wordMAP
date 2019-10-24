@@ -28,4 +28,11 @@ export default class AlignmentMemoryIndex {
   public append(alignmentMemory: Alignment[]) {
     this.permutationIndex.addAlignments(alignmentMemory);
   }
+
+  /**
+   * Trashes the index
+   */
+  public clear() {
+    this.permutationIndex = new PermutationIndex();
+  }
 }

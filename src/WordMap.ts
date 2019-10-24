@@ -6,6 +6,8 @@ import CharacterLength from "./algorithms/CharacterLength";
 import LemmaNgramFrequency from "./algorithms/LemmaNgramFrequency";
 import NgramFrequency from "./algorithms/NgramFrequency";
 import NgramLength from "./algorithms/NgramLength";
+import NgramRelativeTokenDistance
+  from "./algorithms/NgramRelativeTokenDistance";
 import PhrasePlausibility from "./algorithms/PhrasePlausibility";
 import Uniqueness from "./algorithms/Uniqueness";
 import Engine from "./Engine";
@@ -26,6 +28,7 @@ export default class WordMap {
     this.engine.registerAlgorithm(new NgramFrequency());
     this.engine.registerAlgorithm(new LemmaNgramFrequency()); // TODO: combine this with NgramFrequency for better performance
 
+    this.engine.registerAlgorithm(new NgramRelativeTokenDistance()); // TODO: this will be helpful if we support dis-contiguous n-grams.
     this.engine.registerAlgorithm(new AlignmentRelativeOccurrence());
     this.engine.registerAlgorithm(new AlignmentPosition());
     this.engine.registerAlgorithm(new PhrasePlausibility());
@@ -96,6 +99,13 @@ export default class WordMap {
     } else {
       this.engine.addAlignmentMemory([alignments]);
     }
+  }
+
+  /**
+   * Removes all alignment memory from the engine
+   */
+  public clearAlignmentMemory() {
+    this.engine.clearAlignmentMemory();
   }
 
   /**

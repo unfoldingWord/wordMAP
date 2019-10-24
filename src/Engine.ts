@@ -418,6 +418,13 @@ export default class Engine {
   }
 
   /**
+   * Removes all of the alignment memory from the engine.
+   */
+  public clearAlignmentMemory() {
+    this.alignmentMemoryIndex.clear();
+  }
+
+  /**
    * Performs the prediction calculations
    * @param {Token[]} sourceSentence
    * @param {Token[]} targetSentence
