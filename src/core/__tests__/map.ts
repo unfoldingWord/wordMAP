@@ -1,10 +1,10 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import {Alignment, WordMap} from "../core/";
+import {Alignment, WordMap} from "../index";
 import {
   makeMockAlignment,
   tokenizeComplexMockSentence
-} from "../util/testUtils";
+} from "../../util/testUtils";
 
 describe("MAP", () => {
 

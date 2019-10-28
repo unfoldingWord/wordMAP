@@ -1,8 +1,11 @@
 jest.mock("../index/PermutationIndex");
-import {Engine, Ngram, Parser, Prediction, Token} from "../core/";
-import {AlignmentMemoryIndex, CorpusIndex} from "../index/";
+import {Engine, Ngram, Parser, Prediction, Token} from "../";
+import {AlignmentMemoryIndex, CorpusIndex} from "../../index/";
 // @ts-ignore
-import {mockAddAlignment, mockAddAlignments} from "../index/PermutationIndex";
+import {
+  mockAddAlignment,
+  mockAddAlignments
+} from "../../index/PermutationIndex";
 import {
   alignMockSentence,
   makeMockAlignment,
@@ -10,7 +13,7 @@ import {
   MockAlgorithm,
   reverseSentenceWords,
   tokenizeMockSentence
-} from "../util/testUtils";
+} from "../../util/testUtils";
 
 beforeAll(() => {
   jest.clearAllMocks();

@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import WordMap from "../core/WordMap";
+import {WordMap} from "../index";
 
 describe("Align Greek Sources", () => {
   it("aligns Wescott Hort to UGNT", () => {
@@ -25,7 +25,8 @@ describe("Align Greek Sources", () => {
       if (verseSuggestions.length > 0) {
         alignments.push(verseSuggestions[0].toJSON(true));
       } else {
-        throw new Error("Unable to align verses at " + i.toString() + " " + sourceVerses[i] + " <====> " + targetVerses[i]);
+        throw new Error("Unable to align verses at " + i.toString() + " " +
+          sourceVerses[i] + " <====> " + targetVerses[i]);
       }
     }
 

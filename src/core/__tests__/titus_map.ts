@@ -1,11 +1,11 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import {Alignment, WordMap} from "../core/";
+import {Alignment, WordMap} from "../index";
 import {
   makeMockAlignment,
   scoreSuggestion,
   tokenizeComplexMockSentence
-} from "../util/testUtils";
+} from "../../util/testUtils";
 
 describe("MAP predictions in Titus", () => {
   const greek = path.join(__dirname, "fixtures/corpus/tit/greek.txt");
