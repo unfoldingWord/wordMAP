@@ -12,6 +12,25 @@ import {Parser} from "./Parser";
 import {Prediction} from "./Prediction";
 import {Suggestion} from "./Suggestion";
 
+export interface EngineProps {
+  /**
+   * The maximum source text n-gram size evaluated in predictions.
+   */
+  sourceNgramLength?: number;
+  /**
+   * The maximum target text n-gram size evaluated in predictions.
+   */
+  targetNgramLength?: number;
+  /**
+   * Prints warnings to the console
+   */
+  warnings?: boolean;
+  /**
+   * Forces predictions to use target {@link Token}s in order of occurrence.
+   */
+  strictOccurrence?: boolean;
+}
+
 /**
  * Represents a multi-lingual word alignment prediction engine.
  */
@@ -256,9 +275,10 @@ export class Engine {
   /**
    * Sorts an array of predictions by confidence
    * @param {Prediction[]} predictions - the predictions to sort
+   * @param strictOccurrence Forces tokens to be used in order of occurrence.
    * @return {Prediction[]}
    */
-  public static sortPredictions(predictions: Prediction[]): Prediction[] {
+  public static sortPredictions(predictions: Prediction[], strictOccurrence: boolean): Prediction[] {
     return predictions.sort((a, b) => {
       const aConfidence = a.getScore("confidence");
       const bConfidence = b.getScore("confidence");
@@ -275,6 +295,7 @@ export class Engine {
   private maxTargetNgramLength: number;
   private maxSourceNgramLength: number;
   private nGramWarnings: boolean;
+  private strictOccurrence: boolean;
   private registeredAlgorithms: Algorithm[] = [];
   private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
   private corpusIndex: CorpusIndex;
@@ -288,14 +309,16 @@ export class Engine {
     return this.registeredAlgorithms;
   }
 
-  constructor({sourceNgramLength = 3, targetNgramLength = 3, nGramWarnings = true} = {
+  constructor(props: EngineProps = {
     sourceNgramLength: 3,
     targetNgramLength: 3,
-    nGramWarnings: true
+    warnings: true,
+    strictOccurrence: true
   }) {
-    this.maxSourceNgramLength = sourceNgramLength;
-    this.maxTargetNgramLength = targetNgramLength;
-    this.nGramWarnings = nGramWarnings;
+    this.maxSourceNgramLength = props.sourceNgramLength as number;
+    this.maxTargetNgramLength = props.targetNgramLength as number;
+    this.nGramWarnings = props.warnings as boolean;
+    this.strictOccurrence = props.strictOccurrence as boolean;
     this.corpusIndex = new CorpusIndex();
     this.alignmentMemoryIndex = new AlignmentMemoryIndex();
   }
@@ -373,7 +396,7 @@ export class Engine {
       predictions,
       this.alignmentMemoryIndex
     );
-    return Engine.sortPredictions(results);
+    return Engine.sortPredictions(results, this.strictOccurrence);
   }
 
   /**

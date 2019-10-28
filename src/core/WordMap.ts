@@ -12,6 +12,12 @@ import {
   Uniqueness
 } from "../algorithms/";
 import {Alignment, Engine, Ngram, Prediction, Suggestion} from "./";
+import {EngineProps} from "./Engine";
+
+// tslint:disable-next-line:no-empty-interface
+export interface WordMapProps extends EngineProps {
+
+}
 
 /**
  * Multi-Lingual Word Alignment Prediction
@@ -19,7 +25,7 @@ import {Alignment, Engine, Ngram, Prediction, Suggestion} from "./";
 export class WordMap {
   private engine: Engine;
 
-  constructor(opts = {}) {
+  constructor(opts: WordMapProps) {
 
     this.engine = new Engine(opts);
     this.engine.registerAlgorithm(new NgramFrequency());
