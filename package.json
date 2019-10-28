@@ -1,17 +1,15 @@
 {
   "name": "wordmap",
-  "version": "0.7.0-beta",
+  "version": "0.7.0-beta.2",
   "description": "Multi-Lingual Word Alignment Prediction",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "lint": "tslint -c tslint.json src/**/*.ts",
-    "docs": "typedoc --out docs --mode modules --target ES6",
-    "test": "npm run lint && jest",
-    "prebuild": "rm -rf dist",
-    "build": "tsc --strict",
-    "prepare": "if [ ! -d './dist/' ]; then npm run build; fi",
-    "prepublishOnly": "npm test && npm run build",
+    "build:docs": "typedoc --out docs --mode modules --target ES6",
+    "test": "yarn lint && jest",
+    "build": "tsc",
+    "prepublishOnly": "yarn test && yarn build",
     "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version"
   },
   "repository": {
@@ -54,11 +52,11 @@
   "bugs": {
     "url": "https://github.com/translationCoreApps/wordMAP/issues"
   },
-  "homepage": "https://github.com/translationCoreApps/wordMAP#readme",
+  "homepage": "https://wordmap.netlify.com",
   "devDependencies": {
-    "@types/fs-extra": "^5.0.4",
-    "@types/jest": "^23.3.14",
-    "fs-extra": "^7.0.1",
+    "@types/fs-extra": "^8.0.1",
+    "@types/jest": "^24.0.20",
+    "fs-extra": "^8.1.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
     "tslint": "^5.20.0",
