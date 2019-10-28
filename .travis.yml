@@ -1,14 +1,14 @@
 sudo: false
 language: node_js
 node_js:
-  - 12
+  - "12"
 os:
   - linux
 before_install:
-  - npm i -g npm@6.9.0 codecov
-  - npm --version
+  - yarn global add codecov
+  - yarn --version
 install:
-  - npm ci
+  - yarn
 script:
-  - npm run lint && jest --coverage
+  - yarn test --coverage
   - codecov
