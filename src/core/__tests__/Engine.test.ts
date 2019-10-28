@@ -1,4 +1,5 @@
-import {Engine, Ngram, Parser, Prediction, Token} from "../";
+import {Token} from "wordmap-lexer";
+import {Engine, Ngram, Parser, Prediction} from "../";
 import {AlignmentMemoryIndex} from "../../index/AlignmentMemoryIndex";
 import {CorpusIndex} from "../../index/CorpusIndex";
 import {
