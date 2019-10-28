@@ -25,7 +25,7 @@ export interface WordMapProps extends EngineProps {
 export class WordMap {
   private engine: Engine;
 
-  constructor(opts: WordMapProps) {
+  constructor(opts: WordMapProps = {}) {
 
     this.engine = new Engine(opts);
     this.engine.registerAlgorithm(new NgramFrequency());

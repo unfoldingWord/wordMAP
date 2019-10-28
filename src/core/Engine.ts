@@ -25,10 +25,6 @@ export interface EngineProps {
    * Prints warnings to the console
    */
   warnings?: boolean;
-  /**
-   * Forces predictions to use target {@link Token}s in order of occurrence.
-   */
-  strictOccurrence?: boolean;
 }
 
 /**
@@ -275,10 +271,9 @@ export class Engine {
   /**
    * Sorts an array of predictions by confidence
    * @param {Prediction[]} predictions - the predictions to sort
-   * @param strictOccurrence Forces tokens to be used in order of occurrence.
    * @return {Prediction[]}
    */
-  public static sortPredictions(predictions: Prediction[], strictOccurrence: boolean): Prediction[] {
+  public static sortPredictions(predictions: Prediction[]): Prediction[] {
     return predictions.sort((a, b) => {
       const aConfidence = a.getScore("confidence");
       const bConfidence = b.getScore("confidence");
@@ -295,7 +290,6 @@ export class Engine {
   private maxTargetNgramLength: number;
   private maxSourceNgramLength: number;
   private nGramWarnings: boolean;
-  private strictOccurrence: boolean;
   private registeredAlgorithms: Algorithm[] = [];
   private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
   private corpusIndex: CorpusIndex;
@@ -309,16 +303,10 @@ export class Engine {
     return this.registeredAlgorithms;
   }
 
-  constructor(props: EngineProps = {
-    sourceNgramLength: 3,
-    targetNgramLength: 3,
-    warnings: true,
-    strictOccurrence: true
-  }) {
-    this.maxSourceNgramLength = props.sourceNgramLength as number;
-    this.maxTargetNgramLength = props.targetNgramLength as number;
-    this.nGramWarnings = props.warnings as boolean;
-    this.strictOccurrence = props.strictOccurrence as boolean;
+  constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
+    this.maxSourceNgramLength = sourceNgramLength as number;
+    this.maxTargetNgramLength = targetNgramLength as number;
+    this.nGramWarnings = warnings as boolean;
     this.corpusIndex = new CorpusIndex();
     this.alignmentMemoryIndex = new AlignmentMemoryIndex();
   }
@@ -396,7 +384,7 @@ export class Engine {
       predictions,
       this.alignmentMemoryIndex
     );
-    return Engine.sortPredictions(results, this.strictOccurrence);
+    return Engine.sortPredictions(results);
   }
 
   /**
