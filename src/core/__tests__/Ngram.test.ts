@@ -1,4 +1,5 @@
-import {Lexer, Ngram, Token} from "../";
+import Lexer, {Token} from "wordmap-lexer";
+import {Ngram} from "../Ngram";
 
 describe("creates an n-gram", () => {
 

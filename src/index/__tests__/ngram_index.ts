@@ -1,5 +1,6 @@
-import {NgramIndex} from "../";
-import {Lexer, Ngram} from "../../core/";
+import Lexer from "wordmap-lexer";
+import {Ngram} from "../../core/Ngram";
+import {NgramIndex} from "../NgramIndex";
 
 describe("NgramIndex", () => {
   const ngram = new Ngram(Lexer.tokenize("hello"));

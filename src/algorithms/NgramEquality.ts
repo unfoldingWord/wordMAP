@@ -1,6 +1,7 @@
-import {Prediction} from "../core/";
-import {AlignmentMemoryIndex, CorpusIndex} from "../index/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * Calculations the equivalence of the target n-gram with the source n-gram.

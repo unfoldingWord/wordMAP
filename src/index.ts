@@ -1,3 +1,6 @@
-import {WordMap} from "./core";
+import {WordMap} from "./core/";
+
 export default WordMap;
-export * from "./";
+export * from "./core/";
+export * from "./index/";
+export * from "./algorithms";

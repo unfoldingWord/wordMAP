@@ -1,4 +1,4 @@
-import {Ngram} from "./index";
+import {Ngram} from "./Ngram";
 
 /**
  * Represents two individual n-grams that have been matched from two texts.

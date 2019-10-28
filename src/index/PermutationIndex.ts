@@ -1,5 +1,6 @@
-import {Alignment} from "../core/";
-import {AlignmentIndex, NgramIndex} from "./";
+import {Alignment} from "../core/Alignment";
+import {AlignmentIndex} from "./AlignmentIndex";
+import {NgramIndex} from "./NgramIndex";
 
 /**
  * A collection of indexes on the permutation of possible alignments.

@@ -1,10 +1,8 @@
-import {Prediction} from "../core/";
-import {
-  AlignmentMemoryIndex,
-  CorpusIndex,
-  UnalignedSentenceIndex
-} from "../index/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * A commonly seen pattern in translation is that word repetition in the primary text

@@ -1,5 +1,5 @@
-import {Prediction} from "../core/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {Algorithm} from "./Algorithm";
 
 /**
  * This algorithm calculates the relative position of n-grams in a sentence.

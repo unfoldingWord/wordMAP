@@ -1,5 +1,8 @@
-import {NumberObject, PermutationIndex} from "../index/";
-import {Alignment, Ngram, Token} from "./";
+import {Token} from "wordmap-lexer";
+import {NumberObject} from "../index/NumberObject";
+import {PermutationIndex} from "../index/PermutationIndex";
+import {Alignment} from "./Alignment";
+import {Ngram} from "./Ngram";
 
 /**
  * A collection of parsing functions

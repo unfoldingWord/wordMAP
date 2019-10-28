@@ -1,11 +1,16 @@
-import {Algorithm, AlgorithmType, GlobalAlgorithm} from "../algorithms";
-import {
-  AlignmentMemoryIndex,
-  CorpusIndex,
-  NumberObject,
-  UnalignedSentenceIndex
-} from "../index/";
-import {Alignment, Ngram, Parser, Prediction, Suggestion, Token} from "./";
+import {Token} from "wordmap-lexer";
+import {Algorithm} from "../algorithms/Algorithm";
+import {AlgorithmType} from "../algorithms/AlgorithmType";
+import {GlobalAlgorithm} from "../algorithms/GlobalAlgorithm";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {NumberObject} from "../index/NumberObject";
+import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {Alignment} from "./Alignment";
+import {Ngram} from "./Ngram";
+import {Parser} from "./Parser";
+import {Prediction} from "./Prediction";
+import {Suggestion} from "./Suggestion";
 
 /**
  * Represents a multi-lingual word alignment prediction engine.

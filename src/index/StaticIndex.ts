@@ -1,5 +1,6 @@
-import {Ngram, Token} from "../core/";
-import {NgramIndex} from "./";
+import {Token} from "wordmap-lexer";
+import {Ngram} from "../core/Ngram";
+import {NgramIndex} from "./NgramIndex";
 
 /**
  * A collection of indexes on the static content.

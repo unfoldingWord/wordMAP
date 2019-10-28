@@ -1,5 +1,7 @@
-import {Alignment} from "../core/";
-import {AlignmentIndex, NgramIndex, PermutationIndex} from "./";
+import {Alignment} from "../core/Alignment";
+import {AlignmentIndex} from "./AlignmentIndex";
+import {NgramIndex} from "./NgramIndex";
+import {PermutationIndex} from "./PermutationIndex";
 
 /**
  * A collection of indexes for the alignment memory

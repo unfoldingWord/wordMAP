@@ -1,5 +1,7 @@
-import {Parser, Token} from "../core/";
-import {PermutationIndex, StaticIndex} from "./";
+import {Token} from "wordmap-lexer";
+import {Parser} from "../core/Parser";
+import {PermutationIndex} from "./PermutationIndex";
+import {StaticIndex} from "./StaticIndex";
 
 /**
  * A collection of indexes for the corpus.

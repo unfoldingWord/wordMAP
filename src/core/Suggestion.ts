@@ -1,5 +1,5 @@
 import {median} from "../util/math";
-import {Prediction} from "./";
+import {Prediction} from "./Prediction";
 
 /**
  * A translation suggestion

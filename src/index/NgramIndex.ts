@@ -1,5 +1,5 @@
-import {Ngram} from "../core/";
-import {FrequencyIndex} from "./";
+import {Ngram} from "../core/Ngram";
+import {FrequencyIndex} from "./FrequencyIndex";
 
 /**
  * An index of n-gram frequencies

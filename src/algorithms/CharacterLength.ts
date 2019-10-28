@@ -1,5 +1,5 @@
-import {Prediction} from "../core/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {Algorithm} from "./Algorithm";
 
 /**
  * Determines the likely hood that an n-gram is a phrase.

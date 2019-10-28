@@ -1,13 +1,7 @@
-jest.mock("../index/PermutationIndex");
 import {Engine, Ngram, Parser, Prediction, Token} from "../";
-import {AlignmentMemoryIndex, CorpusIndex} from "../../index/";
-// @ts-ignore
+import {AlignmentMemoryIndex} from "../../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../../index/CorpusIndex";
 import {
-  mockAddAlignment,
-  mockAddAlignments
-} from "../../index/PermutationIndex";
-import {
-  alignMockSentence,
   makeMockAlignment,
   makeMockPrediction,
   MockAlgorithm,
@@ -19,37 +13,16 @@ beforeAll(() => {
   jest.clearAllMocks();
 });
 
-it("registers an algorithm", () => {
-  const engine = new Engine();
-  const algorithm = new MockAlgorithm();
-  engine.registerAlgorithm(algorithm);
-  expect(engine.algorithms).toEqual([algorithm]);
-});
-
-it("adds the alignment to the index", () => {
-  const sentence = alignMockSentence("Once upon a time");
-  const engine = new Engine();
-  engine.addAlignmentMemory(sentence);
-  expect(mockAddAlignments).toBeCalledWith(sentence);
+describe("algorithm management", () => {
+  it("registers an algorithm", () => {
+    const engine = new Engine();
+    const algorithm = new MockAlgorithm();
+    engine.registerAlgorithm(algorithm);
+    expect(engine.algorithms).toEqual([algorithm]);
+  });
 });
 
 describe("add corpus", () => {
-  it("adds the corpus to the index", () => {
-    const sentences = [
-      "Once upon a time",
-      "in a galaxy far far away"
-    ];
-    const source = [];
-    const target = [];
-    for (const s of sentences) {
-      source.push(tokenizeMockSentence(s));
-      target.push(tokenizeMockSentence(reverseSentenceWords(s)));
-    }
-    const engine = new Engine();
-    engine.addCorpus(source, target);
-    expect(mockAddAlignment).toBeCalled();
-  });
-
   it("rejects mismatched source and target lengths", () => {
     const sentences = [
       "Once upon a time",
@@ -222,7 +195,6 @@ describe("scoring", () => {
   });
 
   it("calculates prediction confidence", () => {
-    jest.unmock("../index/PermutationIndex");
     jest.resetModules();
     const prediction = new Prediction(makeMockAlignment("hello", "world"));
     prediction.setScores({

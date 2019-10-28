@@ -1,6 +1,8 @@
-import {Prediction} from "../core/";
-import {AlignmentMemoryIndex, CorpusIndex, NumberObject} from "../index/";
-import {GlobalAlgorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {NumberObject} from "../index/NumberObject";
+import {GlobalAlgorithm} from "./GlobalAlgorithm";
 
 /**
  * This algorithm calculates the frequency of n-gram occurrences.

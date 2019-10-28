@@ -1,10 +1,10 @@
-jest.mock("../core/Prediction");
-jest.mock("../core/Suggestion");
+jest.mock("../Prediction");
+jest.mock("../Suggestion");
 import {Engine} from "../index";
 // @ts-ignore
-import {genPrediction} from "../structures/Prediction";
+import {genPrediction} from "../Prediction";
 // @ts-ignore
-import {genSuggestion} from "../structures/Suggestion";
+import {genSuggestion} from "../Suggestion";
 
 beforeAll(() => {
   jest.clearAllMocks();

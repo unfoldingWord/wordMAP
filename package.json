@@ -21,16 +21,7 @@
     "wordmap": "dist/cli.js"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(ts)$": "ts-jest"
-    },
-    "testMatch": [
-      "**/__tests__/*.+(ts|js)"
-    ]
+    "preset": "ts-jest"
   },
   "keywords": [
     "word",

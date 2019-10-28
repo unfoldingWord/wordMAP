@@ -1,6 +1,6 @@
-import {Prediction} from "../core/";
-import {CorpusIndex} from "../index/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * Determines how unique the n-gram is.

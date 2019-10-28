@@ -1,6 +1,8 @@
 import {NgramFrequency} from "../";
 import {Engine, Parser, Prediction} from "../../core/";
-import {AlignmentMemoryIndex, CorpusIndex, NumberObject} from "../../index/";
+import {AlignmentMemoryIndex} from "../../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../../index/CorpusIndex";
+import {NumberObject} from "../../index/NumberObject";
 import {
   alignMockSentence,
   makeCorpus,

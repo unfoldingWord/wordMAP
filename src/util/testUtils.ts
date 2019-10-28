@@ -1,5 +1,6 @@
+import Lexer, {Token} from "wordmap-lexer";
 import {Algorithm} from "../algorithms/";
-import {Alignment, Lexer, Ngram, Prediction, Suggestion, Token} from "../core/";
+import {Alignment, Ngram, Prediction, Suggestion} from "../core/";
 import {AlignmentMemoryIndex, CorpusIndex} from "../index/";
 
 /**

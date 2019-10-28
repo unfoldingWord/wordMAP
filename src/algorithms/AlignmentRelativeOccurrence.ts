@@ -1,10 +1,8 @@
-import {Prediction} from "../core/";
-import {
-  AlignmentMemoryIndex,
-  CorpusIndex,
-  UnalignedSentenceIndex
-} from "../index/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * This algorithm checks the relative similarity of occurrence within the aligned sentences.

@@ -1,4 +1,4 @@
-import {WordMap} from "../core/";
+import {WordMap} from "../core/WordMap";
 
 describe("Regression Tests", () => {
 

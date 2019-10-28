@@ -1,5 +1,5 @@
-import {Alignment} from "../core/";
-import {FrequencyIndex} from "./";
+import {Alignment} from "../core/Alignment";
+import {FrequencyIndex} from "./FrequencyIndex";
 
 /**
  * An index of alignment frequencies

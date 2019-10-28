@@ -1,5 +1,6 @@
-import {NumberObject} from "../index/";
-import {Alignment, Ngram} from "./";
+import {NumberObject} from "../index/NumberObject";
+import {Alignment} from "./Alignment";
+import {Ngram} from "./Ngram";
 
 /**
  * Represents a single alignment prediction

@@ -1,3 +1,4 @@
+import Lexer, {Token} from "wordmap-lexer";
 import {
   AlignmentOccurrences,
   AlignmentPosition,
@@ -10,15 +11,7 @@ import {
   PhrasePlausibility,
   Uniqueness
 } from "../algorithms/";
-import {
-  Alignment,
-  Engine,
-  Lexer,
-  Ngram,
-  Prediction,
-  Suggestion,
-  Token
-} from "./";
+import {Alignment, Engine, Ngram, Prediction, Suggestion} from "./";
 
 /**
  * Multi-Lingual Word Alignment Prediction

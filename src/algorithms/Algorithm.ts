@@ -1,10 +1,8 @@
-import {Prediction} from "../core";
-import {
-  AlignmentMemoryIndex,
-  CorpusIndex,
-  UnalignedSentenceIndex
-} from "../index/";
-import {AlgorithmType} from "./";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {AlgorithmType} from "./AlgorithmType";
 
 export abstract class Algorithm implements AlgorithmType {
   /**

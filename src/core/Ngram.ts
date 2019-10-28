@@ -1,4 +1,4 @@
-import {Token} from "./";
+import {Token} from "wordmap-lexer";
 
 /**
  * Represents a set of zero or more tokens from a text.

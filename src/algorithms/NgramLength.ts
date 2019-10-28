@@ -1,5 +1,5 @@
-import {Prediction} from "../core/";
-import {Algorithm} from "./";
+import {Prediction} from "../core/Prediction";
+import {Algorithm} from "./Algorithm";
 
 /**
  * In other algorithms n-grams are scored equally regardless of length.
