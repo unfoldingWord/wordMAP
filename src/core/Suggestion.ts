@@ -1,10 +1,10 @@
 import {median} from "../util/math";
-import Prediction from "./Prediction";
+import {Prediction} from "./";
 
 /**
  * A translation suggestion
  */
-export default class Suggestion {
+export class Suggestion {
 
   /**
    * Sorts predictions by token position

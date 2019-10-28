@@ -1,4 +1,4 @@
-export default class Suggestion {
+export class Suggestion {
 
   public confidence: number = 0;
 

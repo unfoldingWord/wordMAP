@@ -1,13 +1,10 @@
-import {Token} from "wordmap-lexer";
-import NumberObject from "./index/NumberObject";
-import PermutationIndex from "./index/PermutationIndex";
-import Alignment from "./structures/Alignment";
-import Ngram from "./structures/Ngram";
+import {NumberObject, PermutationIndex} from "../index/";
+import {Alignment, Ngram, Token} from "./";
 
 /**
  * A collection of parsing functions
  */
-export default class Parser {
+export class Parser {
 
   /**
    * Returns an array of n-grams of a particular size from a sentence
@@ -27,7 +24,7 @@ export default class Parser {
       const ngram = new Ngram(sentence.slice(pos, end));
       // measure occurrence
       if (ngram.key in occurrences) {
-        occurrences[ngram.key] ++;
+        occurrences[ngram.key]++;
       } else {
         occurrences[ngram.key] = 1;
       }

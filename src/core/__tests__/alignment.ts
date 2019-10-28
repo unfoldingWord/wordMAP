@@ -1,6 +1,4 @@
-import Lexer, {Token} from "wordmap-lexer";
-import Alignment from "../Alignment";
-import Ngram from "../Ngram";
+import {Alignment, Lexer, Ngram, Token} from "../";
 
 describe("create alignment", () => {
   it("works", () => {

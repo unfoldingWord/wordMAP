@@ -1,5 +1,4 @@
-import Lexer, {Token} from "wordmap-lexer";
-import Ngram from "../Ngram";
+import {Lexer, Ngram, Token} from "../";
 
 describe("creates an n-gram", () => {
 
@@ -47,7 +46,7 @@ describe("creates an n-gram", () => {
   it("has no lemma when empty", () => {
     expect(new Ngram([new Token({})]).lemmaKey).toBeUndefined();
   });
-  
+
   it("has no lemma", () => {
     const tokens = Lexer.tokenize("hello world");
     const ngram = new Ngram(tokens);

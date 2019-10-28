@@ -1,12 +1,11 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import Alignment from "../structures/Alignment";
+import {Alignment, WordMap} from "../core/";
 import {
   makeMockAlignment,
   scoreSuggestion,
   tokenizeComplexMockSentence
 } from "../util/testUtils";
-import WordMap from "../WordMap";
 
 describe("MAP predictions in Titus", () => {
   const greek = path.join(__dirname, "fixtures/corpus/tit/greek.txt");
@@ -17,7 +16,8 @@ describe("MAP predictions in Titus", () => {
   it("predicts the first verse with lemma fallback", () => {
     // this just makes sure things don't break
     const unalignedPair = [
-      tokenizeComplexMockSentence("Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν"),
+      tokenizeComplexMockSentence(
+        "Παῦλος, δοῦλος Θεοῦ, ἀπόστολος δὲ Ἰησοῦ Χριστοῦ, κατὰ πίστιν ἐκλεκτῶν Θεοῦ, καὶ ἐπίγνωσιν ἀληθείας, τῆς κατ’ εὐσέβειαν"),
       "Paul a servant of God and an apostle of Jesus Christ for the faith of God s chosen people and the knowledge of the truth that agrees with godliness"
     ];
     const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 2);

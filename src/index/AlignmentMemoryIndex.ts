@@ -1,12 +1,10 @@
-import Alignment from "../structures/Alignment";
-import AlignmentIndex from "./AlignmentIndex";
-import NgramIndex from "./NgramIndex";
-import PermutationIndex from "./PermutationIndex";
+import {Alignment} from "../core/";
+import {AlignmentIndex, NgramIndex, PermutationIndex} from "./";
 
 /**
  * A collection of indexes for the alignment memory
  */
-export default class AlignmentMemoryIndex {
+export class AlignmentMemoryIndex {
   private permutationIndex: PermutationIndex;
 
   public get alignmentFrequency(): AlignmentIndex {

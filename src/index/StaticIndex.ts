@@ -1,6 +1,5 @@
-import {Token} from "wordmap-lexer";
-import Ngram from "../structures/Ngram";
-import NgramIndex from "./NgramIndex";
+import {Ngram, Token} from "../core/";
+import {NgramIndex} from "./";
 
 /**
  * A collection of indexes on the static content.
@@ -8,7 +7,7 @@ import NgramIndex from "./NgramIndex";
  * e.g. a source SentenceIndex and a target SentenceIndex
  * Then we could reuse it in other places such as word-mt.
  */
-export default class StaticIndex {
+export class StaticIndex {
   private srcNgramFreqIndex: NgramIndex;
   private srcTokenLength: number;
   private srcCharLength: number;
@@ -91,18 +90,18 @@ export default class StaticIndex {
     this.tgtTokenLength += targetTokens.length;
 
     // character length
-    for (let i = 0, len = sourceTokens.length; i < len; i ++) {
+    for (let i = 0, len = sourceTokens.length; i < len; i++) {
       this.srcCharLength += sourceTokens[i].toString().length;
     }
-    for (let i = 0, len = targetTokens.length; i < len; i ++) {
+    for (let i = 0, len = targetTokens.length; i < len; i++) {
       this.tgtCharLength += targetTokens[i].toString().length;
     }
 
     // n-gram frequency
-    for (let i = 0, len = sourceNgrams.length; i < len; i ++) {
+    for (let i = 0, len = sourceNgrams.length; i < len; i++) {
       this.srcNgramFreqIndex.increment(sourceNgrams[i]);
     }
-    for (let i = 0, len = targetNgrams.length; i < len; i ++) {
+    for (let i = 0, len = targetNgrams.length; i < len; i++) {
       this.tgtNgramFreqIndex.increment(targetNgrams[i]);
     }
   }

@@ -1,14 +1,16 @@
-import Algorithm from "../Algorithm";
-import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
-import CorpusIndex from "../index/CorpusIndex";
-import UnalignedSentenceIndex from "../index/UnalignedSentenceIndex";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/";
+import {
+  AlignmentMemoryIndex,
+  CorpusIndex,
+  UnalignedSentenceIndex
+} from "../index/";
+import {Algorithm} from "./";
 
 /**
  * A commonly seen pattern in translation is that word repetition in the primary text
  * is often seen in the secondary text.
  */
-export default class AlignmentOccurrences extends Algorithm {
+export class AlignmentOccurrences extends Algorithm {
 
   /**
    * Calculates the

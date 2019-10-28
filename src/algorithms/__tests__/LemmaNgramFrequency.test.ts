@@ -1,19 +1,13 @@
-import Engine from "../../Engine";
-import AlignmentMemoryIndex from "../../index/AlignmentMemoryIndex";
-import CorpusIndex from "../../index/CorpusIndex";
-import NumberObject from "../../index/NumberObject";
-import Parser from "../../Parser";
-import Prediction from "../../structures/Prediction";
+import {LemmaNgramFrequency} from "../";
+import {Engine, Parser, Prediction} from "../../core/";
+import {AlignmentMemoryIndex, CorpusIndex, NumberObject} from "../../index/";
 import {
-  alignComplexMockSentence, makeComplexCorpus,
+  alignComplexMockSentence,
+  makeComplexCorpus,
   makeComplexMockAlignment,
-  makeCorpus,
-  makeMockAlignment,
-  makeUnalignedSentence,
   tokenizeComplexMockSentence,
   tokenizeMockSentence
 } from "../../util/testUtils";
-import LemmaNgramFrequency from "../LemmaNgramFrequency";
 
 describe("calculate frequency", () => {
   it("produces no results", () => {
@@ -151,10 +145,15 @@ describe("calculate frequency", () => {
       // training data
       const sourceCorpusSentence = "greetings:hi taco world";
       const targetCorpusSentence = "dlalignment ocat olleh";
-      const sourceCorpusTokens = tokenizeComplexMockSentence(sourceCorpusSentence);
+      const sourceCorpusTokens = tokenizeComplexMockSentence(
+        sourceCorpusSentence);
       const targetCorpusTokens = tokenizeMockSentence(targetCorpusSentence);
       engine.addCorpus([sourceCorpusTokens], [targetCorpusTokens]);
-      engine.addAlignmentMemory([makeComplexMockAlignment("greetings:hi", "olleh")]);
+      engine.addAlignmentMemory([
+        makeComplexMockAlignment(
+          "greetings:hi",
+          "olleh"
+        )]);
 
       // un-aligned sentence pair
       const sourceSentence = "hello:hi";

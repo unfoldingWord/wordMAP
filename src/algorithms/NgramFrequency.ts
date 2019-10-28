@@ -1,14 +1,11 @@
-import Algorithm from "../Algorithm";
-import GlobalAlgorithm from "../GlobalAlgorithm";
-import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
-import CorpusIndex from "../index/CorpusIndex";
-import NumberObject from "../index/NumberObject";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/";
+import {AlignmentMemoryIndex, CorpusIndex, NumberObject} from "../index/";
+import {GlobalAlgorithm} from "./";
 
 /**
  * This algorithm calculates the frequency of n-gram occurrences.
  */
-export default class NgramFrequency extends GlobalAlgorithm {
+export class NgramFrequency extends GlobalAlgorithm {
 
   /**
    * Performs a numerical addition with the value of a key in a number object.
@@ -55,7 +52,7 @@ export default class NgramFrequency extends GlobalAlgorithm {
     const alignmentFrequencyCorpusSums: NumberObject = {};
     const alignmentFrequencyAlignmentMemorySums: NumberObject = {};
 
-    for (const p  of predictions) {
+    for (const p of predictions) {
       // alignment permutation frequency within the corpus/alignment memory
       const alignmentFrequencyCorpus: number = cIndex.permutations.alignmentFrequency.read(
         p.alignment);

@@ -1,10 +1,10 @@
-import Ngram from "./Ngram";
+import {Ngram} from "./index";
 
 /**
  * Represents two individual n-grams that have been matched from two texts.
  * e.g. from a primary text and secondary text.
  */
-export default class Alignment {
+export class Alignment {
 
   public sourceNgram: Ngram;
   public targetNgram: Ngram;

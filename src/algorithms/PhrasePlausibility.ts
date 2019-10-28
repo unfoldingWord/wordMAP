@@ -1,12 +1,11 @@
-import Algorithm from "../Algorithm";
-import CorpusIndex from "../index/CorpusIndex";
-import Ngram from "../structures/Ngram";
-import Prediction from "../structures/Prediction";
+import {Ngram, Prediction} from "../core/";
+import {CorpusIndex} from "../index/";
+import {Algorithm} from "./";
 
 /**
  * Determines the likely hood that an n-gram is a phrase.
  */
-export default class PhrasePlausibility extends Algorithm {
+export class PhrasePlausibility extends Algorithm {
 
   /**
    * Calculates the plausibility

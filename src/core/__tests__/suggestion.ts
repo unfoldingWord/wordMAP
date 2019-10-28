@@ -1,4 +1,4 @@
-import Suggestion from "../Suggestion";
+import {Suggestion} from "../";
 
 describe("Suggestion", () => {
   it("renders toString with an empty object", () => {

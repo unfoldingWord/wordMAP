@@ -1,7 +1,5 @@
-import {Token} from "wordmap-lexer";
-import Ngram from "../../structures/Ngram";
-import AlignmentOccurrences from "../AlignmentOccurrences";
-import PhrasePlausibility from "../PhrasePlausibility";
+import {AlignmentOccurrences, PhrasePlausibility} from "../";
+import {Ngram, Token} from "../../core/";
 
 describe("AlignmentOccurrences", () => {
 

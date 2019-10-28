@@ -1,4 +1,4 @@
-export default class Prediction {
+export class Prediction {
   public confidence: number = 0;
 
   public getScore(key: string): number {

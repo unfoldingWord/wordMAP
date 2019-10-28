@@ -1,11 +1,10 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import Alignment from "../structures/Alignment";
+import {Alignment, WordMap} from "../core/";
 import {
-  makeMockAlignment, reverseSentence,
-  tokenizeComplexMockSentence, tokenizeMockSentence
+  makeMockAlignment,
+  tokenizeComplexMockSentence
 } from "../util/testUtils";
-import WordMap from "../WordMap";
 
 describe("MAP", () => {
 
@@ -99,13 +98,16 @@ describe("MAP", () => {
     );
 
     const unalignedPair = [
-      tokenizeComplexMockSentence("Βίβλος γενέσεωςalt:γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ."),
+      tokenizeComplexMockSentence(
+        "Βίβλος γενέσεωςalt:γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυὶδ υἱοῦ Ἀβραάμ."),
       "The book of the genealogy of Jesus Christ, son of David, son of Abraham:"
     ];
     const suggestions = map.predict(unalignedPair[0], unalignedPair[1], 5);
 
-    expect(suggestions[0].getPredictions()[0].key).toEqual("n:βίβλος->n:the:book:of");
-    expect(suggestions[0].getPredictions()[1].key).toEqual("n:γενέσεωςalt->n:the:genealogy:of");
+    expect(suggestions[0].getPredictions()[0].key).toEqual(
+      "n:βίβλος->n:the:book:of");
+    expect(suggestions[0].getPredictions()[1].key).toEqual(
+      "n:γενέσεωςalt->n:the:genealogy:of");
   });
 
   it.skip("predicts from corpus", () => {

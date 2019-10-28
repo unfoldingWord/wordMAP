@@ -1,8 +1,5 @@
-import {Token} from "wordmap-lexer";
-import Alignment from "../../structures/Alignment";
-import Ngram from "../../structures/Ngram";
-import Prediction from "../../structures/Prediction";
-import AlignmentRelativeOccurrence from "../AlignmentRelativeOccurrence";
+import {AlignmentRelativeOccurrence} from "../";
+import {Alignment, Ngram, Prediction, Token} from "../../core/";
 
 function makeNgram(occurrence: number, occurrences: number): Ngram {
   const ngram = new Ngram([new Token({text: "text"})]);

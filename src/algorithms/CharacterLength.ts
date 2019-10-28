@@ -1,10 +1,10 @@
-import Algorithm from "../Algorithm";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/";
+import {Algorithm} from "./";
 
 /**
  * Determines the likely hood that an n-gram is a phrase.
  */
-export default class CharacterLength extends Algorithm {
+export class CharacterLength extends Algorithm {
 
   public name = "character length";
 

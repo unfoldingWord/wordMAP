@@ -1,9 +1,9 @@
-import {Token} from "wordmap-lexer";
+import {Token} from "./";
 
 /**
  * Represents a set of zero or more tokens from a text.
  */
-export default class Ngram {
+export class Ngram {
 
   public occurrence: number = 1;
   public occurrences: number = 1;

@@ -1,10 +1,10 @@
-import Ngram from "../structures/Ngram";
-import FrequencyIndex from "./FrequencyIndex";
+import {Ngram} from "../core/";
+import {FrequencyIndex} from "./";
 
 /**
  * An index of n-gram frequencies
  */
-export default class NgramIndex extends FrequencyIndex {
+export class NgramIndex extends FrequencyIndex {
 
   /**
    * Reads a value from the index

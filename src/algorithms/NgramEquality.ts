@@ -1,14 +1,13 @@
-import Algorithm from "../Algorithm";
-import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
-import CorpusIndex from "../index/CorpusIndex";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/";
+import {AlignmentMemoryIndex, CorpusIndex} from "../index/";
+import {Algorithm} from "./";
 
 /**
  * Calculations the equivalence of the target n-gram with the source n-gram.
  * This is primarily useful when aligning texts within the same language.
  * e.g. to uncover variations within the text such as spelling and word order.
  */
-export default class NgramEquality extends Algorithm {
+export class NgramEquality extends Algorithm {
   public name: string = "n-gram equality";
 
   /**

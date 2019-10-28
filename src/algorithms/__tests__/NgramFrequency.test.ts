@@ -1,9 +1,6 @@
-import Engine from "../../Engine";
-import AlignmentMemoryIndex from "../../index/AlignmentMemoryIndex";
-import CorpusIndex from "../../index/CorpusIndex";
-import NumberObject from "../../index/NumberObject";
-import Parser from "../../Parser";
-import Prediction from "../../structures/Prediction";
+import {NgramFrequency} from "../";
+import {Engine, Parser, Prediction} from "../../core/";
+import {AlignmentMemoryIndex, CorpusIndex, NumberObject} from "../../index/";
 import {
   alignMockSentence,
   makeCorpus,
@@ -12,7 +9,6 @@ import {
   reverseSentenceWords,
   tokenizeMockSentence
 } from "../../util/testUtils";
-import NgramFrequency from "../NgramFrequency";
 
 describe("calculate frequency", () => {
   it("produces no results", () => {

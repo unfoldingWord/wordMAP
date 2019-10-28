@@ -1,4 +1,4 @@
-import Uniqueness from "../Uniqueness";
+import {Uniqueness} from "../";
 
 describe("Uniqueness", () => {
 
@@ -9,7 +9,13 @@ describe("Uniqueness", () => {
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
-    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    const result = Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      sourceTokenLength,
+      targetTokenLength,
+      phrasePlausibility
+    );
     expect(result).toEqual(1); // TODO: should be very low
   });
 
@@ -20,7 +26,13 @@ describe("Uniqueness", () => {
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
-    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    const result = Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      sourceTokenLength,
+      targetTokenLength,
+      phrasePlausibility
+    );
     expect(result).toEqual(0.8333333333333333); // TODO: should be very low
   });
 
@@ -31,7 +43,13 @@ describe("Uniqueness", () => {
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
-    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    const result = Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      sourceTokenLength,
+      targetTokenLength,
+      phrasePlausibility
+    );
     expect(result).toEqual(0.030000000000000002);
   });
 
@@ -42,7 +60,13 @@ describe("Uniqueness", () => {
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
-    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    const result = Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      sourceTokenLength,
+      targetTokenLength,
+      phrasePlausibility
+    );
     expect(result).toEqual(0.6666666666666667);
   });
 
@@ -53,7 +77,13 @@ describe("Uniqueness", () => {
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
-    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    const result = Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      sourceTokenLength,
+      targetTokenLength,
+      phrasePlausibility
+    );
     expect(result).toEqual(0.6666666666666667); // TODO: should be higher
   });
 
@@ -64,7 +94,13 @@ describe("Uniqueness", () => {
     const targetTokenLength = 100;
     const phrasePlausibility = 1;
 
-    const result = Uniqueness.calc(sourceFrequency, targetFrequency, sourceTokenLength, targetTokenLength, phrasePlausibility);
+    const result = Uniqueness.calc(
+      sourceFrequency,
+      targetFrequency,
+      sourceTokenLength,
+      targetTokenLength,
+      phrasePlausibility
+    );
     expect(result).toEqual(1);
   });
 });

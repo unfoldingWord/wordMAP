@@ -1,21 +1,16 @@
-import {Token} from "wordmap-lexer";
-import Algorithm from "./Algorithm";
-import AlgorithmInterface from "./AlgorithmInterface";
-import GlobalAlgorithm from "./GlobalAlgorithm";
-import AlignmentMemoryIndex from "./index/AlignmentMemoryIndex";
-import CorpusIndex from "./index/CorpusIndex";
-import NumberObject from "./index/NumberObject";
-import UnalignedSentenceIndex from "./index/UnalignedSentenceIndex";
-import Parser from "./Parser";
-import Alignment from "./structures/Alignment";
-import Ngram from "./structures/Ngram";
-import Prediction from "./structures/Prediction";
-import Suggestion from "./structures/Suggestion";
+import {Algorithm, AlgorithmType, GlobalAlgorithm} from "../algorithms";
+import {
+  AlignmentMemoryIndex,
+  CorpusIndex,
+  NumberObject,
+  UnalignedSentenceIndex
+} from "../index/";
+import {Alignment, Ngram, Parser, Prediction, Suggestion, Token} from "./";
 
 /**
  * Represents a multi-lingual word alignment prediction engine.
  */
-export default class Engine {
+export class Engine {
   /**
    * Generates an array of all possible alignment predictions
    * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
@@ -330,7 +325,12 @@ export default class Engine {
     const numPredictions = predictions.length;
 
     const sentenceIndex: UnalignedSentenceIndex = new UnalignedSentenceIndex();
-    sentenceIndex.append([sourceSentence], [targetSentence], this.maxSourceNgramLength, this.maxTargetNgramLength);
+    sentenceIndex.append(
+      [sourceSentence],
+      [targetSentence],
+      this.maxSourceNgramLength,
+      this.maxTargetNgramLength
+    );
 
     // run global algorithms first
     for (const algorithm of globalAlgorithms) {
@@ -375,7 +375,7 @@ export default class Engine {
    * Adds a new algorithm to the engine.
    * @param {Algorithm} algorithm - the algorithm to run with the engine.
    */
-  public registerAlgorithm(algorithm: AlgorithmInterface): void {
+  public registerAlgorithm(algorithm: AlgorithmType): void {
     if (algorithm instanceof GlobalAlgorithm) {
       this.registeredGlobalAlgorithms.push(algorithm);
     } else if (algorithm instanceof Algorithm) {
@@ -391,7 +391,12 @@ export default class Engine {
    * @param {[Token[]]} target - an array of tokenized target sentences.
    */
   public addCorpus(source: Token[][], target: Token[][]) {
-    this.corpusIndex.append(source, target, this.maxSourceNgramLength, this.maxTargetNgramLength);
+    this.corpusIndex.append(
+      source,
+      target,
+      this.maxSourceNgramLength,
+      this.maxTargetNgramLength
+    );
   }
 
   /**

@@ -1,11 +1,10 @@
-import NumberObject from "../index/NumberObject";
-import Alignment from "./Alignment";
-import Ngram from "./Ngram";
+import {NumberObject} from "../index/";
+import {Alignment, Ngram} from "./";
 
 /**
  * Represents a single alignment prediction
  */
-export default class Prediction {
+export class Prediction {
   private predictedAlignment: Alignment;
   private scores: NumberObject;
 

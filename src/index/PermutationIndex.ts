@@ -1,11 +1,10 @@
-import Alignment from "../structures/Alignment";
-import AlignmentIndex from "./AlignmentIndex";
-import NgramIndex from "./NgramIndex";
+import {Alignment} from "../core/";
+import {AlignmentIndex, NgramIndex} from "./";
 
 /**
  * A collection of indexes on the permutation of possible alignments.
  */
-export default class PermutationIndex {
+export class PermutationIndex {
 
   /**
    * Alignment permutation frequency index.
@@ -59,7 +58,7 @@ export default class PermutationIndex {
    * @param {Alignment[]} alignments - an array of alignments to add
    */
   public addAlignments(alignments: Alignment[]) {
-    for (let i = 0, len = alignments.length; i < len; i ++) {
+    for (let i = 0, len = alignments.length; i < len; i++) {
       this.addAlignment(alignments[i]);
     }
   }

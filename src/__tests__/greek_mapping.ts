@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import WordMap from "../WordMap";
+import WordMap from "../core/WordMap";
 
 describe("Align Greek Sources", () => {
   it("aligns Wescott Hort to UGNT", () => {

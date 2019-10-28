@@ -1,25 +1,29 @@
-import Lexer, {Token} from "wordmap-lexer";
-import AlignmentOccurrences from "./algorithms/AlignmentOccurrences";
-import AlignmentPosition from "./algorithms/AlignmentPosition";
-import AlignmentRelativeOccurrence from "./algorithms/AlignmentRelativeOccurrence";
-import CharacterLength from "./algorithms/CharacterLength";
-import LemmaNgramFrequency from "./algorithms/LemmaNgramFrequency";
-import NgramFrequency from "./algorithms/NgramFrequency";
-import NgramLength from "./algorithms/NgramLength";
-import NgramRelativeTokenDistance
-  from "./algorithms/NgramRelativeTokenDistance";
-import PhrasePlausibility from "./algorithms/PhrasePlausibility";
-import Uniqueness from "./algorithms/Uniqueness";
-import Engine from "./Engine";
-import Alignment from "./structures/Alignment";
-import Ngram from "./structures/Ngram";
-import Prediction from "./structures/Prediction";
-import Suggestion from "./structures/Suggestion";
+import {
+  AlignmentOccurrences,
+  AlignmentPosition,
+  AlignmentRelativeOccurrence,
+  CharacterLength,
+  LemmaNgramFrequency,
+  NgramFrequency,
+  NgramLength,
+  NgramRelativeTokenDistance,
+  PhrasePlausibility,
+  Uniqueness
+} from "../algorithms/";
+import {
+  Alignment,
+  Engine,
+  Lexer,
+  Ngram,
+  Prediction,
+  Suggestion,
+  Token
+} from "./";
 
 /**
  * Multi-Lingual Word Alignment Prediction
  */
-export default class WordMap {
+export class WordMap {
   private engine: Engine;
 
   constructor(opts = {}) {

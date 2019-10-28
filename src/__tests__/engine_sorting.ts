@@ -1,6 +1,6 @@
-jest.mock("../structures/Prediction");
-jest.mock("../structures/Suggestion");
-import Engine from "../Engine";
+jest.mock("../core/Prediction");
+jest.mock("../core/Suggestion");
+import {Engine} from "../core/";
 // @ts-ignore
 import {genPrediction} from "../structures/Prediction";
 // @ts-ignore

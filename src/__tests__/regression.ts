@@ -1,5 +1,4 @@
-import Alignment from "../structures/Alignment";
-import WordMap from "../WordMap";
+import {WordMap} from "../core/";
 
 describe("Regression Tests", () => {
 

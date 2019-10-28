@@ -1,4 +1,4 @@
-import AlignmentIndex from "../AlignmentIndex";
+import {AlignmentIndex} from "../";
 
 export const mockAddAlignments = jest.fn(() => {
   console.log("added alignments");
@@ -10,7 +10,7 @@ export const mockAddSentencePair = jest.fn(() => {
   console.log("added corpus");
 });
 
-export default jest.fn().mockImplementation(() => {
+export const PermutationIndex = jest.fn().mockImplementation(() => {
   return {
     addAlignments: mockAddAlignments,
     addAlignment: mockAddAlignment,

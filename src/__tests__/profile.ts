@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import WordMap from "../WordMap";
+import WordMap from "../core/WordMap";
 
 /**
  * This is used for profiling.
