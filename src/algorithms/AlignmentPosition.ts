@@ -1,5 +1,5 @@
-import Algorithm from "../Algorithm";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/Prediction";
+import {Algorithm} from "./Algorithm";
 
 /**
  * This algorithm calculates the relative position of n-grams in a sentence.
@@ -10,7 +10,7 @@ import Prediction from "../structures/Prediction";
  *
  * Results range from near 0 to 1
  */
-export default class AlignmentPosition extends Algorithm {
+export class AlignmentPosition extends Algorithm {
   public name = "alignment position";
 
   public execute(prediction: Prediction): Prediction {

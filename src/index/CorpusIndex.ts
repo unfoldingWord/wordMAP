@@ -1,12 +1,12 @@
 import {Token} from "wordmap-lexer";
-import Parser from "../Parser";
-import PermutationIndex from "./PermutationIndex";
-import StaticIndex from "./StaticIndex";
+import {Parser} from "../core/Parser";
+import {PermutationIndex} from "./PermutationIndex";
+import {StaticIndex} from "./StaticIndex";
 
 /**
  * A collection of indexes for the corpus.
  */
-export default class CorpusIndex {
+export class CorpusIndex {
   private permutationIndex: PermutationIndex;
   private staticIndex: StaticIndex;
 
@@ -59,7 +59,11 @@ export default class CorpusIndex {
         );
 
         // index permutation metrics
-        Parser.indexAlignmentPermutations(sourceNgrams, targetNgrams, this.permutationIndex);
+        Parser.indexAlignmentPermutations(
+          sourceNgrams,
+          targetNgrams,
+          this.permutationIndex
+        );
       }
     }
   }

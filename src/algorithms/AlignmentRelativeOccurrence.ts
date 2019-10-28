@@ -1,8 +1,8 @@
-import Algorithm from "../Algorithm";
-import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
-import CorpusIndex from "../index/UnalignedSentenceIndex";
-import UnalignedSentenceIndex from "../index/UnalignedSentenceIndex";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * This algorithm checks the relative similarity of occurrence within the aligned sentences.
@@ -14,7 +14,7 @@ import Prediction from "../structures/Prediction";
  * This algorithm can be used to correct those false positives.
  * Results range from 0 to 1.
  */
-export default class AlignmentRelativeOccurrence extends Algorithm {
+export class AlignmentRelativeOccurrence extends Algorithm {
 
   public static calculate(prediction: Prediction): number {
     const yData = prediction.alignment.source; // .getTokens()[0];
@@ -59,12 +59,18 @@ export default class AlignmentRelativeOccurrence extends Algorithm {
     }
 
     // get total ngram occurrences, preferring the lemma.
-    const sourceKey = prediction.source.lemmaKey ? prediction.source.lemmaKey : prediction.source.key;
-    const targetKey = prediction.target.lemmaKey ? prediction.target.lemmaKey : prediction.target.key;
+    const sourceKey = prediction.source.lemmaKey ?
+      prediction.source.lemmaKey :
+      prediction.source.key;
+    const targetKey = prediction.target.lemmaKey ?
+      prediction.target.lemmaKey :
+      prediction.target.key;
 
     // inject into the prediction
-    prediction.source.occurrences = usIndex.static.sourceNgramFrequency.read(sourceKey);
-    prediction.target.occurrences = usIndex.static.targetNgramFrequency.read(targetKey);
+    prediction.source.occurrences = usIndex.static.sourceNgramFrequency.read(
+      sourceKey);
+    prediction.target.occurrences = usIndex.static.targetNgramFrequency.read(
+      targetKey);
 
     const weight = AlignmentRelativeOccurrence.calculate(prediction);
 

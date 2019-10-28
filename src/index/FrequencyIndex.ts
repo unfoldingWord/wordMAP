@@ -1,7 +1,7 @@
 /**
  * An index of frequencies
  */
-export default abstract class FrequencyIndex {
+export abstract class FrequencyIndex {
 
   private index: Map<string, number>;
 

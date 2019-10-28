@@ -19,7 +19,7 @@ With wordMAP you can create amazing translation tools that:
 ## Installation
 
 ```
-npm i wordmap
+yarn add wordmap
 ```
 
 ## Usage

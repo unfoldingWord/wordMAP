@@ -1,10 +1,10 @@
-import Alignment from "../structures/Alignment";
-import FrequencyIndex from "./FrequencyIndex";
+import {Alignment} from "../core/Alignment";
+import {FrequencyIndex} from "./FrequencyIndex";
 
 /**
  * An index of alignment frequencies
  */
-export default class AlignmentIndex extends FrequencyIndex {
+export class AlignmentIndex extends FrequencyIndex {
   /**
    * Reads a value from the index
    * @param alignment - the alignment index to read. This may be a specific key, or the alignment object to read the default key.

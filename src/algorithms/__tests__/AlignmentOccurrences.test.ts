@@ -1,4 +1,4 @@
-import AlignmentOccurrences from "../AlignmentOccurrences";
+import {AlignmentOccurrences} from "../";
 
 describe("AlignmentOccurrences", () => {
   it("has similar occurrence with large numbers", () => {

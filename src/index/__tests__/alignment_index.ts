@@ -1,5 +1,5 @@
 import {makeMockAlignment} from "../../util/testUtils";
-import AlignmentIndex from "../AlignmentIndex";
+import {AlignmentIndex} from "../AlignmentIndex";
 
 describe("AlignmentIndex", () => {
   it("writes to the index", () => {

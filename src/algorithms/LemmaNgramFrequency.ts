@@ -1,14 +1,13 @@
-import Algorithm from "../Algorithm";
-import GlobalAlgorithm from "../GlobalAlgorithm";
-import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
-import CorpusIndex from "../index/CorpusIndex";
-import NumberObject from "../index/NumberObject";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {NumberObject} from "../index/NumberObject";
+import {GlobalAlgorithm} from "./GlobalAlgorithm";
 
 /**
  * This algorithm calculates the frequency of n-gram occurrences.
  */
-export default class LemmaNgramFrequency extends GlobalAlgorithm {
+export class LemmaNgramFrequency extends GlobalAlgorithm {
 
   /**
    * Performs a numerical addition with the value of a key in a number object.
@@ -55,7 +54,7 @@ export default class LemmaNgramFrequency extends GlobalAlgorithm {
     const alignmentFrequencyCorpusSums: NumberObject = {};
     const alignmentFrequencyAlignmentMemorySums: NumberObject = {};
 
-    for (const p  of predictions) {
+    for (const p of predictions) {
       // skip predictions without lemmas
       if (p.alignment.lemmaKey === undefined) {
         p.setScores({

@@ -2,7 +2,7 @@
 
 import * as fs from "fs-extra";
 import * as yargs from "yargs";
-import WordMap from "./index";
+import WordMap from "./";
 
 console.log("******************************************************");
 console.log("* Multi-Lingual Word Alignment Prediction (Word MAP) *");

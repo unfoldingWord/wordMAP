@@ -1,8 +1,6 @@
 import {Token} from "wordmap-lexer";
-import Alignment from "../../structures/Alignment";
-import Ngram from "../../structures/Ngram";
-import Prediction from "../../structures/Prediction";
-import AlignmentPosition from "../AlignmentPosition";
+import {AlignmentPosition} from "../";
+import {Alignment, Ngram, Prediction} from "../../core/";
 
 describe("AlignmentPosition", () => {
   it("has a perfect score", () => {

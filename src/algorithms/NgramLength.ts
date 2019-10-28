@@ -1,5 +1,5 @@
-import Algorithm from "../Algorithm";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/Prediction";
+import {Algorithm} from "./Algorithm";
 
 /**
  * In other algorithms n-grams are scored equally regardless of length.
@@ -9,7 +9,7 @@ import Prediction from "../structures/Prediction";
  * The weight of an alignment increases proportionally to it's length,
  * and relative sentence coverage in primary and secondary text.
  */
-export default class NgramLength extends Algorithm {
+export class NgramLength extends Algorithm {
   public name = "n-gram length";
 
   public execute(prediction: Prediction): Prediction {

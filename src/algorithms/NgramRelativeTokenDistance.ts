@@ -1,8 +1,8 @@
-import Algorithm from "../Algorithm";
-import AlignmentMemoryIndex from "../index/AlignmentMemoryIndex";
-import CorpusIndex from "../index/UnalignedSentenceIndex";
-import UnalignedSentenceIndex from "../index/UnalignedSentenceIndex";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/Prediction";
+import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * This algorithm calculates the relative distance between tokens within an n-gram.
@@ -13,7 +13,7 @@ import Prediction from "../structures/Prediction";
  * This algorithm can be used to correct those false positives.
  * Results range from 0 to 1.
  */
-export default class NgramRelativeTokenDistance extends Algorithm {
+export class NgramRelativeTokenDistance extends Algorithm {
 
   /**
    * Calculates the relative distance between positions.

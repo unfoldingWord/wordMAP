@@ -1,11 +1,11 @@
-import Algorithm from "../Algorithm";
-import CorpusIndex from "../index/CorpusIndex";
-import Prediction from "../structures/Prediction";
+import {Prediction} from "../core/Prediction";
+import {CorpusIndex} from "../index/CorpusIndex";
+import {Algorithm} from "./Algorithm";
 
 /**
  * Determines how unique the n-gram is.
  */
-export default class Uniqueness extends Algorithm {
+export class Uniqueness extends Algorithm {
 
   /**
    * Performs the uniqueness calculation.
