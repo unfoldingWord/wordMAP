@@ -56,3 +56,7 @@ We need a tool that:
 
 ## Learn more
 Want to learn more? Read [WHITEPAPER.md](./WHITEPAPER.md).
+
+## Development
+When publishing to npm be sure to use the command `yarn deploy`.
+This will publish the proper module structure to npm.
