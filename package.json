@@ -18,7 +18,7 @@
     "url": "git+https://github.com/translationCoreApps/wordMAP.git"
   },
   "bin": {
-    "wordmap": "dist/cli.js"
+    "wordmap": "cli.js"
   },
   "jest": {
     "preset": "ts-jest"
