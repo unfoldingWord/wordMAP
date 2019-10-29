@@ -1,8 +1,9 @@
+# wordMAP
 [![Build Status](https://travis-ci.org/unfoldingWord/wordMAP.svg?branch=master)](https://travis-ci.org/unfoldingWord/wordMAP)
 [![codecov](https://codecov.io/gh/unfoldingWord/wordmap/branch/master/graph/badge.svg)](https://codecov.io/gh/unfoldingWord/wordmap)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
+[![npm version](https://badge.fury.io/js/wordmap.svg)](https://badge.fury.io/js/wordmap)
 
-# wordMAP
 > Multi-Lingual Word Alignment Prediction
 
 
