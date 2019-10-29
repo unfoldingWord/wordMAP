@@ -20,7 +20,7 @@ describe("AlignmentOccurrences", () => {
       sourceLength,
       targetLength
     );
-    expect(weight).toEqual(0);
+    expect(weight).toEqual(0.1);
   });
 
   it("has similar frequency with large numbers", () => {

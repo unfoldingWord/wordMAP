@@ -23,7 +23,9 @@ export class PhrasePlausibility extends Algorithm {
       return 1;
     }
 
-    let weight = 0;
+    // TRICKY: we don't want to obliterate everything if it's not likely to be a phrase.
+    //  we just want to severely handicap it.
+    let weight = 0.1;
     // TODO: this is similar to uniqueness. I want a high uniqueness value (meaning it is not unique) and high similarity (meaning they both have similar occurrence)
     if (sourceNgramFrequency > 0 && targetNgramFrequency > 0) {
       const sourcePlausibility = sourceNgramFrequency / sourceTokenLength;
