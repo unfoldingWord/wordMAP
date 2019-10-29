@@ -5,7 +5,7 @@ describe("Regression Tests", () => {
   it("suggests tokens out of order of occurrence", () => {
     // We have found that sometimes tokens will be suggested out of order with it's occurrence.
     // The result is a mix of occurrences of the token in the predictions instead of a sequential occurrence.
-    // This is due to the influence of alignment memory and is expected.
+    // This is due to the influence of alignment memory.
     const map = new WordMap();
     map.appendAlignmentMemoryString("Θεὸς", "the God");
     const source = "περὶ δὲ τῶν νεκρῶν, ὅτι ἐγείρονται, οὐκ ἀνέγνωτε ἐν τῇ βίβλῳ Μωϋσέως ἐπὶ τοῦ βάτου, πῶς εἶπεν αὐτῷ ὁ Θεὸς λέγων, ἐγὼ ὁ Θεὸς Ἀβραὰμ, καὶ ὁ Θεὸς Ἰσαὰκ, καὶ ὁ Θεὸς Ἰακώβ?";
@@ -17,13 +17,13 @@ describe("Regression Tests", () => {
     expect(predictions[19].alignment.key).toEqual("n:θεὸς->n:the:god");
     const token = predictions[19].alignment.targetNgram.getTokens()[1];
     expect(token.toString()).toEqual("God");
-    expect(token.occurrence).toEqual(2);
+    expect(token.occurrence).toEqual(1);
 
     // this should have the second occurrence of God
     expect(predictions[24].alignment.key).toEqual("n:ἀβραὰμ->n:god");
     const token2 = predictions[24].alignment.targetNgram.getTokens()[0];
     expect(token2.toString()).toEqual("God");
-    expect(token2.occurrence).toEqual(1);
+    expect(token2.occurrence).toEqual(2);
   });
 
   it("suggests the correct n-gram occurrence", () => {
