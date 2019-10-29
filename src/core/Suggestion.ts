@@ -1,4 +1,4 @@
-import {median} from "../util/math";
+import {average, median} from "../util/math";
 import {Prediction} from "./Prediction";
 
 /**
@@ -54,7 +54,16 @@ export class Suggestion {
       const c = p.getScore("confidence");
       confidenceNumbers.push(c);
     }
-    return median(confidenceNumbers);
+    const med = median(confidenceNumbers);
+    const avg = average(confidenceNumbers);
+
+    if (med > 0) {
+      return (med + avg) / 2;
+    } else {
+      // TRICKY: if the suggestion is overwhelmed with scores of 0 the median may be 0
+      //  take just the average if that's the case.
+      return avg;
+    }
   }
 
   /**

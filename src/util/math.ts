@@ -35,3 +35,16 @@ export function median(numbers: number[]): number {
 
   return medianVal;
 }
+
+/**
+ * calculates the average value of an array of numbers
+ * @param numbers
+ */
+export function average(numbers: number[]): number {
+  let total = 0;
+  const len = numbers.length;
+  for (let i = 0; i < len; i++) {
+    total += numbers[i];
+  }
+  return divide(total, len);
+}

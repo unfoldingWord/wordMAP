@@ -215,10 +215,14 @@ export class Engine {
    * @return {Suggestion}
    */
   public static suggest(predictions: Prediction[], maxSuggestions: number = 1): Suggestion[] {
+    const suggestionKeys: string[] = [];
     const suggestions: Suggestion[] = [];
 
     // build suggestions
-    for (let i = 0; i < maxSuggestions; i++) {
+    let i = -1;
+    while (suggestions.length < maxSuggestions) {
+      i++;
+
       if (i >= predictions.length) {
         break;
       }
@@ -243,7 +247,12 @@ export class Engine {
           return !nextBest.intersects(p);
         });
       }
-      suggestions.push(suggestion);
+      // TRICKY: only add unique suggestions
+      const key = suggestion.toString();
+      if (suggestionKeys.indexOf(key) === -1) {
+        suggestionKeys.push(key);
+        suggestions.push(suggestion);
+      }
     }
 
     return Engine.sortSuggestions(suggestions);
