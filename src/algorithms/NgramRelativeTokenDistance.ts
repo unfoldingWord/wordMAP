@@ -6,6 +6,7 @@ import {Algorithm} from "./Algorithm";
 
 /**
  * This algorithm calculates the relative distance between tokens within an n-gram.
+ * NOTE: this algorithm is only useful for dis-contiguous n-grams.
  *
  * Some words that are textually identical but have different occurrences may
  * be falsely suggested with a word farther away within the sentence.

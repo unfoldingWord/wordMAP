@@ -3,6 +3,7 @@ import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
 import {CorpusIndex} from "../index/CorpusIndex";
 import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
 import {Algorithm} from "./Algorithm";
+import {AlignmentPosition} from "./AlignmentPosition";
 
 /**
  * This algorithm checks the relative similarity of occurrence within the aligned sentences.
@@ -17,8 +18,8 @@ import {Algorithm} from "./Algorithm";
 export class AlignmentRelativeOccurrence extends Algorithm {
 
   public static calculate(prediction: Prediction): number {
-    const yData = prediction.alignment.source; // .getTokens()[0];
-    const xData = prediction.alignment.target; // .getTokens()[0];
+    const yData = prediction.alignment.source;
+    const xData = prediction.alignment.target;
 
     // ranges
     const yRange = yData.occurrences;
@@ -28,26 +29,7 @@ export class AlignmentRelativeOccurrence extends Algorithm {
     const y = yData.occurrence;
     const x = xData.occurrence;
 
-    // plot ranges between two points (range of possible occurrences)
-    const [x1, y1] = [1, 1];
-    const [x2, y2] = [xRange, yRange];
-
-    // map x onto the yRange using "Two Point Slope Form" equation
-    const xPrime = (x * y2 - y1 * x - x1 * y2 + x1 * y1) / (x2 - x1) + y1;
-    // NOTE: y and xPrime are now both on the yRange.
-
-    // normalize to range between 0 and 1.
-    // TRICKY: the ranges start at 1 so we must shift to 0.
-    const ny = (y - 1) / (yRange - 1);
-    const nxPrime = (xPrime - 1) / (yRange - 1);
-
-    // calculate disparity
-    const disparity = Math.abs(ny - nxPrime);
-
-    // a disparity close to 0 means the n-grams have a very similar order of occurrence.
-    // a disparity close to 1 means the n-grams have a very different order of occurrence.
-
-    return 1 - disparity;
+    return AlignmentPosition.calculateRelativeDistance(x, y, xRange, yRange);
   }
 
   public name = "alignment relative occurrence";

@@ -9,8 +9,8 @@
     "build:docs": "typedoc --out docs --mode modules --target ES6",
     "test": "yarn lint && jest",
     "prebuild": "rm -rf dist/",
-    "build": "tsc",
-    "predeploy": "yarn test && yarn build && cp package.json dist/ && cp README.md dist/",
+    "build": "tsc && cp package.json dist/ && cp README.md dist/",
+    "predeploy": "yarn test && yarn build",
     "deploy": "yarn publish dist",
     "postpublish": "git tag v$npm_package_version && git push origin v$npm_package_version"
   },

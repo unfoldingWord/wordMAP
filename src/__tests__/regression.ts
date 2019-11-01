@@ -2,7 +2,23 @@ import {WordMap} from "../core/WordMap";
 
 describe("Regression Tests", () => {
 
-  it("suggests tokens out of order of occurrence", () => {
+  it("properly suggests the closest token occurrence", () => {
+    // We have found that sometimes tokens will be suggested out of order with it's occurrence.
+    // The result is a mix of occurrences of the token in the predictions instead of a sequential occurrence.
+    // This is due to the influence of alignment memory.
+    const map = new WordMap();
+    map.appendAlignmentMemoryString("וַ⁠יַּ֕עַשׂ", "did");
+    const source = "וַ⁠יִּקַּ֨ח גִּדְע֜וֹן עֲשָׂרָ֤ה אֲנָשִׁים֙ מֵֽ⁠עֲבָדָ֔י⁠ו וַ⁠יַּ֕עַשׂ כַּ⁠אֲשֶׁ֛ר דִּבֶּ֥ר אֵלָ֖י⁠ו יְהוָ֑ה וַ⁠יְהִ֡י כַּ⁠אֲשֶׁ֣ר יָרֵא֩ אֶת־ בֵּ֨ית אָבִ֜י⁠ו וְ⁠אֶת־ אַנְשֵׁ֥י הָ⁠עִ֛יר מֵ⁠עֲשׂ֥וֹת יוֹמָ֖ם וַ⁠יַּ֥עַשׂ לָֽיְלָה׃";
+    const target = "So Gideon and ten of his servants did what Yahweh commanded. But they did it at night, because he was afraid what the other members of his family and the other men in town would do to him if they found out that he had done that.";
+    const suggestions = map.predict(source, target, 10);
+    const predictions = suggestions[0].getPredictions()
+      .filter((p) => p.confidence >= 1);
+    const token = predictions[0].target.getTokens()[0];
+    expect(token.toString()).toEqual("did");
+    expect(token.occurrence).toEqual(1);
+  });
+
+  it("suggests tokens in order of occurrence", () => {
     // We have found that sometimes tokens will be suggested out of order with it's occurrence.
     // The result is a mix of occurrences of the token in the predictions instead of a sequential occurrence.
     // This is due to the influence of alignment memory.
