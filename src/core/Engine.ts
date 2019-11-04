@@ -10,6 +10,7 @@ import {Alignment} from "./Alignment";
 import {Ngram} from "./Ngram";
 import {Parser} from "./Parser";
 import {Prediction} from "./Prediction";
+import {Scheduler} from "./Scheduler";
 import {Suggestion} from "./Suggestion";
 
 export interface EngineProps {
@@ -303,6 +304,7 @@ export class Engine {
   private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
   private corpusIndex: CorpusIndex;
   private alignmentMemoryIndex: AlignmentMemoryIndex;
+  private scheduler: Scheduler;
 
   /**
    * Returns a list of algorithms that are registered in the engine
@@ -318,6 +320,7 @@ export class Engine {
     this.nGramWarnings = warnings as boolean;
     this.corpusIndex = new CorpusIndex();
     this.alignmentMemoryIndex = new AlignmentMemoryIndex();
+    this.scheduler = new Scheduler();
   }
 
   /**
@@ -357,29 +360,24 @@ export class Engine {
       this.maxTargetNgramLength
     );
 
-    // run global algorithms first
-    for (const algorithm of globalAlgorithms) {
-      predictions = algorithm.execute(
-        predictions,
-        cIndex,
-        saIndex,
-        sentenceIndex
-      );
-    }
-
-    // run regular algorithms
-    const numAlgorithms = algorithms.length;
-    for (let i = 0; i < numPredictions; i++) {
-      for (let j = 0; j < numAlgorithms; j++) {
-        algorithms[j].execute(
-          predictions[i],
-          cIndex,
-          saIndex,
-          sentenceIndex
-        );
+    for (let i = 0, len = this.scheduler.batches.length; i < len; i ++) {
+      const batch = this.scheduler.batches[i];
+      if (batch[0] instanceof GlobalAlgorithm) {
+        // process entire dataset
+        for (let j = 0, jLen = batch.length; j < jLen; j ++) {
+          // TODO: avoid side effects
+          predictions = (batch[j] as GlobalAlgorithm).execute(predictions, cIndex, saIndex, sentenceIndex);
+        }
+      } else {
+        // process one prediction at a time
+        for (let j = 0, jLen = batch.length; j < jLen; j ++) {
+          for (let p = 0; p < numPredictions; p ++) {
+            // TODO: avoid side effects
+            (batch[j] as Algorithm).execute(predictions[p], cIndex, saIndex, sentenceIndex);
+          }
+        }
       }
     }
-
     return predictions;
   }
 
@@ -401,6 +399,7 @@ export class Engine {
    * @param {Algorithm} algorithm - the algorithm to run with the engine.
    */
   public registerAlgorithm(algorithm: AlgorithmType): void {
+    this.scheduler.add(algorithm);
     if (algorithm instanceof GlobalAlgorithm) {
       this.registeredGlobalAlgorithms.push(algorithm);
     } else if (algorithm instanceof Algorithm) {

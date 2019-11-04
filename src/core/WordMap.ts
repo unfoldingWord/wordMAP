@@ -8,6 +8,7 @@ import {
     NgramFrequency,
     NgramLength,
     NgramRelativeTokenDistance,
+    OrderOfOccurrence,
     PhrasePlausibility,
     Uniqueness
 } from "../algorithms/";
@@ -39,6 +40,7 @@ export class WordMap {
         this.engine.registerAlgorithm(new CharacterLength());
         this.engine.registerAlgorithm(new AlignmentOccurrences());
         this.engine.registerAlgorithm(new Uniqueness());
+        // this.engine.registerAlgorithm(new OrderOfOccurrence());
     }
 
     /**

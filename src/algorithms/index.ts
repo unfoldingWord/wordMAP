@@ -13,3 +13,4 @@ export {NgramLength} from "./NgramLength";
 export {NgramRelativeTokenDistance} from "./NgramRelativeTokenDistance";
 export {PhrasePlausibility} from "./PhrasePlausibility";
 export {Uniqueness} from "./Uniqueness";
+export {OrderOfOccurrence} from "./OrderOfOccurrence";
