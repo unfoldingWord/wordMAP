@@ -24,6 +24,11 @@ export class AlignmentPosition extends Algorithm {
      * @return a value close to 1 indicates they are very close. A value close to 0 indicates they are very far.
      */
     public static calculateRelativeDistance(x: number, y: number, xRange: number, yRange: number): number {
+        // points are identical
+        if (x === y && xRange === yRange) {
+            return 1;
+        }
+
         if (x > xRange || y > yRange) {
             throw new Error("Points are out of range. Make sure you are providing the correct range size.");
         }
@@ -80,5 +85,4 @@ export class AlignmentPosition extends Algorithm {
         prediction.setScore("alignmentPosition", weight);
         return prediction;
     }
-
 }
