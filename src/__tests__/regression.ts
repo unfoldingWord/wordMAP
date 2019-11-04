@@ -2,10 +2,7 @@ import {WordMap} from "../core/WordMap";
 
 describe("Regression Tests", () => {
 
-  it("properly suggests the closest token occurrence", () => {
-    // We have found that sometimes tokens will be suggested out of order with it's occurrence.
-    // The result is a mix of occurrences of the token in the predictions instead of a sequential occurrence.
-    // This is due to the influence of alignment memory.
+  it("properly suggests the first token occurrence", () => {
     const map = new WordMap();
     map.appendAlignmentMemoryString("וַ⁠יַּ֕עַשׂ", "did");
     const source = "וַ⁠יִּקַּ֨ח גִּדְע֜וֹן עֲשָׂרָ֤ה אֲנָשִׁים֙ מֵֽ⁠עֲבָדָ֔י⁠ו וַ⁠יַּ֕עַשׂ כַּ⁠אֲשֶׁ֛ר דִּבֶּ֥ר אֵלָ֖י⁠ו יְהוָ֑ה וַ⁠יְהִ֡י כַּ⁠אֲשֶׁ֣ר יָרֵא֩ אֶת־ בֵּ֨ית אָבִ֜י⁠ו וְ⁠אֶת־ אַנְשֵׁ֥י הָ⁠עִ֛יר מֵ⁠עֲשׂ֥וֹת יוֹמָ֖ם וַ⁠יַּ֥עַשׂ לָֽיְלָה׃";
