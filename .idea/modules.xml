@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/word-map.iml" filepath="$PROJECT_DIR$/.idea/word-map.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wordmap.iml" filepath="$PROJECT_DIR$/.idea/wordmap.iml" />
     </modules>
   </component>
 </project>

@@ -11,7 +11,7 @@ describe("AlignmentPosition", () => {
           text: "hello",
           position: 2,
           characterPosition: 5,
-          sentenceTokenLen: 1,
+          sentenceTokenLen: 5,
           sentenceCharLen: 5
         })]),
       new Ngram([
@@ -19,11 +19,12 @@ describe("AlignmentPosition", () => {
           text: "hallo",
           position: 2,
           characterPosition: 5,
-          sentenceTokenLen: 1,
+          sentenceTokenLen: 5,
           sentenceCharLen: 5
         })])
     ));
-    const result = engine.execute(prediction);
+    const result = engine.
+    execute(prediction);
     expect(result.getScores()).toEqual({
       "alignmentPosition": 1
     });
@@ -37,7 +38,7 @@ describe("AlignmentPosition", () => {
           text: "hello",
           position: 2,
           characterPosition: 1,
-          sentenceTokenLen: 1,
+          sentenceTokenLen: 5,
           sentenceCharLen: 5
         })]),
       new Ngram([
@@ -45,13 +46,13 @@ describe("AlignmentPosition", () => {
           text: "hallo",
           position: 3,
           characterPosition: 1,
-          sentenceTokenLen: 1,
+          sentenceTokenLen: 5,
           sentenceCharLen: 5
         })])
     ));
     const result = engine.execute(prediction);
     expect(result.getScores()).toEqual({
-      "alignmentPosition": 0
+      "alignmentPosition": 0.75
     });
   });
 
@@ -63,7 +64,7 @@ describe("AlignmentPosition", () => {
           text: "hello",
           position: 2,
           characterPosition: 1,
-          sentenceTokenLen: 1,
+          sentenceTokenLen: 5,
           sentenceCharLen: 5
         })]),
       new Ngram([
@@ -71,13 +72,13 @@ describe("AlignmentPosition", () => {
           text: "hallo",
           position: 4,
           characterPosition: 1,
-          sentenceTokenLen: 1,
+          sentenceTokenLen: 5,
           sentenceCharLen: 5
         })])
     ));
     const result = engine.execute(prediction);
     expect(result.getScores()).toEqual({
-      "alignmentPosition": -1
+      "alignmentPosition": .5
     });
   });
 });
