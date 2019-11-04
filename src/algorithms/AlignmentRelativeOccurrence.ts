@@ -2,8 +2,8 @@ import {Prediction} from "../core/Prediction";
 import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
 import {CorpusIndex} from "../index/CorpusIndex";
 import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {measureRelativeProximity} from "../util/math";
 import {Algorithm} from "./Algorithm";
-import {AlignmentPosition} from "./AlignmentPosition";
 
 /**
  * This algorithm checks the relative similarity of occurrence within the aligned sentences.
@@ -29,7 +29,7 @@ export class AlignmentRelativeOccurrence extends Algorithm {
     const y = yData.occurrence;
     const x = xData.occurrence;
 
-    return AlignmentPosition.calculateRelativeDistance(x, y, xRange, yRange);
+    return measureRelativeProximity(x, y, xRange, yRange);
   }
 
   public name = "alignment relative occurrence";
