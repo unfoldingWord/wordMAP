@@ -102,7 +102,7 @@ export class WordMap {
         if (alignments instanceof Array) {
             this.engine.addAlignmentMemory(alignments);
         } else {
-            this.engine.addAlignmentMemory([alignments]);
+            this.engine.addAlignmentMemory([alignments] as Alignment[]);
         }
     }
 
