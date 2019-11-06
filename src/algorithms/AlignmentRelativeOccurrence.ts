@@ -18,8 +18,8 @@ import {Algorithm} from "./Algorithm";
 export class AlignmentRelativeOccurrence extends Algorithm {
 
   public static calculate(prediction: Prediction): number {
-    const yData = prediction.alignment.source;
-    const xData = prediction.alignment.target;
+    const yData = prediction.alignment.sourceNgram;
+    const xData = prediction.alignment.targetNgram;
 
     // ranges
     const yRange = yData.occurrences;

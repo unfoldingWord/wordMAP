@@ -37,7 +37,7 @@ export class AlignmentPosition extends Algorithm {
             weight *= prediction.getScore("ngramRelativeTokenDistance");
         }
 
-        // TRICKY: prefer the first occurrences.
+        // TRICKY: prefer earlier occurrences.
         const targetOccurrences = prediction.target.occurrences;
         const occurrenceDistance = measureRelativeProximity(1, prediction.target.occurrence, targetOccurrences, targetOccurrences);
         const reductionFactor = 0.9; // reduce down to 90%
