@@ -29,7 +29,7 @@ export class WordMap {
     private forceOccurrenceOrder: boolean;
 
     constructor(opts: WordMapProps = {}) {
-        const {forceOccurrenceOrder = false} = opts;
+        const {forceOccurrenceOrder = true} = opts;
         this.forceOccurrenceOrder = forceOccurrenceOrder;
 
         this.engine = new Engine(opts);
