@@ -211,7 +211,6 @@ export class Engine {
             if (isAlignmentMemory) {
                 confidence++;
             }
-
             p.setScore("confidence", confidence);
             finalPredictions.push(p);
         }
@@ -329,6 +328,7 @@ export class Engine {
             return 0;
         });
     }
+
     private maxTargetNgramLength: number;
     private maxSourceNgramLength: number;
     private nGramWarnings: boolean;
