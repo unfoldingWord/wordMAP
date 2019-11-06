@@ -14,9 +14,11 @@ import {
 import {Alignment, Engine, Ngram, Prediction, Suggestion} from "./";
 import {EngineProps} from "./Engine";
 
-// tslint:disable-next-line:no-empty-interface
 export interface WordMapProps extends EngineProps {
-
+    /**
+     * Forces suggestions to preserve the order of word occurrences.
+     */
+    forceOccurrenceOrder?: boolean;
 }
 
 /**
@@ -24,8 +26,11 @@ export interface WordMapProps extends EngineProps {
  */
 export class WordMap {
     private engine: Engine;
+    private forceOccurrenceOrder: boolean;
 
     constructor(opts: WordMapProps = {}) {
+        const {forceOccurrenceOrder = false} = opts;
+        this.forceOccurrenceOrder = forceOccurrenceOrder;
 
         this.engine = new Engine(opts);
         this.engine.registerAlgorithm(new NgramFrequency());
@@ -170,7 +175,7 @@ export class WordMap {
                 return p.confidence >= 1 || p.target.isNull();
             });
         }
-        return Engine.suggest(predictions, maxSuggestions);
+        return Engine.suggest(predictions, maxSuggestions, this.forceOccurrenceOrder);
     }
 
     /**
@@ -198,6 +203,6 @@ export class WordMap {
                 }
             }
         }
-        return Engine.suggest(validPredictions, maxSuggestions);
+        return Engine.suggest(validPredictions, maxSuggestions, this.forceOccurrenceOrder);
     }
 }
