@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/translationCoreApps/wordMAP.git"
+    "url": "git+https://github.com/unfoldingWord/wordMAP.git"
   },
   "bin": {
     "wordmap": "cli.js"
@@ -43,7 +43,7 @@
   "author": "unfoldingword",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/translationCoreApps/wordMAP/issues"
+    "url": "https://github.com/unfoldingWord/wordMAP/issues"
   },
   "homepage": "https://wordmap.netlify.com",
   "devDependencies": {
