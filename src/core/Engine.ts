@@ -135,7 +135,7 @@ export class Engine {
         const finalPredictions: Prediction[] = [];
         const weights: NumberObject = {
             "alignmentPosition": 0.7,
-            "sourceNgramLength": 0.2,
+            "ngramLength": 0.2,
             "characterLength": 0.3,
             "alignmentOccurrences": 0.4,
             "lemmaAlignmentOccurrences": 0.4,
@@ -147,7 +147,7 @@ export class Engine {
             "targetCorpusPermutationsFrequencyRatio": 0.7,
             "targetCorpusLemmaPermutationsFrequencyRatio": 0.7,
 
-            "sourceAlignmentMemoryFrequencyRatio": 0.7,
+            "sourceAlignmentMemoryFrequencyRatio": 0.8,
             "sourceAlignmentMemoryLemmaFrequencyRatio": 0.7,
             "targetAlignmentMemoryFrequencyRatio": 0.7,
             "targetAlignmentMemoryLemmaFrequencyRatio": 0.7
