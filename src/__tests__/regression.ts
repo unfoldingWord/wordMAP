@@ -53,20 +53,22 @@ describe("Order of occurrence", () => {
         // We have found that sometimes tokens will be suggested out of order with it's occurrence.
         // The result is a mix of occurrences of the token in the predictions instead of a sequential occurrence.
         // This is due to the influence of alignment memory.
-        const map = new WordMap();
+        const map = new WordMap({
+            forceOccurrenceOrder: true
+        });
         map.appendAlignmentMemoryString("Θεὸς", "the God");
         const source = "περὶ δὲ τῶν νεκρῶν, ὅτι ἐγείρονται, οὐκ ἀνέγνωτε ἐν τῇ βίβλῳ Μωϋσέως ἐπὶ τοῦ βάτου, πῶς εἶπεν αὐτῷ ὁ Θεὸς λέγων, ἐγὼ ὁ Θεὸς Ἀβραὰμ, καὶ ὁ Θεὸς Ἰσαὰκ, καὶ ὁ Θεὸς Ἰακώβ?";
         const target = "But concerning the dead that are raised, have you not read in the book of Moses, in the account about the bush, how God spoke to him, saying, ‘I am the God of Abraham and the God of Isaac and the God of Jacob’?";
         const suggestions = map.predict(source, target, 10);
-        const predictions = suggestions[0].getPredictions();
 
-        // ensure all usages of "God" are in order of occurrence
-        let lastOccurrence = 0;
-        for (const p of predictions) {
-            for (const t of p.target.getTokens()) {
-                if (t.toString() === "God") {
-                    expect(t.occurrence).toEqual(lastOccurrence + 1);
-                    lastOccurrence++;
+        for (const s of suggestions) {
+            let lastOccurrence = 0;
+            for (const p of s.getPredictions()) {
+                for (const t of p.target.getTokens()) {
+                    if (t.toString() === "God") {
+                        expect(t.occurrence).toEqual(lastOccurrence + 1);
+                        lastOccurrence++;
+                    }
                 }
             }
         }
