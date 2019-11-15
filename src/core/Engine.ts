@@ -247,7 +247,7 @@ export class Engine {
 
             // TRICKY: disable forced occurrence order if we exceed the maximum discards,
             //  and start at the beginning.
-            if (forceOccurrence && numDiscards > 1000) {
+            if (forceOccurrence && numDiscards >= 1000) {
                 forceOccurrence = false;
                 i = 1;
             }

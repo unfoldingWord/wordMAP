@@ -19,13 +19,51 @@ describe("NaN confidence scores", () => {
 
 describe("Order of occurrence", () => {
 
+    it("should discard no more than the max number of suggestions", () => {
+        const map = new WordMap({
+            forceOccurrenceOrder: true
+        });
+        map.appendAlignmentMemoryString("εἶπεν", "the water");
+        map.appendAlignmentMemoryString("ὕδασιν", "the demons");
+
+        const source = "καὶ εἶπεν αὐτοῖς,  ὑπάγετε.  οἱ δὲ ἐξελθόντες ἀπῆλθον εἰς τοὺς χοίρους;  καὶ ἰδοὺ,  ὥρμησεν πᾶσα ἡ ἀγέλη κατὰ τοῦ κρημνοῦ εἰς τὴν θάλασσαν,  καὶ ἀπέθανον ἐν τοῖς ὕδασιν.";
+        const target = "Then Jesus said to them, 'Go!' So the demons came out and went into the pigs; and behold, the whole herd rushed down the steep hill into the sea and they died in the water.";
+        const fillSpy = jest.spyOn(utils, "fillSuggestion");
+        map.predict(source, target, 1);
+        expect(fillSpy).toBeCalledTimes(1001);
+        fillSpy.mockRestore();
+    });
+
+    it("should only discard between 40 and 50 suggestions", () => {
+        const map = new WordMap({
+            forceOccurrenceOrder: true
+        });
+        map.appendAlignmentMemoryString("εἶπεν", "the water");
+        map.appendAlignmentMemoryString("ὕδασιν", "the demons");
+
+        // these provide some balance.
+        map.appendAlignmentMemoryString("εἶπεν", "Jesus");
+        map.appendAlignmentMemoryString("ὕδασιν", "the water");
+
+        const source = "καὶ εἶπεν αὐτοῖς,  ὑπάγετε.  οἱ δὲ ἐξελθόντες ἀπῆλθον εἰς τοὺς χοίρους;  καὶ ἰδοὺ,  ὥρμησεν πᾶσα ἡ ἀγέλη κατὰ τοῦ κρημνοῦ εἰς τὴν θάλασσαν,  καὶ ἀπέθανον ἐν τοῖς ὕδασιν.";
+        const target = "Then Jesus said to them, 'Go!' So the demons came out and went into the pigs; and behold, the whole herd rushed down the steep hill into the sea and they died in the water.";
+        const fillSpy = jest.spyOn(utils, "fillSuggestion");
+        map.predict(source, target, 1);
+        expect(fillSpy.mock.calls.length).toBeLessThan(50);
+        expect(fillSpy.mock.calls.length).toBeGreaterThan(40);
+        fillSpy.mockRestore();
+    });
+
     it("should not prefer memory that uses tokens out of occurrence order", () => {
+        // this is a small scale version of the above tests,
+        // to illustrate suggestions can be generated without having to discard any.
         const map = new WordMap({
             forceOccurrenceOrder: true
         });
         map.appendAlignmentMemoryString("der schnee", "the rain");
         map.appendAlignmentMemoryString("der regen", "the snow");
-        //
+
+        // provides some balance
         map.appendAlignmentMemoryString("der schnee", "the");
         map.appendAlignmentMemoryString("der regen", "the");
 
