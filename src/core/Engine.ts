@@ -38,24 +38,6 @@ export interface EngineProps {
  */
 export class Engine {
 
-    private maxTargetNgramLength: number;
-    private maxSourceNgramLength: number;
-    private nGramWarnings: boolean;
-    private registeredAlgorithms: Algorithm[] = [];
-    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
-    private corpusIndex: CorpusIndex;
-    private alignmentMemoryIndex: AlignmentMemoryIndex;
-    private scheduler: Scheduler;
-
-    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
-        this.maxSourceNgramLength = sourceNgramLength as number;
-        this.maxTargetNgramLength = targetNgramLength as number;
-        this.nGramWarnings = warnings as boolean;
-        this.corpusIndex = new CorpusIndex();
-        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
-        this.scheduler = new Scheduler();
-    }
-
     /**
      * Returns a list of algorithms that are registered in the engine
      * @return {Array<Algorithm>}
@@ -278,8 +260,6 @@ export class Engine {
 
             try {
                 utils.fillSuggestion(filtered, forceOccurrenceOrder, isOccurrenceValid, addOccurrence, suggestion);
-                // fill suggestion
-
             } catch {
                 continue;
             }
@@ -331,6 +311,24 @@ export class Engine {
             }
             return 0;
         });
+    }
+
+    private maxTargetNgramLength: number;
+    private maxSourceNgramLength: number;
+    private nGramWarnings: boolean;
+    private registeredAlgorithms: Algorithm[] = [];
+    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
+    private corpusIndex: CorpusIndex;
+    private alignmentMemoryIndex: AlignmentMemoryIndex;
+    private scheduler: Scheduler;
+
+    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
+        this.maxSourceNgramLength = sourceNgramLength as number;
+        this.maxTargetNgramLength = targetNgramLength as number;
+        this.nGramWarnings = warnings as boolean;
+        this.corpusIndex = new CorpusIndex();
+        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
+        this.scheduler = new Scheduler();
     }
 
     /**
