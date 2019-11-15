@@ -81,6 +81,8 @@ export function useSequentialOccurrence(): [(arg0: SequentialOccurrenceProps) =>
     /**
      * Performs a final review of the occurrences to ensure the occurrences begin at 1
      * and there are no skipped occurrences.
+     * I'm not sure we should use this because enforcing occurrences to begin at 1 and continue without gaps
+     * could cause us to lose a lot of valid suggestions.
      */
     function review(): boolean {
         const keys = Object.keys(items);
