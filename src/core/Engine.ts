@@ -7,6 +7,7 @@ import {CorpusIndex} from "../index/CorpusIndex";
 import {NumberObject} from "../index/NumberObject";
 import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
 import {
+    getSequentialOccurrenceProps,
     makeSequentialOccurrenceProps,
     SequentialOccurrenceProps,
     useSequentialOccurrence
@@ -37,6 +38,24 @@ export interface EngineProps {
  * Represents a multi-lingual word alignment prediction engine.
  */
 export class Engine {
+
+    private maxTargetNgramLength: number;
+    private maxSourceNgramLength: number;
+    private nGramWarnings: boolean;
+    private registeredAlgorithms: Algorithm[] = [];
+    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
+    private corpusIndex: CorpusIndex;
+    private alignmentMemoryIndex: AlignmentMemoryIndex;
+    private scheduler: Scheduler;
+
+    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
+        this.maxSourceNgramLength = sourceNgramLength as number;
+        this.maxTargetNgramLength = targetNgramLength as number;
+        this.nGramWarnings = warnings as boolean;
+        this.corpusIndex = new CorpusIndex();
+        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
+        this.scheduler = new Scheduler();
+    }
 
     /**
      * Returns a list of algorithms that are registered in the engine
@@ -254,8 +273,8 @@ export class Engine {
 
             // track occurrence
             resetOccurrences();
-            if (forceOccurrenceOrder && best.target.occurrences > 1) {
-                addOccurrence(makeSequentialOccurrenceProps(best));
+            if (forceOccurrenceOrder) {
+                getSequentialOccurrenceProps(best).forEach(addOccurrence);
             }
 
             try {
@@ -311,24 +330,6 @@ export class Engine {
             }
             return 0;
         });
-    }
-
-    private maxTargetNgramLength: number;
-    private maxSourceNgramLength: number;
-    private nGramWarnings: boolean;
-    private registeredAlgorithms: Algorithm[] = [];
-    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
-    private corpusIndex: CorpusIndex;
-    private alignmentMemoryIndex: AlignmentMemoryIndex;
-    private scheduler: Scheduler;
-
-    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
-        this.maxSourceNgramLength = sourceNgramLength as number;
-        this.maxTargetNgramLength = targetNgramLength as number;
-        this.nGramWarnings = warnings as boolean;
-        this.corpusIndex = new CorpusIndex();
-        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
-        this.scheduler = new Scheduler();
     }
 
     /**
@@ -499,11 +500,14 @@ function fillSuggestion(filtered: Prediction[], forceOccurrenceOrder: boolean, i
         });
 
         // track and validate occurrence
-        if (forceOccurrenceOrder && nextBest.target.occurrences > 1) {
-            if (!isOccurrenceValid(makeSequentialOccurrenceProps(nextBest))) {
-                throw new Error();
-            } else {
-                addOccurrence(makeSequentialOccurrenceProps(nextBest));
+        if (forceOccurrenceOrder) {
+            const occurrenceProps = getSequentialOccurrenceProps(nextBest);
+            for (let i = 0, len = occurrenceProps.length; i < len; i++) {
+                if (!isOccurrenceValid(occurrenceProps[i])) {
+                    throw new Error();
+                } else {
+                    addOccurrence(occurrenceProps[i]);
+                }
             }
         }
 

@@ -17,6 +17,7 @@ export interface SequentialOccurrenceProps {
 
 /**
  * Converts a prediction into props for use in {@link useSequentialOccurrence}.
+ * @deprecated use {@link getSequentialOccurrenceProps} instead
  * @param prediction
  */
 export function makeSequentialOccurrenceProps(prediction: Prediction): SequentialOccurrenceProps {
@@ -25,6 +26,26 @@ export function makeSequentialOccurrenceProps(prediction: Prediction): Sequentia
         position: prediction.source.tokenPosition,
         occurrence: prediction.target.occurrence
     };
+}
+
+/**
+ * Expands a prediction into an array of items that can be validated.
+ * Tokens with occurrences equal to 1 are ignored.
+ * @param prediction
+ */
+export function getSequentialOccurrenceProps(prediction: Prediction): SequentialOccurrenceProps[] {
+    const tokens = prediction.target.getTokens();
+    const items: SequentialOccurrenceProps[] = [];
+    for (let i = 0, len = tokens.length; i < len; i++) {
+        if (tokens[i].occurrences > 1) {
+            items.push({
+                key: tokens[i].toString(),
+                position: prediction.source.tokenPosition,
+                occurrence: tokens[i].occurrence
+            });
+        }
+    }
+    return items;
 }
 
 /**

@@ -30,7 +30,7 @@ describe("Order of occurrence", () => {
         const source = "καὶ εἶπεν αὐτοῖς,  ὑπάγετε.  οἱ δὲ ἐξελθόντες ἀπῆλθον εἰς τοὺς χοίρους;  καὶ ἰδοὺ,  ὥρμησεν πᾶσα ἡ ἀγέλη κατὰ τοῦ κρημνοῦ εἰς τὴν θάλασσαν,  καὶ ἀπέθανον ἐν τοῖς ὕδασιν.";
         const target = "Then Jesus said to them, 'Go!' So the demons came out and went into the pigs; and behold, the whole herd rushed down the steep hill into the sea and they died in the water.";
         const fillSpy = jest.spyOn(utils, "fillSuggestion");
-        map.predict(source, target, 1);
+        const suggestions = map.predict(source, target, 1);
         expect(fillSpy).toHaveBeenCalledTimes(10);
         fillSpy.mockRestore();
     });
