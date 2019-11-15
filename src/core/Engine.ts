@@ -248,6 +248,7 @@ export class Engine {
             // TRICKY: disable forced occurrence order if we exceed the maximum discards,
             //  and start at the beginning.
             if (forceOccurrence && numDiscards >= 1000) {
+                console.warn("Exceeded maximum discards while searching for valid occurrence order.");
                 forceOccurrence = false;
                 i = 1;
             }
