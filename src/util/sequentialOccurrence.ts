@@ -16,19 +16,6 @@ export interface SequentialOccurrenceProps {
 }
 
 /**
- * Converts a prediction into props for use in {@link useSequentialOccurrence}.
- * @deprecated use {@link getSequentialOccurrenceProps} instead
- * @param prediction
- */
-export function makeSequentialOccurrenceProps(prediction: Prediction): SequentialOccurrenceProps {
-    return {
-        key: prediction.target.key,
-        position: prediction.source.tokenPosition,
-        occurrence: prediction.target.occurrence
-    };
-}
-
-/**
  * Expands a prediction into an array of items that can be validated.
  * Tokens with occurrences equal to 1 are ignored.
  * @param prediction
@@ -51,7 +38,7 @@ export function getSequentialOccurrenceProps(prediction: Prediction): Sequential
 /**
  * Utility to check if occurrences are used sequentially
  */
-export function useSequentialOccurrence(): [(arg0: SequentialOccurrenceProps) => boolean, (arg0: SequentialOccurrenceProps) => void, () => void] {
+export function useSequentialOccurrence(): [(arg0: SequentialOccurrenceProps) => boolean, (arg0: SequentialOccurrenceProps) => void, () => void, () => boolean] {
     let items: any = {};
 
     /**
@@ -92,11 +79,38 @@ export function useSequentialOccurrence(): [(arg0: SequentialOccurrenceProps) =>
     }
 
     /**
+     * Performs a final review of the occurrences to ensure the occurrences begin at 1
+     * and there are no skipped occurrences.
+     */
+    function review(): boolean {
+        const keys = Object.keys(items);
+        for (let i = 0, keyLen = keys.length; i < keyLen; i++) {
+            const item = items[keys[i]];
+            const numOccurrences = item.length;
+
+            // TRICKY: we can be certain the occurrences are in order if they range are in the range of 1 to numOccurrences.
+            let startsAtOne = false;
+            for (let j = 0; j < numOccurrences; j++) {
+                if (item[j].occurrence === 1) {
+                    startsAtOne = true;
+                }
+                if (item[j].occurrence > numOccurrences) {
+                    return false;
+                }
+            }
+            if (!startsAtOne) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Resets the validation queue
      */
     function reset() {
         items = {};
     }
 
-    return [ok, add, reset];
+    return [ok, add, reset, review];
 }
