@@ -19,17 +19,21 @@ describe("NaN confidence scores", () => {
 
 describe("Order of occurrence", () => {
 
-    it("should discard a maximum of 10 invalid suggestions", () => {
+    it("should not prefer memory that uses tokens out of occurrence order", () => {
         const map = new WordMap({
             forceOccurrenceOrder: true
         });
-        map.appendAlignmentMemoryString("εἶπεν", "the water");
-        map.appendAlignmentMemoryString("ὕδασιν", "the demons");
-        const source = "καὶ εἶπεν αὐτοῖς,  ὑπάγετε.  οἱ δὲ ἐξελθόντες ἀπῆλθον εἰς τοὺς χοίρους;  καὶ ἰδοὺ,  ὥρμησεν πᾶσα ἡ ἀγέλη κατὰ τοῦ κρημνοῦ εἰς τὴν θάλασσαν,  καὶ ἀπέθανον ἐν τοῖς ὕδασιν.";
-        const target = "Then Jesus said to them, 'Go!' So the demons came out and went into the pigs; and behold, the whole herd rushed down the steep hill into the sea and they died in the water.";
+        map.appendAlignmentMemoryString("der schnee", "the rain");
+        map.appendAlignmentMemoryString("der regen", "the snow");
+        //
+        map.appendAlignmentMemoryString("der schnee", "the");
+        map.appendAlignmentMemoryString("der regen", "the");
+
+        const source = "der schnee der regen";
+        const target = "the snow the rain";
         const fillSpy = jest.spyOn(utils, "fillSuggestion");
         map.predict(source, target, 1);
-        expect(fillSpy).toHaveBeenCalledTimes(10);
+        expect(fillSpy).toHaveBeenCalledTimes(1);
         fillSpy.mockRestore();
     });
 

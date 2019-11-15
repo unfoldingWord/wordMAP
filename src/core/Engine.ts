@@ -6,9 +6,9 @@ import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
 import {CorpusIndex} from "../index/CorpusIndex";
 import {NumberObject} from "../index/NumberObject";
 import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
+import {reduceStrength} from "../util/math";
 import {
     getSequentialOccurrenceProps,
-    makeSequentialOccurrenceProps,
     SequentialOccurrenceProps,
     useSequentialOccurrence
 } from "../util/sequentialOccurrence";
@@ -38,24 +38,6 @@ export interface EngineProps {
  * Represents a multi-lingual word alignment prediction engine.
  */
 export class Engine {
-
-    private maxTargetNgramLength: number;
-    private maxSourceNgramLength: number;
-    private nGramWarnings: boolean;
-    private registeredAlgorithms: Algorithm[] = [];
-    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
-    private corpusIndex: CorpusIndex;
-    private alignmentMemoryIndex: AlignmentMemoryIndex;
-    private scheduler: Scheduler;
-
-    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
-        this.maxSourceNgramLength = sourceNgramLength as number;
-        this.maxTargetNgramLength = targetNgramLength as number;
-        this.nGramWarnings = warnings as boolean;
-        this.corpusIndex = new CorpusIndex();
-        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
-        this.scheduler = new Scheduler();
-    }
 
     /**
      * Returns a list of algorithms that are registered in the engine
@@ -223,7 +205,10 @@ export class Engine {
                 weights
             );
 
-            // prefer to use the saved alignment confidence
+            // strongly enforce alignment position
+            confidence *= reduceStrength(p.getScore("alignmentPosition"), 0.4);
+
+            // prefer to use the alignment memory confidence
             if (!isAlignmentMemory) {
                 confidence = corpusConfidence;
                 confidence *= p.getScore("phrasePlausibility");
@@ -254,9 +239,18 @@ export class Engine {
         const [isOccurrenceValid, addOccurrence, resetOccurrences] = useSequentialOccurrence();
 
         // build suggestions
+        let forceOccurrence = forceOccurrenceOrder;
+        let numDiscards = 0;
         let i = -1;
         while (suggestions.length < maxSuggestions) {
             i++;
+
+            // TRICKY: disable forced occurrence order if we exceed the maximum discards,
+            //  and start at the beginning.
+            if (forceOccurrence && numDiscards > 1000) {
+                forceOccurrence = false;
+                i = 1;
+            }
 
             if (i >= predictions.length) {
                 break;
@@ -273,13 +267,14 @@ export class Engine {
 
             // track occurrence
             resetOccurrences();
-            if (forceOccurrenceOrder) {
+            if (forceOccurrence) {
                 getSequentialOccurrenceProps(best).forEach(addOccurrence);
             }
 
             try {
-                utils.fillSuggestion(filtered, forceOccurrenceOrder, isOccurrenceValid, addOccurrence, suggestion);
+                utils.fillSuggestion(filtered, forceOccurrence, isOccurrenceValid, addOccurrence, suggestion);
             } catch {
+                numDiscards ++;
                 continue;
             }
 
@@ -330,6 +325,24 @@ export class Engine {
             }
             return 0;
         });
+    }
+
+    private maxTargetNgramLength: number;
+    private maxSourceNgramLength: number;
+    private nGramWarnings: boolean;
+    private registeredAlgorithms: Algorithm[] = [];
+    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
+    private corpusIndex: CorpusIndex;
+    private alignmentMemoryIndex: AlignmentMemoryIndex;
+    private scheduler: Scheduler;
+
+    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
+        this.maxSourceNgramLength = sourceNgramLength as number;
+        this.maxTargetNgramLength = targetNgramLength as number;
+        this.nGramWarnings = warnings as boolean;
+        this.corpusIndex = new CorpusIndex();
+        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
+        this.scheduler = new Scheduler();
     }
 
     /**
