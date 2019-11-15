@@ -108,3 +108,23 @@ export function fitToRange(x: number, min: number, max: number, targetMin: numbe
     // map x onto the target range using the "Two Point Slope Form" equation
     return (x * y2 - y1 * x - x1 * y2 + x1 * y1) / (x2 - x1) + y1;
 }
+
+/**
+ * Scales scales a value up to 1.
+ * Setting a scale factor of 1 will return 1. A scale factor of 0 will return the original value.
+ * @param x the number to scale. Must be between 0 and 1 inclusive.
+ * @param factor The amount to scale by. Must be between 0 and 1 inclusive.
+ */
+export function scaleUp(x: number, factor: number): number {
+    return x + (1 - x) * factor;
+}
+
+/**
+ * Moves a value toward 1 in order to reduce it's effect in multiplication and division.
+ * This is the inverse of {@link scaleUp}.
+ * @param x
+ * @param factor
+ */
+export function reduceStrength(x: number, factor: number): number {
+    return scaleUp(x, 1 - factor);
+}

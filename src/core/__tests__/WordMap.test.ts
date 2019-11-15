@@ -56,6 +56,7 @@ describe("predict", () => {
         map.appendAlignmentMemoryString("far", "very distant");
         map.appendAlignmentMemoryString("far", "very distant");
         map.appendAlignmentMemoryString("far", "very distant");
+        map.appendAlignmentMemoryString("far", "very distant");
         const suggestions = map.predict(source, target, 1);
         const predictions = suggestions[0].getPredictions()
             .filter((p) => p.confidence >= 1);

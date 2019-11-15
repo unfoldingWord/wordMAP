@@ -58,6 +58,7 @@ export class NgramFrequency extends GlobalAlgorithm {
       // alignment permutation frequency within the corpus/alignment memory
       const alignmentFrequencyCorpus: number = cIndex.permutations.alignmentFrequency.read(
         p.alignment);
+      //  how often the alignment appears in the alignment memory
       const alignmentFrequencyAlignmentMemory: number = saIndex.alignmentFrequency.read(
         p.alignment);
 
@@ -67,10 +68,12 @@ export class NgramFrequency extends GlobalAlgorithm {
       // const sourceNgramFrequencyInCorpusPermutations
       const ngramFrequencyCorpusSource: number = cIndex.permutations.sourceNgramFrequency.read(
         p.source);
+      // how often the source n-gram appears in the alignment memory
       const ngramFrequencyAlignmentMemorySource: number = saIndex.sourceNgramFrequency.read(
         p.source);
       const ngramFrequencyCorpusTarget: number = cIndex.permutations.targetNgramFrequency.read(
         p.target);
+      // how often the target n-gram appears in the alignment memory
       const ngramFrequencyAlignmentMemoryTarget: number = saIndex.targetNgramFrequency.read(
         p.target);
 
@@ -83,10 +86,12 @@ export class NgramFrequency extends GlobalAlgorithm {
         alignmentFrequencyCorpus,
         ngramFrequencyCorpusTarget
       );
+      // the ratio of how often the source n-gram in this prediction appears in the alignment memory vs how often the prediction appears in the alignment memory.
       const sourceAlignmentMemoryFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencyAlignmentMemory,
         ngramFrequencyAlignmentMemorySource
       );
+      // the ratio of how often the target n-gram in this prediction appears in the alignment memory vs how often the prediction appears in the alignment memory.
       const targetAlignmentMemoryFrequencyRatio: number = NgramFrequency.divideSafe(
         alignmentFrequencyAlignmentMemory,
         ngramFrequencyAlignmentMemoryTarget
@@ -96,6 +101,9 @@ export class NgramFrequency extends GlobalAlgorithm {
       p.setScores({
         sourceCorpusPermutationsFrequencyRatio,
         targetCorpusPermutationsFrequencyRatio,
+        /**
+         * how often the source n-gram in the alignment memory appears in the memory.
+         */
         sourceAlignmentMemoryFrequencyRatio,
         targetAlignmentMemoryFrequencyRatio
       });
