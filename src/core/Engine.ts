@@ -6,7 +6,11 @@ import {AlignmentMemoryIndex} from "../index/AlignmentMemoryIndex";
 import {CorpusIndex} from "../index/CorpusIndex";
 import {NumberObject} from "../index/NumberObject";
 import {UnalignedSentenceIndex} from "../index/UnalignedSentenceIndex";
-import {makeSequentialOccurrenceProps, useSequentialOccurrence} from "../util/sequentialOccurrence";
+import {
+    makeSequentialOccurrenceProps,
+    SequentialOccurrenceProps,
+    useSequentialOccurrence
+} from "../util/sequentialOccurrence";
 import {Alignment} from "./Alignment";
 import {Ngram} from "./Ngram";
 import {Parser} from "./Parser";
@@ -33,6 +37,24 @@ export interface EngineProps {
  * Represents a multi-lingual word alignment prediction engine.
  */
 export class Engine {
+
+    private maxTargetNgramLength: number;
+    private maxSourceNgramLength: number;
+    private nGramWarnings: boolean;
+    private registeredAlgorithms: Algorithm[] = [];
+    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
+    private corpusIndex: CorpusIndex;
+    private alignmentMemoryIndex: AlignmentMemoryIndex;
+    private scheduler: Scheduler;
+
+    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
+        this.maxSourceNgramLength = sourceNgramLength as number;
+        this.maxTargetNgramLength = targetNgramLength as number;
+        this.nGramWarnings = warnings as boolean;
+        this.corpusIndex = new CorpusIndex();
+        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
+        this.scheduler = new Scheduler();
+    }
 
     /**
      * Returns a list of algorithms that are registered in the engine
@@ -255,27 +277,9 @@ export class Engine {
             }
 
             try {
+                utils.fillSuggestion(filtered, forceOccurrenceOrder, isOccurrenceValid, addOccurrence, suggestion);
                 // fill suggestion
-                while (filtered.length) {
-                    const nextBest = filtered.shift();
-                    if (nextBest === undefined) {
-                        break;
-                    }
-                    filtered = filtered.filter((p) => {
-                        return !nextBest.intersects(p);
-                    });
 
-                    // track and validate occurrence
-                    if (forceOccurrenceOrder && nextBest.target.occurrences > 1) {
-                        if (!isOccurrenceValid(makeSequentialOccurrenceProps(nextBest))) {
-                            throw new Error();
-                        } else {
-                            addOccurrence(makeSequentialOccurrenceProps(nextBest));
-                        }
-                    }
-
-                    suggestion.addPrediction(nextBest);
-                }
             } catch {
                 continue;
             }
@@ -327,24 +331,6 @@ export class Engine {
             }
             return 0;
         });
-    }
-
-    private maxTargetNgramLength: number;
-    private maxSourceNgramLength: number;
-    private nGramWarnings: boolean;
-    private registeredAlgorithms: Algorithm[] = [];
-    private registeredGlobalAlgorithms: GlobalAlgorithm[] = [];
-    private corpusIndex: CorpusIndex;
-    private alignmentMemoryIndex: AlignmentMemoryIndex;
-    private scheduler: Scheduler;
-
-    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
-        this.maxSourceNgramLength = sourceNgramLength as number;
-        this.maxTargetNgramLength = targetNgramLength as number;
-        this.nGramWarnings = warnings as boolean;
-        this.corpusIndex = new CorpusIndex();
-        this.alignmentMemoryIndex = new AlignmentMemoryIndex();
-        this.scheduler = new Scheduler();
     }
 
     /**
@@ -494,3 +480,42 @@ export class Engine {
         );
     }
 }
+
+/**
+ * Fill the suggestion with predictions.
+ * This may throw an exception if the suggestion becomes invalid.
+ * @param filtered
+ * @param forceOccurrenceOrder
+ * @param isOccurrenceValid
+ * @param addOccurrence
+ * @param suggestion
+ */
+function fillSuggestion(filtered: Prediction[], forceOccurrenceOrder: boolean, isOccurrenceValid: (arg0: SequentialOccurrenceProps) => boolean, addOccurrence: (arg0: SequentialOccurrenceProps) => void, suggestion: Suggestion) {
+    while (filtered.length) {
+        const nextBest = filtered.shift();
+        if (nextBest === undefined) {
+            break;
+        }
+        filtered = filtered.filter((p) => {
+            return !nextBest.intersects(p);
+        });
+
+        // track and validate occurrence
+        if (forceOccurrenceOrder && nextBest.target.occurrences > 1) {
+            if (!isOccurrenceValid(makeSequentialOccurrenceProps(nextBest))) {
+                throw new Error();
+            } else {
+                addOccurrence(makeSequentialOccurrenceProps(nextBest));
+            }
+        }
+
+        suggestion.addPrediction(nextBest);
+    }
+}
+
+/**
+ * Export utils so we can spy on them during tests.
+ */
+export const utils = {
+    fillSuggestion
+};

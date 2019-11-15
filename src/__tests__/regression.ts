@@ -1,4 +1,5 @@
 import {WordMap} from "../core/WordMap";
+import {utils} from "../core/Engine";
 
 describe("NaN confidence scores", () => {
     it("does not produce NaN scores", () => {
@@ -18,14 +19,16 @@ describe("NaN confidence scores", () => {
 
 describe("Order of occurrence", () => {
 
-    it("discards too many suggestions", () => {
+    it("should discard a maximum of 10 invalid suggestions", () => {
         const map = new WordMap({
             forceOccurrenceOrder: true
         });
         const source = "καὶ εἶπεν αὐτοῖς,  ὑπάγετε.  οἱ δὲ ἐξελθόντες ἀπῆλθον εἰς τοὺς χοίρους;  καὶ ἰδοὺ,  ὥρμησεν πᾶσα ἡ ἀγέλη κατὰ τοῦ κρημνοῦ εἰς τὴν θάλασσαν,  καὶ ἀπέθανον ἐν τοῖς ὕδασιν.";
         const target = "Then Jesus said to them, 'Go!' So the demons came out and went into the pigs; and behold, the whole herd rushed down the steep hill into the sea and they died in the water.";
-        map.predict(source, target);
-        // TODO: spy on suggestion generator to ensure it only runs a few times.
+        const fillSpy = jest.spyOn(utils, "fillSuggestion");
+        map.predict(source, target, 1);
+        expect(fillSpy).toHaveBeenCalledTimes(10);
+        fillSpy.mockRestore();
     });
 
     it("properly suggests the first token occurrence in the correct order", () => {
