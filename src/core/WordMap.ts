@@ -149,10 +149,10 @@ export class WordMap {
      * @param {string} sourceSentence - a sentence from the source text
      * @param {string} targetSentence - a sentence from the target text
      * @param {number} maxSuggestions - the maximum number of suggestions to return
-     * @param excludeCorpus - only provide suggestions based on the alignment memory.
+     * @param minConfidence - the minimum confidence score required for a prediction to be used
      * @return {Suggestion[]}
      */
-    public predict(sourceSentence: string | Token[], targetSentence: string | Token[], maxSuggestions: number = 1, excludeCorpus: boolean = false): Suggestion[] {
+    public predict(sourceSentence: string | Token[], targetSentence: string | Token[], maxSuggestions: number = 1, minConfidence: number = 0.1): Suggestion[] {
         let sourceTokens = [];
         let targetTokens = [];
 
@@ -168,14 +168,8 @@ export class WordMap {
             targetTokens = targetSentence;
         }
 
-        let predictions = this.engine.run(sourceTokens, targetTokens);
-        predictions = this.engine.score(predictions);
-        if (excludeCorpus) {
-            predictions = predictions.filter((p) => {
-                return p.confidence >= 1 || p.target.isNull();
-            });
-        }
-        return Engine.suggest(predictions, maxSuggestions, this.forceOccurrenceOrder);
+        const predictions = this.engine.score(this.engine.run(sourceTokens, targetTokens));
+        return Engine.suggest(predictions, maxSuggestions, this.forceOccurrenceOrder, minConfidence);
     }
 
     /**
@@ -186,9 +180,10 @@ export class WordMap {
      * @param {string} targetSentence
      * @param {Suggestion} benchmark
      * @param {number} maxSuggestions
+     * @param minConfidence - the minimum confidence score required for a prediction to be used
      * @return {Suggestion[]}
      */
-    public predictWithBenchmark(sourceSentence: string, targetSentence: string, benchmark: Alignment[], maxSuggestions: number = 1): Suggestion[] {
+    public predictWithBenchmark(sourceSentence: string, targetSentence: string, benchmark: Alignment[], maxSuggestions: number = 1, minConfidence: number = 0.1): Suggestion[] {
         const sourceTokens = Lexer.tokenize(sourceSentence);
         const targetTokens = Lexer.tokenize(targetSentence);
 
@@ -203,6 +198,6 @@ export class WordMap {
                 }
             }
         }
-        return Engine.suggest(validPredictions, maxSuggestions, this.forceOccurrenceOrder);
+        return Engine.suggest(validPredictions, maxSuggestions, this.forceOccurrenceOrder, minConfidence);
     }
 }

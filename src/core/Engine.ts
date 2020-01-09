@@ -228,15 +228,26 @@ export class Engine {
 
     /**
      * Returns an array of alignment suggestions
-     * @param predictions - the predictions from which to base the suggestion
+     * @param predictions - a sorted array of predictions from which to base the suggestion
      * @param maxSuggestions - the maximum number of suggestions to return
      * @param forceOccurrenceOrder - forces suggestions to use words in order of occurrence. This may exponentially increase the processing time.
+     * @param minConfidence - the minimum confidence a prediction must have to be used
      * @return {Suggestion}
      */
-    public static suggest(predictions: Prediction[], maxSuggestions: number = 1, forceOccurrenceOrder: boolean = false): Suggestion[] {
+    public static suggest(predictions: Prediction[], maxSuggestions: number = 1, forceOccurrenceOrder: boolean = true, minConfidence: number = 0): Suggestion[] {
+        /**
+         * Checks if a prediction can be used or not.
+         * TRICKY: null predictions are always valid so we can fill in the missing gaps.
+         * @param prediction
+         */
+        const isPredictionValid = (prediction: Prediction): boolean => {
+            return prediction.confidence >= minConfidence || prediction.target.isNull();
+        };
+
         const suggestionKeys: string[] = [];
         const suggestions: Suggestion[] = [];
         const [isOccurrenceValid, addOccurrence, resetOccurrences] = useSequentialOccurrence();
+        const validPredictions = predictions.filter(isPredictionValid);
 
         // build suggestions
         let forceOccurrence = forceOccurrenceOrder;
@@ -253,11 +264,11 @@ export class Engine {
                 i = 1;
             }
 
-            if (i >= predictions.length) {
+            if (i >= validPredictions.length) {
                 break;
             }
             const suggestion = new Suggestion();
-            let filtered = [...predictions];
+            let filtered = [...validPredictions];
 
             // TRICKY: sequentially pick the best starting point in descending order
             const best = filtered.splice(i, 1)[0];
@@ -497,33 +508,60 @@ export class Engine {
 /**
  * Fill the suggestion with predictions.
  * This may throw an exception if the suggestion becomes invalid.
- * @param filtered
+ * @param predictions an array of sorted predictions
  * @param forceOccurrenceOrder
  * @param isOccurrenceValid
  * @param addOccurrence
  * @param suggestion
  */
-function fillSuggestion(filtered: Prediction[], forceOccurrenceOrder: boolean, isOccurrenceValid: (arg0: SequentialOccurrenceProps) => boolean, addOccurrence: (arg0: SequentialOccurrenceProps) => void, suggestion: Suggestion) {
+function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean, isOccurrenceValid: (arg0: SequentialOccurrenceProps) => boolean, addOccurrence: (arg0: SequentialOccurrenceProps) => void, suggestion: Suggestion) {
+    let filtered = [...predictions];
+
+    /**
+     * Checks if the occurrences within the prediction are valid
+     * @param prediction
+     */
+    const isPredictionOccurrenceValid = (prediction: Prediction) => {
+        const occurrenceProps = getSequentialOccurrenceProps(prediction);
+        for (let i = 0, len = occurrenceProps.length; i < len; i++) {
+            if (!isOccurrenceValid(occurrenceProps[i])) {
+                return false;
+            } else {
+                addOccurrence(occurrenceProps[i]);
+            }
+        }
+        return true;
+    };
+
+    /**
+     * Records the prediction occurrences so we can keep track of what's been found so far.
+     * @param prediction
+     */
+    const addPredictionOccurrences = (prediction: Prediction) => {
+        const occurrenceProps = getSequentialOccurrenceProps(prediction);
+        for (let i = 0, len = occurrenceProps.length; i < len; i++) {
+            addOccurrence(occurrenceProps[i]);
+        }
+    };
+
     while (filtered.length) {
         const nextBest = filtered.shift();
         if (nextBest === undefined) {
             break;
         }
-        filtered = filtered.filter((p) => {
-            return !nextBest.intersects(p);
-        });
 
         // track and validate occurrence
         if (forceOccurrenceOrder) {
-            const occurrenceProps = getSequentialOccurrenceProps(nextBest);
-            for (let i = 0, len = occurrenceProps.length; i < len; i++) {
-                if (!isOccurrenceValid(occurrenceProps[i])) {
-                    throw new Error();
-                } else {
-                    addOccurrence(occurrenceProps[i]);
-                }
+            if (isPredictionOccurrenceValid(nextBest)) {
+                addPredictionOccurrences(nextBest);
+            } else {
+                continue;
             }
         }
+
+        filtered = filtered.filter((p) => {
+            return !nextBest.intersects(p);
+        });
 
         suggestion.addPrediction(nextBest);
     }
