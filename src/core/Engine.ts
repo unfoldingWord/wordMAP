@@ -244,22 +244,33 @@ export class Engine {
             return prediction.confidence >= minConfidence || prediction.target.isNull();
         };
 
+        const MAX_DISCARDS = 1000;
         const suggestionKeys: string[] = [];
         const suggestions: Suggestion[] = [];
-        const [isOccurrenceValid, addOccurrence, resetOccurrences] = useSequentialOccurrence();
+        const [isOccurrenceValid, addOccurrence, resetOccurrences, reviewOccurrences] = useSequentialOccurrence();
         const validPredictions = predictions.filter(isPredictionValid);
 
-        // build suggestions
+        // require occurrences to appear in order
         let forceOccurrence = forceOccurrenceOrder;
+        // require occurrences to begin at one and have no gaps
+        let strictOccurrence = forceOccurrenceOrder;
         let numDiscards = 0;
         let i = -1;
         while (suggestions.length < maxSuggestions) {
             i++;
 
+            // TRICKY: disable strict occurrence order if we exceed half of the maximum discards,
+            //  and start at the beginning.
+            if (strictOccurrence && numDiscards >= MAX_DISCARDS / 2) {
+                console.warn("Exceeded maximum discards while searching for strict occurrence order. Strict occurrence checking disabled.");
+                strictOccurrence = false;
+                i = 1;
+            }
+
             // TRICKY: disable forced occurrence order if we exceed the maximum discards,
             //  and start at the beginning.
-            if (forceOccurrence && numDiscards >= 1000) {
-                console.warn("Exceeded maximum discards while searching for valid occurrence order.");
+            if (forceOccurrence && numDiscards >= MAX_DISCARDS) {
+                console.warn("Exceeded maximum discards while searching for valid occurrence order. Occurrence checking disabled.");
                 forceOccurrence = false;
                 i = 1;
             }
@@ -283,10 +294,11 @@ export class Engine {
                 getSequentialOccurrenceProps(best).forEach(addOccurrence);
             }
 
-            try {
-                utils.fillSuggestion(filtered, forceOccurrence, isOccurrenceValid, addOccurrence, suggestion);
-            } catch {
-                numDiscards ++;
+            utils.fillSuggestion(filtered, forceOccurrence, isOccurrenceValid, addOccurrence, suggestion);
+
+            // make sure all occurrences begin at 1 and have no gaps
+            if (strictOccurrence && !reviewOccurrences()) {
+                numDiscards++;
                 continue;
             }
 
@@ -507,7 +519,6 @@ export class Engine {
 
 /**
  * Fill the suggestion with predictions.
- * This may throw an exception if the suggestion becomes invalid.
  * @param predictions an array of sorted predictions
  * @param forceOccurrenceOrder
  * @param isOccurrenceValid
@@ -555,6 +566,7 @@ function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean
             if (isPredictionOccurrenceValid(nextBest)) {
                 addPredictionOccurrences(nextBest);
             } else {
+                // skip the prediction since it would invalidate the occurrence order
                 continue;
             }
         }
@@ -564,6 +576,7 @@ function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean
         });
 
         suggestion.addPrediction(nextBest);
+        // TODO: we should break out of this loop once we have accounted for all of the words
     }
 }
 
