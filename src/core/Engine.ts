@@ -576,7 +576,6 @@ function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean
         });
 
         suggestion.addPrediction(nextBest);
-        // TODO: we should break out of this loop once we have accounted for all of the words
     }
 }
 
