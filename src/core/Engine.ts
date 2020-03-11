@@ -272,11 +272,21 @@ export class Engine {
             if (forceOccurrence && numDiscards >= MAX_DISCARDS) {
                 console.warn("Exceeded maximum discards while searching for valid occurrence order. Occurrence checking disabled.");
                 forceOccurrence = false;
+                numDiscards = 0;
                 i = 0;
             }
 
             if (i >= validPredictions.length) {
-                break;
+                if (suggestions.length === 0 && (forceOccurrence || strictOccurrence)) {
+                    // TRICKY: if we come up with an empty set, disable occurrence order and try again.
+                    console.warn("Found empty prediction set. Occurrence checking disabled.");
+                    forceOccurrence = false;
+                    strictOccurrence = false;
+                    numDiscards = 0;
+                    i = 0;
+                } else {
+                    break;
+                }
             }
             const suggestion = new Suggestion();
             let filtered = [...validPredictions];
