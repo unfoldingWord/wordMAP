@@ -200,10 +200,11 @@ describe("MAP", () => {
         "In this way they may train the younger women to love their own husbands and children"
       );
       const predictions = suggestions[0].getPredictions();
-      expect(predictions).toHaveLength(7);
-      expect(predictions[4].key).not.toEqual(
+      expect(predictions).toHaveLength(4);
+      expect(predictions[2].source.getTokens()[0].toString()).toEqual("φιλάνδρους");
+      expect(predictions[2].key).not.toEqual(
         "n:φιλάνδρους->n:love:their:own:husbands");
-      expect(predictions[6].key).toEqual("n:φιλοτέκνους->n:and:children");
+      expect(predictions[3].key).toEqual("n:φιλοτέκνους->n:and:children");
     });
 
     it("uses alignment memory that falls within expanded ngram length", () => {
@@ -216,10 +217,11 @@ describe("MAP", () => {
         "In this way they may train the younger women to love their own husbands and children"
       );
       const predictions = suggestions[0].getPredictions();
-      expect(predictions).toHaveLength(7);
-      expect(predictions[4].key).toEqual(
+      expect(predictions).toHaveLength(6);
+      expect(predictions[3].source.getTokens()[0].toString()).toEqual("φιλάνδρους");
+      expect(predictions[3].key).toEqual(
         "n:φιλάνδρους->n:love:their:own:husbands");
-      expect(predictions[6].key).toEqual("n:φιλοτέκνους->n:and:children");
+      expect(predictions[5].key).toEqual("n:φιλοτέκνους->n:and:children");
     });
   });
 

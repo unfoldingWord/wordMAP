@@ -264,7 +264,7 @@ export class Engine {
             if (strictOccurrence && numDiscards >= MAX_DISCARDS / 2) {
                 console.warn("Exceeded maximum discards while searching for strict occurrence order. Strict occurrence checking disabled.");
                 strictOccurrence = false;
-                i = 1;
+                i = 0;
             }
 
             // TRICKY: disable forced occurrence order if we exceed the maximum discards,
@@ -272,7 +272,7 @@ export class Engine {
             if (forceOccurrence && numDiscards >= MAX_DISCARDS) {
                 console.warn("Exceeded maximum discards while searching for valid occurrence order. Occurrence checking disabled.");
                 forceOccurrence = false;
-                i = 1;
+                i = 0;
             }
 
             if (i >= validPredictions.length) {
