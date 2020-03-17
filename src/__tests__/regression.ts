@@ -1,5 +1,8 @@
+import {Alignment, Ngram} from "../core";
 import {utils} from "../core/Engine";
 import {WordMap} from "../core/WordMap";
+import {tokenizeComplexMockSentence, tokenizeMockSentence} from "../util/testUtils";
+import {sourceMemory, targetMemory} from "./data";
 
 describe("NaN confidence scores", () => {
     it("does not produce NaN scores", () => {
@@ -148,5 +151,36 @@ describe("Order of occurrence", () => {
             .toEqual(1);
         expect(predictions[1].alignment.targetNgram.getTokens()[0].occurrence)
             .toEqual(2);
+    });
+
+    it("suggest the correct word occurrence with real data", () => {
+        // this includes the use of lemmas.
+        const map = new WordMap({warnings: false});
+        const sourceNgramMemory = sourceMemory.split("\n").map((s) => {
+            const tokens = tokenizeComplexMockSentence(s);
+            return new Ngram(tokens);
+        });
+        const targetNgramMemory = targetMemory.split("\n").map((s) => {
+            const tokens = tokenizeMockSentence(s);
+            return new Ngram(tokens);
+        });
+        const memory = [];
+        for (let i = 0; i < sourceNgramMemory.length; i ++) {
+            memory.push(new Alignment(sourceNgramMemory[i], targetNgramMemory[i]));
+        }
+
+        map.appendAlignmentMemory(memory);
+        const source = tokenizeComplexMockSentence("וַֽ⁠יְהִי֙:הָיָה בַּ⁠לַּ֣יְלָה:לַיִל הַ⁠ה֔וּא:הוּא וַ⁠יֹּ֤אמֶר:אָמַר אֵלָי⁠ו֙:אֵל יְהוָ֔ה:יְהֹוָה ק֖וּם:קוּם רֵ֣ד:יָרַד בַּֽ⁠מַּחֲנֶ֑ה:מַחֲנֶה כִּ֥י:כִּי נְתַתִּ֖י⁠ו:נָתַן בְּ⁠יָדֶֽ⁠ךָ:יָד");
+        const target = tokenizeMockSentence("During that night, Yahweh said to Gideon, “Get up and go down to their camp, and you will hear something that will convince you that I will enable your men to defeat them.");
+        const suggestions = map.predict(source, target);
+
+        const predictions = suggestions[0].getPredictions();
+        expect(predictions[3].toString()).toEqual("1.24|n:הַ:ה֔וּא->n:that");
+        expect(predictions[3].target.occurrence).toEqual(1);
+        expect(predictions[7].toString()).toEqual("1.25|n:ו֙->n:that");
+        expect(predictions[7].target.occurrence).toEqual(2);
+        expect(predictions[12].toString()).toEqual("1.22|n:כִּ֥י->n:that");
+        expect(predictions[12].target.occurrence).toEqual(3);
+        console.log(JSON.stringify(suggestions[0].toJSON(true)));
     });
 });
