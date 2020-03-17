@@ -259,11 +259,12 @@ export class Engine {
         while (suggestions.length < maxSuggestions) {
             i++;
 
-            // TRICKY: disable strict occurrence order if we exceed half of the maximum discards,
+            // TRICKY: disable strict occurrence order if we exceed the maximum discards,
             //  and start at the beginning.
-            if (strictOccurrence && numDiscards >= MAX_DISCARDS / 2) {
+            if (strictOccurrence && numDiscards >= MAX_DISCARDS) {
                 console.warn("Exceeded maximum discards while searching for strict occurrence order. Strict occurrence checking disabled.");
                 strictOccurrence = false;
+                numDiscards = 0;
                 i = 0;
             }
 
@@ -539,10 +540,11 @@ function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean
     let filtered = [...predictions];
 
     /**
-     * Checks if the occurrences within the prediction are valid
+     * Checks if the occurrences within the prediction are valid.
+     * They are added if valid
      * @param prediction
      */
-    const isPredictionOccurrenceValid = (prediction: Prediction) => {
+    const consumeOccurrence = (prediction: Prediction) => {
         const occurrenceProps = getSequentialOccurrenceProps(prediction);
         for (let i = 0, len = occurrenceProps.length; i < len; i++) {
             if (!isOccurrenceValid(occurrenceProps[i])) {
@@ -554,17 +556,6 @@ function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean
         return true;
     };
 
-    /**
-     * Records the prediction occurrences so we can keep track of what's been found so far.
-     * @param prediction
-     */
-    const addPredictionOccurrences = (prediction: Prediction) => {
-        const occurrenceProps = getSequentialOccurrenceProps(prediction);
-        for (let i = 0, len = occurrenceProps.length; i < len; i++) {
-            addOccurrence(occurrenceProps[i]);
-        }
-    };
-
     while (filtered.length) {
         const nextBest = filtered.shift();
         if (nextBest === undefined) {
@@ -573,9 +564,7 @@ function fillSuggestion(predictions: Prediction[], forceOccurrenceOrder: boolean
 
         // track and validate occurrence
         if (forceOccurrenceOrder) {
-            if (isPredictionOccurrenceValid(nextBest)) {
-                addPredictionOccurrences(nextBest);
-            } else {
+            if (!consumeOccurrence(nextBest)) {
                 // skip the prediction since it would invalidate the occurrence order
                 continue;
             }

@@ -145,7 +145,7 @@ export class Ngram {
   }
 
   /**
-   * Returns a human readable form of the n-gram
+   * Returns the n-gram key
    * @return {string}
    */
   public toString(): string {
