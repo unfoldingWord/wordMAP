@@ -181,6 +181,5 @@ describe("Order of occurrence", () => {
         expect(predictions[7].target.occurrence).toEqual(2);
         expect(predictions[12].toString()).toEqual("1.22|n:כִּ֥י->n:that");
         expect(predictions[12].target.occurrence).toEqual(3);
-        console.log(JSON.stringify(suggestions[0].toJSON(true)));
     });
 });
