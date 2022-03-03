@@ -32,6 +32,10 @@ export interface EngineProps {
      * Prints warnings to the console
      */
     warnings?: boolean;
+    /**
+     * optionally tune parameters for predictions
+     */
+    engineWeights?: NumberObject;
 }
 
 /**
@@ -47,6 +51,26 @@ export class Engine {
         return this.registeredAlgorithms;
     }
 
+    static defaultWeights: NumberObject = {
+        "alignmentPosition": 0.7,
+        "ngramLength": 0.2,
+        "characterLength": 0.3,
+        "alignmentOccurrences": 0.4,
+        "lemmaAlignmentOccurrences": 0.4,
+        "uniqueness": 0.5,
+        "lemmaUniqueness": 0.5,
+
+        "sourceCorpusPermutationsFrequencyRatio": 0.7,
+        "sourceCorpusLemmaPermutationsFrequencyRatio": 0.7,
+        "targetCorpusPermutationsFrequencyRatio": 0.7,
+        "targetCorpusLemmaPermutationsFrequencyRatio": 0.7,
+
+        "sourceAlignmentMemoryFrequencyRatio": 0.8,
+        "sourceAlignmentMemoryLemmaFrequencyRatio": 0.7,
+        "targetAlignmentMemoryFrequencyRatio": 0.7,
+        "targetAlignmentMemoryLemmaFrequencyRatio": 0.7
+    };
+    
     /**
      * Generates an array of all possible alignment predictions
      * @param {Ngram[]} sourceNgrams - every possible n-gram in the source text
@@ -135,28 +159,12 @@ export class Engine {
      * TODO: this should not be done in the engine because we don't know anything about the algorithms here.
      * @param predictions
      * @param saIndex
+     * @param weights
      */
-    public static calculateConfidence(predictions: Prediction[], saIndex: AlignmentMemoryIndex): Prediction[] {
+    public static calculateConfidence(predictions: Prediction[],
+                                      saIndex: AlignmentMemoryIndex,
+                                      weights: NumberObject): Prediction[] {
         const finalPredictions: Prediction[] = [];
-        const weights: NumberObject = {
-            "alignmentPosition": 0.7,
-            "ngramLength": 0.2,
-            "characterLength": 0.3,
-            "alignmentOccurrences": 0.4,
-            "lemmaAlignmentOccurrences": 0.4,
-            "uniqueness": 0.5,
-            "lemmaUniqueness": 0.5,
-
-            "sourceCorpusPermutationsFrequencyRatio": 0.7,
-            "sourceCorpusLemmaPermutationsFrequencyRatio": 0.7,
-            "targetCorpusPermutationsFrequencyRatio": 0.7,
-            "targetCorpusLemmaPermutationsFrequencyRatio": 0.7,
-
-            "sourceAlignmentMemoryFrequencyRatio": 0.8,
-            "sourceAlignmentMemoryLemmaFrequencyRatio": 0.7,
-            "targetAlignmentMemoryFrequencyRatio": 0.7,
-            "targetAlignmentMemoryLemmaFrequencyRatio": 0.7
-        };
 
         for (const p of predictions) {
             let isAlignmentMemory = saIndex.alignmentFrequency.read(p.alignment);
@@ -370,14 +378,21 @@ export class Engine {
     private corpusIndex: CorpusIndex;
     private alignmentMemoryIndex: AlignmentMemoryIndex;
     private scheduler: Scheduler;
+    private engineWeights: NumberObject;
 
-    constructor({sourceNgramLength = 3, targetNgramLength = 3, warnings = true}: EngineProps = {}) {
+    constructor({
+        sourceNgramLength = 3,
+        targetNgramLength = 3,
+        engineWeights = Engine.defaultWeights,
+        warnings = true
+    }: EngineProps = {}) {
         this.maxSourceNgramLength = sourceNgramLength as number;
         this.maxTargetNgramLength = targetNgramLength as number;
         this.nGramWarnings = warnings as boolean;
         this.corpusIndex = new CorpusIndex();
         this.alignmentMemoryIndex = new AlignmentMemoryIndex();
         this.scheduler = new Scheduler();
+        this.engineWeights = engineWeights;
     }
 
     /**
@@ -446,7 +461,8 @@ export class Engine {
     public score(predictions: Prediction[]): Prediction[] {
         const results = Engine.calculateConfidence(
             predictions,
-            this.alignmentMemoryIndex
+            this.alignmentMemoryIndex,
+            this.engineWeights
         );
         return Engine.sortPredictions(results);
     }
