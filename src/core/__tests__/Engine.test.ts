@@ -219,7 +219,8 @@ describe("scoring", () => {
     });
     const result = Engine.calculateConfidence(
       [prediction],
-      new AlignmentMemoryIndex()
+      new AlignmentMemoryIndex(),
+      Engine.defaultWeights,
     );
     expect(result[0].getScore("confidence")).toEqual(4.9655172413793105);
   });
