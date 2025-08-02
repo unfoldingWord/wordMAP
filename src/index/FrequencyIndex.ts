@@ -1,12 +1,18 @@
+const newCountThreshold: number = 100000;
+
 /**
  * An index of frequencies
  */
 export default abstract class FrequencyIndex {
 
-  private index: Map<string, number>;
+  private index: { [key: string]: number };
+  private newCounter: number;
+  private superCount: number;
 
   constructor() {
-    this.index = new Map();
+    this.index = {};
+    this.newCounter = 0;
+    this.superCount = 0;
   }
 
   /**
@@ -15,10 +21,18 @@ export default abstract class FrequencyIndex {
    * @param {string} key
    */
   protected readIndex(key: string): number {
-    const val = this.index.get(key);
+    const val = this.index[key];
     if (val !== undefined) {
       return val;
     } else {
+      this.newCounter++;
+      if (this.newCounter > newCountThreshold) {
+        this.superCount++;
+        this.newCounter = 0;
+        const indexSize = Object.keys(this.index).length;
+        console.log(`FrequencyIndex [${this.superCount *
+        newCountThreshold}] count threshold reached. Index size: ${indexSize}`);
+      }
       return 0;
     }
   }
@@ -31,7 +45,7 @@ export default abstract class FrequencyIndex {
    */
   protected incrementIndex(key: string, value: number = 1) {
     const originalValue = this.readIndex(key);
-    this.index.set(key, originalValue + value);
+    this.index[key] = originalValue + value;
   }
 
   /**
@@ -41,6 +55,6 @@ export default abstract class FrequencyIndex {
    * @param {number} value
    */
   protected writeIndex(key: string, value: number) {
-    this.index.set(key, value);
+    this.index[key] = value;
   }
 }
