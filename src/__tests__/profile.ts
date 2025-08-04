@@ -6,7 +6,7 @@ import WordMap from "../WordMap";
  * This is used for profiling.
  * There will be some overhead from jest.
  */
-describe("MAP", () => {
+describe.skip("MAP", () => {
 
   it("indexes corpus quickly", () => {
     const map = new WordMap();

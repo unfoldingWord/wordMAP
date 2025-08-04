@@ -1,18 +1,20 @@
-const newCountThreshold: number = 100000;
-
 /**
  * An index of frequencies
  */
 export default abstract class FrequencyIndex {
 
-  private index: { [key: string]: number };
+  private index: Map<string, number>;
   private newCounter: number;
-  private superCount: number;
+  private totalCount: number;
+  private logCountThreshold: number;
+  private slowDownThreshold: number;
 
   constructor() {
-    this.index = {};
+    this.index = new Map();
     this.newCounter = 0;
-    this.superCount = 0;
+    this.totalCount = 0;
+    this.logCountThreshold = 1000000;
+    this.slowDownThreshold = 8000000;
   }
 
   /**
@@ -21,17 +23,19 @@ export default abstract class FrequencyIndex {
    * @param {string} key
    */
   protected readIndex(key: string): number {
-    const val = this.index[key];
+    const val = this.index.get(key);
     if (val !== undefined) {
       return val;
     } else {
       this.newCounter++;
-      if (this.newCounter > newCountThreshold) {
-        this.superCount++;
+      if (this.newCounter > this.logCountThreshold) {
+        if (this.totalCount >= this.slowDownThreshold) {
+          this.logCountThreshold = 1000;
+        }
+        this.totalCount += this.newCounter;
         this.newCounter = 0;
-        const indexSize = Object.keys(this.index).length;
-        console.log(`FrequencyIndex [${this.superCount *
-        newCountThreshold}] count threshold reached. Index size: ${indexSize}`);
+        const indexSize = this.index.size;
+        console.log(`FrequencyIndex [${this.totalCount}] count threshold reached. Index size: ${indexSize}`);
       }
       return 0;
     }
@@ -45,7 +49,7 @@ export default abstract class FrequencyIndex {
    */
   protected incrementIndex(key: string, value: number = 1) {
     const originalValue = this.readIndex(key);
-    this.index[key] = originalValue + value;
+    this.index.set(key, originalValue + value);
   }
 
   /**
@@ -55,6 +59,6 @@ export default abstract class FrequencyIndex {
    * @param {number} value
    */
   protected writeIndex(key: string, value: number) {
-    this.index[key] = value;
+    this.index.set(key, value);
   }
 }
